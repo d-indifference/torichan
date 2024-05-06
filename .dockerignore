@@ -1,0 +1,14 @@
+/dist
+/node_modules
+/volumes
+/.git
+/.idea
+/public/files
+README.MD
+.eslintignore
+.eslintrc.yml
+.gitignore
+.prettierignore
+.prettierrc
+docker-compose.yml
+LICENSE

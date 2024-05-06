@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  postgres:
+    container_name: db.torichan
+    hostname: db.torichan
+    image: postgres:13.3
+    env_file:
+      - .env
+    volumes:
+      - ./volumes/postgres:/var/lib/postgresql/data
+    ports:
+      - '${POSTGRES_PORT}:${POSTGRES_PORT}'
+    restart: unless-stopped
+    networks:
+      - torichan-network
+
+networks:
+  torichan-network:
+    name: 'net.torichan'
+    driver: bridge

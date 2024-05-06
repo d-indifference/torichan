@@ -1,0 +1,12 @@
+http:
+  port: 3000
+
+paths:
+  public: 'public'
+  views: 'views'
+  files: 'public/files'
+
+secure:
+  secret:
+    session: 'insecure-10b0e2d0-6618-4e57-8fa3-c82e0835e9d9'
+    password: 'insecure-a3253b30-0fa4-4dd0-83b8-5fc6e0b31592'

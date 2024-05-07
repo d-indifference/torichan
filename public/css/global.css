@@ -6,12 +6,61 @@ html, body {
   margin-top: 5px;
   padding-left: 5px;
   padding-right: 5px;
-  color: #000000;
-  background-color: #eef2fe;
 }
 
 .tori-footer {
   text-align: center;
   font-size: 12px;
   clear: both;
+}
+
+.tori-navbar {
+  float: right;
+  font-size: 9pt;
+}
+
+.tori-page-title {
+  text-align: center;
+  clear: both;
+  font-family: Tahoma, sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -2px;
+  margin-top: 0;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid;
+  height: 0;
+}
+
+hr.tori-above-post-form {
+  width: 90%;
+}
+
+.tori-posting-form {
+  text-align: left;
+}
+
+fieldset {
+  margin: 0 auto;
+  padding-right: 0.75em;
+  width: 25em;
+}
+
+legend {
+  text-align: center;
+}
+
+table.tori-post-form > tbody > tr > td:first-child {
+  font-weight: 700;
+  padding: 0 5px;
+  font-size: 10pt;
+}
+
+ul.rules {
+  padding-left: 10px;
+  margin: 5px 0 0;
+  font-size: 11px;
 }

@@ -8,15 +8,13 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="/css/global.css">
     <link rel="stylesheet" href="/css/torichan.css">
-    <link rel="stylesheet" href="/css/start-page.css">
-    <title>Torichan Imageboard Engine</title>
+    <title><%= statusCode %></title>
 </head>
 <body>
-    <h1 class="tori-title">Torichan Imageboard Engine</h1>
-    <p class="tori-main-links">
-        [<a href="#">global rules</a>] / [<a href="#">management</a>] / [<a href="https://github.com/d-indifference/torichan">torichan 0.0.1</a>]
-    </p>
+    <h1 class="tori-page-title">Error</h1>
 
-    <%- include('fragments/tori-footer') %>
+    <div style="text-align: center">
+        <p><strong><%= message %></strong></p>
+        <p><a href="/">To the main page</a></p>
+    </div>
 </body>
-</html>

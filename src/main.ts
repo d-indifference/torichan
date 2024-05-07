@@ -9,6 +9,7 @@ import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
 import { sessionConfig } from '@config/session.config';
 import * as fs from 'fs-extra';
+import { NotFoundExceptionFilter } from '@utils/filters/exceptions';
 
 const bootstrap = async (): Promise<void> => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -28,6 +29,8 @@ const bootstrap = async (): Promise<void> => {
   app.use(session(sessionConfig(config)));
 
   await fs.ensureDir(filesDirectory);
+
+  app.useGlobalFilters(new NotFoundExceptionFilter());
 
   await app.listen(port);
 

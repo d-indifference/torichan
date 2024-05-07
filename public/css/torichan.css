@@ -1,0 +1,32 @@
+html, body {
+  color: #000000;
+  background-color: #eef2fe;
+}
+
+.tori-title {
+  color: #af0a0f;
+}
+
+.tori-navbar {
+  color: #89a;
+}
+
+.tori-page-title {
+  color: #af0a0f;
+}
+
+hr {
+  border-top-color: #b7c5d9;
+}
+
+table.tori-post-form > tbody > tr > td:first-child {
+  background-color: #98e;
+  color: #000;
+  border: 1px solid #000;
+}
+
+td.rules {
+  border: none !important;
+  background-color: transparent !important;
+  font-weight: 400 !important;
+}

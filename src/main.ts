@@ -9,7 +9,8 @@ import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
 import { sessionConfig } from '@config/session.config';
 import * as fs from 'fs-extra';
-import { NotFoundExceptionFilter } from '@utils/filters/exceptions';
+import { InternalServerErrorExceptionFilter, NotFoundExceptionFilter } from '@utils/filters/exceptions';
+import { BadRequestExceptionFilter } from '@utils/filters/exceptions/bad-request-exception.filter';
 
 const bootstrap = async (): Promise<void> => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -31,6 +32,8 @@ const bootstrap = async (): Promise<void> => {
   await fs.ensureDir(filesDirectory);
 
   app.useGlobalFilters(new NotFoundExceptionFilter());
+  app.useGlobalFilters(new InternalServerErrorExceptionFilter());
+  app.useGlobalFilters(new BadRequestExceptionFilter());
 
   await app.listen(port);
 

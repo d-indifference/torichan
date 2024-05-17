@@ -14,6 +14,10 @@ html, body {
   clear: both;
 }
 
+.tori-footer a {
+  text-decoration: none;
+}
+
 .tori-navbar {
   float: right;
   font-size: 9pt;
@@ -64,3 +68,89 @@ ul.rules {
   margin: 5px 0 0;
   font-size: 11px;
 }
+
+.thread {
+  margin: 0;
+  clear: both;
+}
+
+.op-container {
+  display: inline;
+}
+
+.post {
+  margin: 4px 0;
+  overflow: hidden;
+}
+
+.op {
+  display: inline;
+}
+
+.post .file {
+  display: block;
+}
+
+.fileText {
+  max-width: 600px;
+  white-space: nowrap;
+}
+
+div.post div.file .fileThumb {
+  float: left;
+  margin: 3px 20px 5px;
+}
+
+div.post div.postInfo {
+  display: block;
+  width: 100%;
+}
+
+td.rules {
+  border: none !important;
+  background-color: transparent !important;
+  font-weight: 400 !important;
+}
+
+div.post label.postInfo span.subject {
+  font-weight: 700;
+}
+
+div.post label.postInfo span.name {
+  font-weight: 700;
+}
+
+div.post a.postNum {
+  text-decoration: none;
+}
+
+.reply-link {
+  display: inline-block;
+}
+
+div.post blockquote.post-message {
+  display: block;
+  margin: 13px 40px 13px 40px;
+}
+
+.tori-page-list a {
+  font-size: 11pt;
+}
+
+.tori-page-list form {
+  display: inline;
+}
+
+.side-arrows {
+  float: left;
+  margin-right: 2px;
+  margin-top: 0;
+  margin-left: 2px;
+}
+
+div.post.reply {
+  display: table;
+  padding: 2px;
+}
+
+.omitted-posts {}

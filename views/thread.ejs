@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="nofollow">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/torichan.css">
+    <link rel="shortcut icon" href="/icons/favicon.ico" type="image/x-icon">
+    <%- include('fragments/tori-script') %>
+    <title>/<%= board.slug %>/ - <% if (thread.openingPost.subject) { %><%= thread.openingPost.subject %><% } else { %>Reply to thread #<%= thread.openingPost.displayNumber %><% } %></title>
+</head>
+<body>
+    <%- include('fragments/tori-navbar'); %>
+
+    <h1 class="tori-page-title">/<%= board.slug %>/ - <% if (thread.openingPost.subject) { %><%= thread.openingPost.subject %><% } else { %>Reply to thread #<%= thread.openingPost.displayNumber %><% } %></h1>
+
+    <hr class="tori-above-post-form">
+
+    <div class="tori-posting-form">
+        <fieldset>
+            <legend>Mode: Reply</legend>
+
+            <form action="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>/post" method="post" enctype="multipart/form-data">
+                <table class="tori-post-form" width="1%">
+                    <tr>
+                        <td>Name</td>
+                        <td><input name="name" type="text" tabindex="1" placeholder="Anonymous" size="32"></td>
+                    </tr>
+                    <tr>
+                        <td>Options</td>
+                        <td><input name="options" type="text" tabindex="1" size="32"></td>
+                    </tr>
+                    <tr>
+                        <td>Subject</td>
+                        <td><input name="subject" type="text" tabindex="1" size="27"><input type="submit" value="Post"></td>
+                    </tr>
+                    <tr>
+                        <td>Comment</td>
+                        <td><textarea name="comment" tabindex="1" rows="11" cols="33"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>File</td>
+                        <td><input name="file" type="file" tabindex="1" size="8"></td>
+                    </tr>
+                    <tr>
+                        <td>Password</td>
+                        <td><input
+                                    name="password"
+                                    type="password"
+                                    tabindex="1"
+                                    size="8"
+                                    value="<%= password %>"
+                            > (For comments & files deletion)</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="rules">
+                            <ul class="rules">
+                                <li>Image files up to 3072 kB in size are supported.</li>
+                                <li>Images larger than 200x200 will be reduced in size.</li>
+                                <li>Moderator is always right.</li>
+                                <li>Please read the <a href="#">Rules</a> and <a href="#">FAQ</a> before posting.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </fieldset>
+    </div>
+
+    <hr>
+    <div class="reply-navbar">
+        [<a href="/<%= board.slug %>">Return</a>]
+        [<a href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#bottom">Bottom</a>]
+    </div>
+
+    <a name="top"></a>
+    <form action="#" method="post">
+        <div class="board">
+            <%- include('components/thread', { thread: thread }); %>
+            <hr>
+        </div>
+    </form>
+    <a name="bottom"></a>
+
+    <div class="reply-navbar">
+        [<a href="/<%= board.slug %>">Return</a>]
+        [<a href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#top">Top</a>]
+    </div>
+
+    <%- include('fragments/tori-navbar'); %>
+    <%- include('fragments/tori-footer'); %>
+</body>

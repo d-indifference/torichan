@@ -10,7 +10,7 @@ export class NotFoundExceptionFilter implements ExceptionFilter {
     const ctx: HttpArgumentsHost = host.switchToHttp();
     const response: Response = ctx.getResponse();
 
-    this.logger.log('[404] Not found');
+    this.logger.warn('[404] Not found');
 
     response.status(HttpStatus.NOT_FOUND).render('error', {
       statusCode: response.statusCode,

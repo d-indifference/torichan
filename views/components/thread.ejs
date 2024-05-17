@@ -1,0 +1,100 @@
+<hr>
+<div class="thread">
+    <div class="op-container">
+        <div class="post op">
+            <a name="<%= thread.openingPost.displayNumber %>"></a>
+
+            <% if (thread.openingPost.attachedFile) { %>
+                <div class="file">
+                    <div class="fileText">
+                        File:
+                        <a
+                            target="_blank"
+                            href="/files/<%= board.slug %>/src/<%= thread.openingPost.attachedFile.path %>"
+                        ><%= thread.openingPost.attachedFile.path %></a>
+                        (<%= thread.openingPost.attachedFile.size %><% if (thread.openingPost.attachedFile.isImage) { %>, <%= thread.openingPost.attachedFile.width %>x<%= thread.openingPost.attachedFile.height %><% } %>)
+                    </div>
+                    <% if (thread.openingPost.attachedFile.thumbnailPath) { %>
+                        <a
+                            class="fileThumb"
+                            href="/files/<%= board.slug %>/src/<%= thread.openingPost.attachedFile.path %>"
+                            target="_blank"
+                        >
+                            <img
+                                src="/files/<%= board.slug %>/thumb/<%= thread.openingPost.attachedFile.thumbnailPath %>"
+                                alt="<%= thread.openingPost.attachedFile.size %>"
+                                style="height: <%= thread.openingPost.attachedFile.thumbnailHeight %>px; width: <%= thread.openingPost.attachedFile.thumbnailWidth %>px;"
+                                loading="lazy"
+                            >
+                        </a>
+                    <% } %>
+                </div>
+            <% } %>
+            <label class="postInfo">
+                <input type="checkbox" name="<%= thread.openingPost.displayNumber %>" value="delete">
+                <span class="subject"><%= thread.openingPost.subject %></span>
+                <span class="name"><%= thread.openingPost.name %></span>
+                <span class="dateTime"><%= thread.openingPost.createdAt %></span>
+            </label>
+            <a class="postNum" href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#<%= thread.openingPost.displayNumber %>">No. <%= thread.openingPost.displayNumber %></a>
+
+            <div class="reply-link">[<a href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>">Reply</a>]</div><br>
+
+            <blockquote class="post-message"><%= thread.openingPost.comment %></blockquote>
+
+            <% if (thread.omittedPosts) { %>
+                <% if (thread.omittedPosts.needToDisplay) { %>
+                    <span class="omitted-posts"><%= thread.omittedPosts.comments %> replies and <%= thread.omittedPosts.files %> files omitted. <a
+                                href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>">Click here</a> to view them.</span>
+                <% } %>
+            <% } %>
+        </div>
+    </div>
+
+    <% thread.replies.forEach(reply => { %>
+        <div class="reply-container">
+            <div class="side-arrows">&gt;&gt;</div>
+            <div class="post reply">
+                <a name="<%= reply.displayNumber %>"></a>
+
+                <label class="postInfo">
+                    <input type="checkbox" name="<%= reply.displayNumber %>" value="delete">
+                    <span class="subject"><%= reply.subject %></span>
+                    <span class="name"><%= reply.name %></span>
+                    <span class="dateTime"><%= reply.createdAt %></span>
+                </label>
+                <a class="postNum" href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#<%= reply.displayNumber %>">No. <%= reply.displayNumber %></a>
+
+                <% if (reply.attachedFile) { %>
+                    <div class="file">
+                        <div class="fileText">
+                            File:
+                            <a
+                                target="_blank"
+                                href="/files/<%= board.slug %>/src/<%= reply.attachedFile.path %>"
+                            ><%= reply.attachedFile.path %></a>
+                            (<%= reply.attachedFile.size %><% if (reply.attachedFile.isImage) { %>, <%= reply.attachedFile.width %>x<%= reply.attachedFile.height %><% } %>)
+                        </div>
+                        <% if (reply.attachedFile.thumbnailPath) { %>
+                            <a
+                                class="fileThumb"
+                                href="/files/<%= board.slug %>/src/<%= reply.attachedFile.path %>"
+                                target="_blank"
+                            >
+                                <img
+                                    src="/files/<%= board.slug %>/thumb/<%= reply.attachedFile.thumbnailPath %>"
+                                    alt="<%= reply.attachedFile.size %>"
+                                    style="height: <%= reply.attachedFile.thumbnailHeight %>px; width: <%= reply.attachedFile.thumbnailWidth %>px;"
+                                    loading="lazy"
+                                >
+                            </a>
+                        <% } %>
+                    </div>
+                <% } %>
+
+                <blockquote class="post-message"><%= reply.comment %></blockquote>
+            </div>
+        </div>
+    <% }); %>
+</div>
+<br clear="left">

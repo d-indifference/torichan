@@ -4,5 +4,5 @@ import * as path from 'path';
 
 export const nestjsFormDataConfig = (config: ConfigService): FormDataInterceptorConfig => ({
   storage: FileSystemStoredFile,
-  fileSystemStoragePath: path.join(process.cwd(), config.getOrThrow<string>('AIO_VOLUMES_APP'))
+  fileSystemStoragePath: path.join(process.cwd(), config.getOrThrow<string>('paths.files'))
 });

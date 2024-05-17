@@ -32,6 +32,16 @@ export class BoardService {
     return board;
   }
 
+  public async findEntityBySlug(slug: string): Promise<Board> {
+    this.logger.log(`findEntityBySlug ({slug: ${slug}})`);
+
+    const board = await this.prisma.board.findFirst({ where: { slug } });
+
+    this.processNotFound(board, `Board with slug: ${slug} was not found`);
+
+    return board;
+  }
+
   public async findById(id: string): Promise<BoardDto> {
     this.logger.log(`findById ({id: ${id}})`);
 
@@ -45,7 +55,7 @@ export class BoardService {
 
     const board = await this.prisma.board.findFirst({ where: { slug } });
 
-    this.processNotFound(board, `Board with slug: ${slug} was not found`);
+    this.processNotFound(board, `Page with address: /${slug} was not found`);
 
     return BoardDto.fromModel(board);
   }

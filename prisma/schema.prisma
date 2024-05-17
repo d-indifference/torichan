@@ -9,7 +9,48 @@ datasource db {
 
 model Board {
   id        String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  slug      String @db.VarChar(256)
+  slug      String @unique @db.VarChar(256)
   name      String @db.VarChar(256)
   postCount Int    @default(0)
+
+  comments Comment[]
+}
+
+model Comment {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt     DateTime  @default(now())
+  displayNumber Int
+  isAdmin       Boolean   @default(false) @db.Boolean
+  ip            String    @db.VarChar(64)
+  name          String    @db.VarChar(256)
+  options       String?   @db.VarChar(512)
+  subject       String?   @db.VarChar(256)
+  comment       String    @db.Text
+  password      String    @db.VarChar(8)
+  lastHit       DateTime?
+
+  attachedFileId String?       @db.Uuid
+  attachedFile   AttachedFile? @relation(fields: [attachedFileId], references: [id])
+
+  board   Board?  @relation(fields: [boardId], references: [id])
+  boardId String? @db.Uuid
+
+  children Comment[] @relation(name: "threadReplies")
+  parent   Comment?  @relation(fields: [parentId], references: [id], name: "threadReplies")
+  parentId String?   @db.Uuid
+}
+
+model AttachedFile {
+  id              String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  path            String  @db.VarChar(512)
+  size            Int
+  width           Int?
+  height          Int?
+  mimeType        String  @db.VarChar(128)
+  thumbnailPath   String? @db.VarChar(512)
+  thumbnailWidth  Int?
+  thumbnailHeight Int?
+  isImage         Boolean @db.Boolean
+
+  comment Comment[]
 }

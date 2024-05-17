@@ -12,8 +12,15 @@ secure:
     password: 'insecure-a3253b30-0fa4-4dd0-83b8-5fc6e0b31592'
 
 constants:
+  placeholders:
+    name: 'Anonymous'
+  thumbnail:
+    side: 200
+  max:
+    threads: 10
+    bump-limit: 5
   pagination:
     default:
-      threads: 10
+      threads: 3
       preview-replies: 5
       table-contains: 10

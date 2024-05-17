@@ -3,6 +3,15 @@ html, body {
   background-color: #eef2fe;
 }
 
+a {
+  color: #34345c;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #d00 !important;
+}
+
 .tori-title {
   color: #af0a0f;
 }
@@ -20,13 +29,43 @@ hr {
 }
 
 table.tori-post-form > tbody > tr > td:first-child {
-  background-color: #98e;
+  background-color: #9988eeff;
   color: #000;
   border: 1px solid #000;
 }
 
-td.rules {
-  border: none !important;
-  background-color: transparent !important;
-  font-weight: 400 !important;
+span.subject {
+  color: #0f0c5d;
+}
+
+span.name {
+  color: #117743;
+}
+
+div.post a.postNum {
+  color: #000;
+}
+
+div.post a.postNum:hover {
+  color: #d00 !important;
+}
+
+.tori-page-list {
+  color: #89a;;
+}
+
+.side-arrows {
+  color: #b7c5d9;
+}
+
+div.post.reply {
+  background-color: #d6daf0;
+  border: 1px solid #b7c5d9;
+  border-left: none;
+  border-top: none;
+}
+
+span.omitted-posts {
+  color: #707070;
+  margin-top: 10px;
 }

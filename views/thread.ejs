@@ -77,10 +77,21 @@
     </div>
 
     <a name="top"></a>
-    <form action="#" method="post">
+    <form action="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>/delete" method="post">
         <div class="board">
             <%- include('components/thread', { thread: thread }); %>
             <hr>
+        </div>
+
+        <div class="delete-form">
+            Delete Post: [<label>File only <input type="checkbox" name="fileOnly"></label>]<br>
+            Password <input
+                    type="password"
+                    tabindex="1"
+                    size="8"
+                    value="<%= password %>"
+                    name="password"
+            ><input type="submit" value="Delete"><br>
         </div>
     </form>
     <a name="bottom"></a>
@@ -90,6 +101,7 @@
         [<a href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#top">Top</a>]
     </div>
 
+    <br clear="all">
     <%- include('fragments/tori-navbar'); %>
     <%- include('fragments/tori-footer'); %>
 </body>

@@ -70,7 +70,7 @@ export class BoardService {
     const allImagesCount = await this.commentService.count(
       { parent: { board: { slug: thread.boardSlug }, displayNumber: thread.displayNumber }, attachedFile: { isNot: null } });
 
-    const previewImagesCount = displayReplies.filter(reply => reply.attachedFile !== null).length;
+    const previewImagesCount = displayReplies.filter(reply => reply.attachedFile !== undefined).length;
 
     const omittedPosts = allRepliesCount - lastRepliesCount;
     const omittedImages = allImagesCount - previewImagesCount;

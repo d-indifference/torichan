@@ -80,7 +80,7 @@ export class FileSystemService {
   public async removePath(fileSystemPath: string): Promise<void> {
     const fullPath = this.buildFullPath(fileSystemPath);
 
-    if (await this.isPathExists(fullPath)) {
+    if (await this.isPathExists(fileSystemPath)) {
       await fsExtra.remove(fullPath);
 
       this.logger.log(`Path removed: ${fileSystemPath}`);

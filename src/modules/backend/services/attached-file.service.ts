@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier  */
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { FileSystemService, PrismaService } from '@utils/services';
 import { AttachedFile, Prisma } from '@prisma/client';
 import { CommentCreateDto } from '@backend/dto/comment';
@@ -22,6 +22,26 @@ export class AttachedFileService {
     private readonly fileSystem: FileSystemService,
     private readonly prisma: PrismaService,
   ) {}
+
+  public async findOne(where: Prisma.AttachedFileWhereInput): Promise<AttachedFile> {
+    this.logger.log(`findOne ({where: ${JSON.stringify(where)}})`);
+
+    const attachedFile = await this.findOneExact(where);
+
+    if (!attachedFile) {
+      const message: string = 'Attached file was not found';
+      this.logger.warn(`${message}, condition: ${JSON.stringify(where)}`);
+      throw new NotFoundException(message);
+    }
+
+    return attachedFile;
+  }
+
+  public async findOneExact(where: Prisma.AttachedFileWhereInput): Promise<AttachedFile> {
+    this.logger.log(`findByIdExact ({where: ${JSON.stringify(where)}})`);
+
+    return (await this.prisma.attachedFile.findFirst({ where, include: { comment: true } })) as AttachedFile;
+  }
 
   public async saveFile(board: string, dto: CommentCreateDto): Promise<AttachedFile> {
     this.logger.log(`saveFile ({board: ${board}), dto: ${dto.file ? dto.file.path : null}}`);
@@ -80,6 +100,53 @@ export class AttachedFileService {
     const imageMimeList = ['image/apng', 'image/avif', 'image/gif', 'image/jpeg', 'image/png', 'image/svg+xml', 'image/webp'];
 
     return imageMimeList.indexOf(file.mimeType) !== -1;
+  }
+
+  public async removeEntity(attachedFile: AttachedFile): Promise<void> {
+    this.logger.log(`removeEntity ({attachedFile: ${JSON.stringify(attachedFile)})`);
+
+    const { filePathSrc, filePathThumb } = await this.makeFilePaths(attachedFile);
+
+    await this.fileSystem.removePath(filePathSrc);
+
+    if (filePathThumb) {
+      await this.fileSystem.removePath(filePathThumb);
+    }
+
+    await this.prisma.attachedFile.delete({ where: { id: attachedFile.id } });
+  }
+
+  public async remove(where: Prisma.AttachedFileWhereInput): Promise<void> {
+    this.logger.log(`remove ({where: ${JSON.stringify(where)}})`);
+
+    const attachedFile = await this.findOne(where);
+
+    await this.removeEntity(attachedFile);
+  }
+
+  public async removeIfFound(where: Prisma.AttachedFileWhereInput): Promise<void> {
+    this.logger.log(`removeIfFound ({where: ${JSON.stringify(where)}})`);
+
+    const attachedFile = await this.findOneExact(where);
+
+    if (attachedFile) {
+      await this.removeEntity(attachedFile);
+    }
+  }
+
+  private async makeFilePaths(attachedFile: AttachedFile): Promise<{ filePathSrc: string, filePathThumb?: string }> {
+    this.logger.log(`makeFilePaths ({attachedFile: ${JSON.stringify(attachedFile)})`);
+
+    const fileCommentWithBoard = await this.prisma.comment.findFirst({ where: { id: attachedFile.commentId }, include: { board: true } });
+    const filePathSrc = `${fileCommentWithBoard.board.slug}/src/${attachedFile.path}`;
+
+    let filePathThumb: string | undefined;
+
+    if (attachedFile.thumbnailPath) {
+      filePathThumb = `${fileCommentWithBoard.board.slug}/thumb/${attachedFile.thumbnailPath}`;
+    }
+
+    return { filePathSrc, filePathThumb };
   }
 
   private async createThumbnail(

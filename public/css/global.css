@@ -21,6 +21,7 @@ html, body {
 .tori-navbar {
   float: right;
   font-size: 9pt;
+  text-align: right;
 }
 
 .tori-page-title {
@@ -153,4 +154,12 @@ div.post.reply {
   padding: 2px;
 }
 
-.omitted-posts {}
+.omitted-posts {
+  margin-top: 10px;
+}
+
+div.delete-form {
+  float: right;
+  margin-top: 2px;
+  margin-bottom: 5px
+}

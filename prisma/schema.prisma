@@ -29,11 +29,11 @@ model Comment {
   password      String    @db.VarChar(8)
   lastHit       DateTime?
 
-  attachedFileId String?       @db.Uuid
-  attachedFile   AttachedFile? @relation(fields: [attachedFileId], references: [id])
-
   board   Board?  @relation(fields: [boardId], references: [id])
   boardId String? @db.Uuid
+
+  attachedFileId String?       @db.Uuid
+  attachedFile   AttachedFile?
 
   children Comment[] @relation(name: "threadReplies")
   parent   Comment?  @relation(fields: [parentId], references: [id], name: "threadReplies")
@@ -52,5 +52,6 @@ model AttachedFile {
   thumbnailHeight Int?
   isImage         Boolean @db.Boolean
 
-  comment Comment[]
+  comment   Comment? @relation(fields: [commentId], references: [id])
+  commentId String?  @unique @db.Uuid
 }

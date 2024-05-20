@@ -17,10 +17,10 @@ constants:
   thumbnail:
     side: 200
   max:
-    threads: 10
+    threads: 20
     bump-limit: 5
   pagination:
     default:
-      threads: 3
-      preview-replies: 5
+      threads: 10
+      preview-replies: 3
       table-contains: 10

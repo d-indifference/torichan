@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier  */
 import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@utils/services';
-import { Comment, Prisma } from '@prisma/client';
+import { AttachedFile, Comment, Prisma } from '@prisma/client';
 import { CommentCreateDto, CommentDto } from '@backend/dto/comment';
 import { DateTime } from 'luxon';
 import { ConfigService } from '@nestjs/config';
@@ -12,6 +12,10 @@ import { PrismaTakeSkipDto } from '@utils/misc';
 @Injectable()
 export class CommentService {
   private readonly logger: Logger = new Logger(CommentService.name);
+
+  private readonly delayAfterThread: number = 0;
+
+  private readonly delayAfterReply = 0;
 
   constructor(
     private readonly prisma: PrismaService,
@@ -37,8 +41,10 @@ export class CommentService {
     return comments.map(comment => CommentDto.fromModel(comment, comment.board.slug, comment.attachedFile));
   }
 
-  public async count(where: Prisma.CommentWhereInput): Promise<number> {
-    this.logger.log(`count ({where: ${JSON.stringify(where)}})`);
+  public async count(where: Prisma.CommentWhereInput, needToLog?: boolean): Promise<number> {
+    if (needToLog) {
+      this.logger.log(`count ({where: ${JSON.stringify(where)}})`);
+    }
 
     return (await this.prisma.comment.count({ where })) as number;
   }
@@ -65,12 +71,22 @@ export class CommentService {
     return comment;
   }
 
-  public async getMaxPageNumber(where: Prisma.CommentWhereInput): Promise<number> {
+  public async existsByBoardAndDisplayNumber(board: string, displayNumber: number): Promise<boolean> {
+    const comment = await this.prisma.comment.findFirst({ include: { board: true }, where: { displayNumber, board: { slug: board } } });
+
+    return comment !== null;
+  }
+
+  public async getMaxPageNumber(where: Prisma.CommentWhereInput, needToLog?: boolean): Promise<number> {
+    if (needToLog) {
+      this.logger.log(`getMaxPageNumber ({where: ${JSON.stringify(where)})`);
+    }
+
     const pageSize = this.config.getOrThrow<number>('constants.pagination.default.threads');
 
     const count = await this.prisma.comment.count({ where });
 
-    return Math.round(count / pageSize);
+    return Math.floor(count / pageSize);
   }
 
   public async createThread(board: string, ip: string, dto: CommentCreateDto, isAdmin = false): Promise<Comment> {
@@ -85,11 +101,11 @@ export class CommentService {
     this.checkFieldSpam(dto);
     this.checkFile(dto);
     await this.checkMaxActiveCommentSize(board);
-    await this.checkDelay(ip);
+    await this.checkDelay(ip, this.delayAfterThread);
 
     const attachedFile = await this.attachedFileService.saveFile(board, dto);
 
-    const newThread = dto.toCreateInput(await this.calculateDisplayNumber(board), ip);
+    const newThread = dto.toCreateInput(foundBoard.postCount + 1, ip);
     newThread.board = { connect: { id: foundBoard.id } };
     newThread.lastHit = new Date();
 
@@ -101,6 +117,10 @@ export class CommentService {
       data: newThread,
       include: { board: true, attachedFile: true }
     });
+
+    await this.setFileToComment(createdThread.id, attachedFile);
+
+    await this.boardService.incrementPostCount(foundBoard.id);
 
     this.logger.log(`Object created: [Comment] {id: ${createdThread.id}}`);
 
@@ -119,11 +139,11 @@ export class CommentService {
     this.checkIpBan(ip);
     this.checkFieldSpam(dto);
     this.checkFile(dto);
-    await this.checkDelay(ip, 15000);
+    await this.checkDelay(ip, this.delayAfterReply);
 
     const attachedFile = await this.attachedFileService.saveFile(board, dto);
 
-    const newReply = dto.toCreateInput(await this.calculateDisplayNumber(board), ip);
+    const newReply = dto.toCreateInput(foundBoard.postCount + 1, ip);
     newReply.board = { connect: { id: foundBoard.id } };
     newReply.lastHit = null;
     newReply.parent = { connect: { id: foundParent.id } };
@@ -137,11 +157,60 @@ export class CommentService {
       include: { board: true, attachedFile: true }
     });
 
+    await this.setFileToComment(createdReply.id, attachedFile);
+
     this.logger.log(`Object created: [Comment] {id: ${createdReply.id}}`);
 
     await this.updateLastHit(foundParent, dto);
+    await this.boardService.incrementPostCount(foundBoard.id);
 
     return createdReply;
+  }
+
+  private async setFileToComment(commentId: string, attachedFile: AttachedFile): Promise<void> {
+    if (attachedFile) {
+      await this.prisma.comment.update({ data: { attachedFileId: attachedFile.id }, where: { id: commentId } });
+    }
+  }
+
+  public async clearAttachedFile(where: Prisma.CommentWhereInput): Promise<void> {
+    this.logger.log(`clearAttachedFile ({where: ${where})`);
+
+    const comments = await this.prisma.comment.findMany({ where, include: { attachedFile: true } });
+
+    for (const comment of comments) {
+      if (comment.attachedFile) {
+        await this.attachedFileService.removeEntity(comment.attachedFile);
+      }
+    }
+  }
+
+  public async remove(where: Prisma.CommentWhereInput): Promise<void> {
+    this.logger.log(`remove ({where: ${where})`);
+
+    const comments = await this.prisma.comment.findMany({ where, include: { attachedFile: true } });
+
+    for (const comment of comments) {
+      if (comment.attachedFile) {
+        await this.attachedFileService.removeEntity(comment.attachedFile);
+      }
+
+      await this.prisma.comment.deleteMany({ where });
+    }
+
+    await this.removeOrphans();
+  }
+
+  private async removeOrphans(): Promise<void> {
+    const orphanedComments = await this.prisma.comment.findMany({ where: { lastHit: null, parent: null }, include: { attachedFile: true } });
+
+    for (const comment of orphanedComments) {
+      if (comment.attachedFile) {
+        await this.attachedFileService.removeEntity(comment.attachedFile);
+      }
+
+      await this.prisma.comment.delete({ where: { id: comment.id } });
+    }
   }
 
   private escapeHtmlIfAdmin(dto: CommentCreateDto, isAdmin: boolean): string {
@@ -211,20 +280,6 @@ export class CommentService {
     }
   }
 
-  private async calculateDisplayNumber(board: string): Promise<number> {
-    const lastComment = await this.prisma.comment.findFirst({
-      where: { board: { slug: board } },
-      include: { board: true },
-      orderBy: { createdAt: 'desc' }
-    });
-
-    if (!lastComment) {
-      return 1;
-    }
-
-    return lastComment.displayNumber + 1;
-  }
-
   private async updateLastHit(comment: Comment, dto: CommentCreateDto): Promise<void> {
     this.logger.log(`updateLastHit ({comment: ${JSON.stringify(comment)}, dto: ${dto.toString()})`);
 
@@ -237,7 +292,7 @@ export class CommentService {
       this.logger.log(`Last hit will be updated ({ option: ${option}, parentLength: ${currentRepliesLength} })`);
       await this.prisma.comment.update({ data: { lastHit: new Date() }, where: { id: comment.id } });
     } else {
-      this.logger.log(`Last hit will not be updated ({ option: ${option}, parentLength: ${currentRepliesLength} })`);
+      this.logger.log(`Last hit will not be updated ({ option: ${option}, repliesLength: ${currentRepliesLength} })`);
     }
   }
 }

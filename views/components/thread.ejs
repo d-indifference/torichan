@@ -31,7 +31,7 @@
                 </div>
             <% } %>
             <label class="postInfo">
-                <input type="checkbox" name="<%= thread.openingPost.displayNumber %>" value="delete">
+                <input type="checkbox" name="delete" value="<%= thread.openingPost.displayNumber %>">
                 <span class="subject"><%= thread.openingPost.subject %></span>
                 <span class="name"><%= thread.openingPost.name %></span>
                 <span class="dateTime"><%= thread.openingPost.createdAt %></span>
@@ -58,7 +58,7 @@
                 <a name="<%= reply.displayNumber %>"></a>
 
                 <label class="postInfo">
-                    <input type="checkbox" name="<%= reply.displayNumber %>" value="delete">
+                    <input type="checkbox" name="delete" value="<%= reply.displayNumber %>">
                     <span class="subject"><%= reply.subject %></span>
                     <span class="name"><%= reply.name %></span>
                     <span class="dateTime"><%= reply.createdAt %></span>

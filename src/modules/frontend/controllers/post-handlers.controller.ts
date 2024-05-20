@@ -4,6 +4,8 @@ import { CommentCreateDto } from '@backend/dto/comment';
 import { Request, Response } from 'express';
 import { FormDataRequest } from 'nestjs-form-data';
 import { ParsePositiveNumberPipe } from '@utils/pipes';
+import { CommentRemoveDto } from '@frontend/dto';
+import { NormalizeRemoveCommentDtoPipe } from '@frontend/pipes';
 
 @Controller()
 export class PostHandlersController {
@@ -30,5 +32,26 @@ export class PostHandlersController {
     @Res() res: Response
   ): Promise<void> {
     await this.commentService.createReply(board, displayNumber, req.ip, dto, res);
+  }
+
+  @Post('/:board/delete')
+  @FormDataRequest()
+  public async deleteCommentsFromBoardPage(
+    @Param('board') board: string,
+    @Body(NormalizeRemoveCommentDtoPipe) dto: CommentRemoveDto,
+    @Res() res: Response
+  ): Promise<void> {
+    await this.commentService.removeAndRedirectToBoard(board, dto, res);
+  }
+
+  @Post('/:board/res/:displayNumber/delete')
+  @FormDataRequest()
+  public async deleteCommentsFromThreadPage(
+    @Param('board') board: string,
+    @Param('displayNumber', ParseIntPipe, ParsePositiveNumberPipe) displayNumber: number,
+    @Body(NormalizeRemoveCommentDtoPipe) dto: CommentRemoveDto,
+    @Res() res: Response
+  ): Promise<void> {
+    await this.commentService.removeAndRedirectToThread(board, displayNumber, dto, res);
   }
 }

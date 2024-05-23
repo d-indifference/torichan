@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { BoardService } from '@backend/services/board.service';
 import { AttachedFileService } from '@backend/services/attached-file.service';
 import { PrismaTakeSkipDto } from '@utils/misc';
+import { BanService } from '@backend/services/ban.service';
 
 @Injectable()
 export class CommentService {
@@ -21,7 +22,8 @@ export class CommentService {
     private readonly prisma: PrismaService,
     private readonly config: ConfigService,
     private readonly boardService: BoardService,
-    private readonly attachedFileService: AttachedFileService
+    private readonly attachedFileService: AttachedFileService,
+    private readonly banService: BanService
   ) {}
 
   public async findAll(
@@ -97,7 +99,7 @@ export class CommentService {
     dto.comment = this.escapeHtmlIfAdmin(dto, isAdmin);
     dto.name = this.processPosterName(dto.name, isAdmin);
 
-    this.checkIpBan(ip);
+    await this.checkIpBan(ip);
     this.checkFieldSpam(dto);
     this.checkFile(dto);
     await this.checkMaxActiveCommentSize(board);
@@ -136,7 +138,7 @@ export class CommentService {
     dto.comment = this.escapeHtmlIfAdmin(dto, isAdmin);
     dto.name = this.processPosterName(dto.name, isAdmin);
 
-    this.checkIpBan(ip);
+    await this.checkIpBan(ip);
     this.checkFieldSpam(dto);
     this.checkFile(dto);
     await this.checkDelay(ip, this.delayAfterReply);
@@ -223,6 +225,10 @@ export class CommentService {
 
   private processPosterName(name: string, isAdmin: boolean): string {
     if (name === '' || name === undefined) {
+      if (isAdmin) {
+        return 'Moderator';
+      }
+
       return this.config.getOrThrow('constants.placeholders.name');
     }
 
@@ -233,7 +239,9 @@ export class CommentService {
     return comment;
   }
 
-  private checkIpBan(ip: string): void {}
+  private async checkIpBan(ip: string): Promise<void> {
+    await this.banService.checkActiveBan(ip);
+  }
 
   private checkFieldSpam(dto: CommentCreateDto): void {}
 

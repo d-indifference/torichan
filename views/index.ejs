@@ -11,13 +11,20 @@
     <link rel="stylesheet" href="/css/start-page.css">
     <link rel="shortcut icon" href="/icons/favicon.ico" type="image/x-icon">
     <%- include('fragments/tori-script') %>
-    <title>Torichan Imageboard Engine</title>
+    <title><%- templateConstants.siteName %></title>
 </head>
 <body>
-    <h1 class="tori-title">Torichan Imageboard Engine</h1>
+    <%- include('fragments/tori-navbar'); %>
+    <br clear="all">
+
+    <h1 class="tori-title"><%- templateConstants.siteName %></h1>
+    <em style="text-align: center; display: block; font-size: 14pt"><%- templateConstants.siteSlogan %></em>
     <p class="tori-main-links">
-        [<a href="#">global rules</a>] / [<a href="#">management</a>] / [<a href="https://github.com/d-indifference/torichan">torichan 0.0.1</a>]
+        [<a href="#">global rules</a>] / [<a href="/admin">management</a>] / [<a href="https://github.com/d-indifference/torichan">torichan 0.0.1</a>]
     </p>
+
+    <%- include('fragments/tori-navbar'); %>
+    <br clear="all">
 
     <%- include('fragments/tori-footer') %>
 </body>

@@ -1,3 +1,6 @@
 <div class="tori-navbar">
-    [<a href="/">Home</a>][<a href="#">Management</a>]
+    [<% boards.forEach(board => { %>
+        /<a href="/<%= board.slug %>" title="<%= board.name %>"><%= board.slug %></a>/
+    <% }); %>]
+    [<a href="/">Home</a>][<a href="/admin">Management</a>]
 </div>

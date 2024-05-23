@@ -13,6 +13,10 @@
     <title>/<%= board.slug %>/ - <% if (thread.openingPost.subject) { %><%= thread.openingPost.subject %><% } else { %>Reply to thread #<%= thread.openingPost.displayNumber %><% } %></title>
 </head>
 <body>
+    <% if (session) { %>
+        <form action="/admin/ban/remove-comment" method="post" id="removeCommentForm"></form>
+    <% } %>
+
     <%- include('fragments/tori-navbar'); %>
 
     <h1 class="tori-page-title">/<%= board.slug %>/ - <% if (thread.openingPost.subject) { %><%= thread.openingPost.subject %><% } else { %>Reply to thread #<%= thread.openingPost.displayNumber %><% } %></h1>
@@ -27,7 +31,10 @@
                 <table class="tori-post-form" width="1%">
                     <tr>
                         <td>Name</td>
-                        <td><input name="name" type="text" tabindex="1" placeholder="Anonymous" size="32"></td>
+                        <td>
+                            <input name="name" type="text" tabindex="1" placeholder="<% if (session) { %>Moderator<% } else { %>Anonymous<% } %>" size="32">
+                            <% if (session) { %><label><input type="checkbox" name="isAdmin" checked>Mark me as administrator</label><% } %>
+                        </td>
                     </tr>
                     <tr>
                         <td>Options</td>

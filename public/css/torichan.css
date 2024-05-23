@@ -68,3 +68,8 @@ div.post.reply {
 span.omitted-posts {
   color: #707070;
 }
+
+span.admin-name {
+  font-weight: 900;
+  color: purple !important;
+}

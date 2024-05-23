@@ -12,4 +12,11 @@ export class PaginationResolveService {
 
     return new PrismaTakeSkipDto(pageSize, skipCount);
   }
+
+  public resolveTableSelection(page = 0): PrismaTakeSkipDto {
+    const pageSize = this.config.getOrThrow<number>('constants.pagination.default.table-contains');
+    const skipCount = page * pageSize;
+
+    return new PrismaTakeSkipDto(pageSize, skipCount);
+  }
 }

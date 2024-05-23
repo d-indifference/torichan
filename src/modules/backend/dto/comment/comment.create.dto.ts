@@ -1,6 +1,7 @@
 import { FileSystemStoredFile, IsFile, MaxFileSize } from 'nestjs-form-data';
 import { IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 import { Prisma } from '@prisma/client';
+import { isUndefined } from 'lodash';
 
 export class CommentCreateDto {
   @IsString()
@@ -35,6 +36,11 @@ export class CommentCreateDto {
   @MaxLength(8)
   password: string;
 
+  @IsString()
+  @IsOptional()
+  @MaxLength(2)
+  isAdmin: 'on' | undefined;
+
   public toCreateInput(displayNumber: number, ip: string): Prisma.CommentCreateInput {
     return {
       displayNumber,
@@ -43,11 +49,12 @@ export class CommentCreateDto {
       options: this.options,
       subject: this.subject,
       comment: this.comment,
-      password: this.password
+      password: this.password,
+      isAdmin: !isUndefined(this.isAdmin)
     };
   }
 
   public toString(): string {
-    return `{"name": ${this.name}, "options": ${this.options},"subject": ${this.subject}, "comment": ${this.comment}, "password": ${this.password}}`;
+    return `{"name": ${this.name}, "options": ${this.options},"subject": ${this.subject}, "comment": ${this.comment}, "password": ${this.password}, "isAdmin": ${this.isAdmin} }`;
   }
 }

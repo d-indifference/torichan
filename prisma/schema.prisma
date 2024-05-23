@@ -29,14 +29,14 @@ model Comment {
   password      String    @db.VarChar(8)
   lastHit       DateTime?
 
-  board   Board?  @relation(fields: [boardId], references: [id])
+  board   Board?  @relation(fields: [boardId], references: [id], onDelete: Cascade)
   boardId String? @db.Uuid
 
   attachedFileId String?       @db.Uuid
   attachedFile   AttachedFile?
 
   children Comment[] @relation(name: "threadReplies")
-  parent   Comment?  @relation(fields: [parentId], references: [id], name: "threadReplies")
+  parent   Comment?  @relation(fields: [parentId], references: [id], name: "threadReplies", onDelete: Cascade)
   parentId String?   @db.Uuid
 }
 
@@ -52,6 +52,31 @@ model AttachedFile {
   thumbnailHeight Int?
   isImage         Boolean @db.Boolean
 
-  comment   Comment? @relation(fields: [commentId], references: [id])
+  comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId String?  @unique @db.Uuid
+}
+
+enum UserRole {
+  ADMINISTRATOR
+  MODERATOR
+}
+
+model User {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  username          String   @db.VarChar(256)
+  encryptedPassword String   @db.VarChar(256)
+  email             String   @unique @db.VarChar(256)
+  role              UserRole
+  bans              Ban[]
+}
+
+model Ban {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now())
+  ip        String   @db.VarChar(64)
+  till      DateTime
+  reason    String   @db.VarChar(512)
+
+  userId String? @db.Uuid
+  user   User?   @relation(fields: [userId], references: [id])
 }

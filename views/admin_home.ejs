@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="nofollow">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/torichan.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="shortcut icon" href="/icons/favicon.ico" type="image/x-icon">
+    <%- include('fragments/tori-script') %>
+    <title>Management Panel - <%- templateConstants.siteName %></title>
+</head>
+<body>
+    <%- include('fragments/admin-navbar') %>
+
+    <h1 class="tori-page-title">Management panel</h1>
+    <%- include('fragments/admin-welcome') %>
+
+    <%- include('fragments/admin-tabs') %>
+
+    <div class="admin-info-panel">
+        <table style="margin: 0 auto">
+            <tr>
+                <td>
+                    <p>Currently, there are <strong><%= technicalInfo.totalComments %></strong> posts on <strong><%= technicalInfo.totalBoards %></strong> boards</p>
+
+                    <% if (session.role === 'ADMINISTRATOR') { %>
+
+                        <p><a href='/admin'>Disk space used</a> is <strong><%= technicalInfo.diskSpaceUsed %></strong></p>
+
+                        <h3>Technical Info</h3>
+                        <ul>
+                            <li>Uptime (seconds) - <b><%= technicalInfo.uptime %></b></li>
+                        </ul>
+
+                        <h5>CPU details (<%= technicalInfo.cpus.length %>) [<a href="#" id="cpu_toggle">Show</a>]</h5>
+                        <div id="cpu_section" style="display: none">
+                            <hr>
+                            <% technicalInfo.cpus.forEach((cpu, idx) => { %>
+                                <b>CPU #<%= idx + 1 %>:</b>
+                                <ul>
+                                    <li>model - <b><%= cpu.model %></b></li>
+                                    <li>speed - <b><%= cpu.speed %></b></li>
+                                    <li>user usage time (microseconds) - <b><%= cpu.times.user %></b></li>
+                                    <li>system usage time (microseconds) - <b><%= cpu.times.sys %></b></li>
+                                    <li>nice mode time (microseconds) - <b><%= cpu.times.nice %></b></li>
+                                    <li>idle mode time (microseconds) - <b><%= cpu.times.idle %></b></li>
+                                    <li>irq mode time (microseconds) - <b><%= cpu.times.irq %></b></li>
+                                </ul>
+                            <% }); %>
+                            <hr>
+                        </div>
+
+                        <p>Memory usage:</p>
+                        <ul>
+                            <li>Total - <b><%= technicalInfo.memory.total %></b></li>
+                            <li>Free - <b><%= technicalInfo.memory.inUsage  %></b></li>
+                            <li>In use - <b><%= technicalInfo.memory.free %></b></li>
+                        </ul>
+
+                        <p>Debug port: <b><%= technicalInfo.debugPort %></b> (see <a
+                                    href='https://nodejs.org/en/docs/guides/debugging-getting-started'
+                                    target='_blank'
+                            >Node.js Debugging Guide</a>)</p>
+                        <p>App port: <b><%= technicalInfo.port %></b></p>
+
+                        <p><abbr title='Docker container ID'>Host name</abbr>: <b><%= technicalInfo.host %></b></p>
+
+                        <h3>Node.js</h3>
+                        <p>
+                            <a href='https://nodejs.org/' target='_blank'>Node.js</a> version - <b>v<%= technicalInfo.processVersions.node %></b>
+                        </p>
+
+                        <h5>Node details</h5>
+                        <ol>
+                            <% Object.keys(technicalInfo.processVersions).forEach(proc => { %>
+                                <li><%= proc %>: <b><%= technicalInfo.processVersions[proc] %></b></li>
+                            <% }); %>
+                        </ol>
+
+                        <h3>PostgreSQL</h3>
+                        <p><a href='https://www.postgresql.org/' target='_blank'>PostgreSQL</a> version: <b><%= technicalInfo.postgresVersion %></b></p>
+
+                        <h3>Dependencies</h3>
+
+                        <ul>
+                            <% Object.keys(technicalInfo.dependencies).forEach(dependency => { %>
+                                <li><a href="https://www.npmjs.com/package/<%= dependency %>" target="_blank">
+                                        <%= dependency %>
+                                    </a>: <b><%= technicalInfo.dependencies[dependency] %></b></li>
+                            <% }); %>
+                        </ul>
+
+                        <h3>Dev Dependencies</h3>
+
+                        <ul>
+                            <% Object.keys(technicalInfo.devDependencies).forEach(dependency => { %>
+                                <li><a href="https://www.npmjs.com/package/<%= dependency %>" target="_blank">
+                                        <%= dependency %>
+                                    </a>: <b><%= technicalInfo.devDependencies[dependency] %></b></li>
+                            <% }); %>
+                        </ul>
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <%- include('fragments/admin-navbar') %>
+
+    <script type="text/javascript" src="/js/admin.js"></script>
+
+    <%- include('fragments/tori-footer'); %>
+</body>

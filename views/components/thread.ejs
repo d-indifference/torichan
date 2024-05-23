@@ -33,12 +33,44 @@
             <label class="postInfo">
                 <input type="checkbox" name="delete" value="<%= thread.openingPost.displayNumber %>">
                 <span class="subject"><%= thread.openingPost.subject %></span>
-                <span class="name"><%= thread.openingPost.name %></span>
+                <% if (!thread.openingPost.isAdmin) { %><span class="name"><%= thread.openingPost.name %></span><% } else { %><span class="admin-name" title="Highlight posts by Moderators">##&nbsp;<%= thread.openingPost.name %></span><% } %>
                 <span class="dateTime"><%= thread.openingPost.createdAt %></span>
             </label>
             <a class="postNum" href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#<%= thread.openingPost.displayNumber %>">No. <%= thread.openingPost.displayNumber %></a>
 
-            <div class="reply-link">[<a href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>">Reply</a>]</div><br>
+            <div class="reply-link">
+                <% if (session) { %>
+                    &nbsp;&nbsp;
+                    <b style="color: red; text-decoration: underline">IP: <%= thread.openingPost.ip %></b>
+                    &nbsp;
+                    <button
+                        type="submit"
+                        form="removeCommentForm"
+                        name="payload"
+                        value="{&quot;mode&quot;:&quot;ONLY_COMMENT&quot;,&quot;commentId&quot;:&quot;<%= thread.openingPost.id %>&quot;,&quot;ip&quot;:&quot;<%= thread.openingPost.ip %>&quot;,&quot;redirectAfterDeletion&quot;:&quot;/<%= board.slug %>&quot;}"
+                    >
+                        Delete this comment
+                    </button>
+                    <button
+                        type="submit"
+                        form="removeCommentForm"
+                        name="payload"
+                        value="{&quot;mode&quot;:&quot;ONLY_FILE&quot;,&quot;commentId&quot;:&quot;<%= thread.openingPost.id %>&quot;,&quot;ip&quot;:&quot;<%= thread.openingPost.ip %>&quot;,&quot;redirectAfterDeletion&quot;:&quot;/<%= board.slug %><% if (pageMode === 'THREAD') { %>/res/<%= thread.openingPost.displayNumber %><% } %>&quot;}"
+                    >
+                        Delete this file
+                    </button>
+                    <button
+                        type="submit"
+                        form="removeCommentForm"
+                        name="payload"
+                        value="{&quot;mode&quot;:&quot;ALL_BY_IP&quot;,&quot;commentId&quot;:&quot;<%= thread.openingPost.id %>&quot;,&quot;ip&quot;:&quot;<%= thread.openingPost.ip %>&quot;,&quot;redirectAfterDeletion&quot;:&quot;/<%= board.slug %>&quot;}"
+                    >
+                        Delete all comments from this IP
+                    </button>
+                    [<a target="_blank" href="/admin/ban/new?ip=<%= thread.openingPost.ip %>">Ban this IP</a>]
+                <% } %>
+                <% if (pageMode === 'BOARD') { %>[<a href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>">Reply</a>]<% } %>
+            </div><br>
 
             <blockquote class="post-message"><%= thread.openingPost.comment %></blockquote>
 
@@ -60,10 +92,41 @@
                 <label class="postInfo">
                     <input type="checkbox" name="delete" value="<%= reply.displayNumber %>">
                     <span class="subject"><%= reply.subject %></span>
-                    <span class="name"><%= reply.name %></span>
+                    <% if (!reply.isAdmin) { %><span class="name"><%= reply.name %></span><% } else { %><span class="admin-name" title="Highlight posts by Moderators">##&nbsp;<%= reply.name %></span><% } %>
                     <span class="dateTime"><%= reply.createdAt %></span>
                 </label>
                 <a class="postNum" href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#<%= reply.displayNumber %>">No. <%= reply.displayNumber %></a>
+
+                <% if (session) { %>
+                    &nbsp;&nbsp;
+                    <b style="color: red; text-decoration: underline">IP: <%= reply.ip %></b>
+                    &nbsp;
+                    <button
+                            type="submit"
+                            form="removeCommentForm"
+                            name="payload"
+                            value="{&quot;mode&quot;:&quot;ONLY_COMMENT&quot;,&quot;commentId&quot;:&quot;<%= reply.id %>&quot;,&quot;ip&quot;:&quot;<%= reply.ip %>&quot;,&quot;redirectAfterDeletion&quot;:&quot;/<%= board.slug %><% if (pageMode === 'THREAD') { %>/res/<%= thread.openingPost.displayNumber %><% } %>&quot;}"
+                    >
+                        Delete this comment
+                    </button>
+                    <button
+                            type="submit"
+                            form="removeCommentForm"
+                            name="payload"
+                            value="{&quot;mode&quot;:&quot;ONLY_FILE&quot;,&quot;commentId&quot;:&quot;<%= reply.id %>&quot;,&quot;ip&quot;:&quot;<%= reply.ip %>&quot;,&quot;redirectAfterDeletion&quot;:&quot;/<%= board.slug %><% if (pageMode === 'THREAD') { %>/res/<%= thread.openingPost.displayNumber %><% } %>&quot;}"
+                    >
+                        Delete this file
+                    </button>
+                    <button
+                            type="submit"
+                            form="removeCommentForm"
+                            name="payload"
+                            value="{&quot;mode&quot;:&quot;ALL_BY_IP&quot;,&quot;commentId&quot;:&quot;<%= reply.id %>&quot;,&quot;ip&quot;:&quot;<%= reply.ip %>&quot;,&quot;redirectAfterDeletion&quot;:&quot;/<%= board.slug %><% if (pageMode === 'THREAD') { %>/res/<%= thread.openingPost.displayNumber %><% } %>&quot;}"
+                    >
+                        Delete all comments from this IP
+                    </button>
+                    [<a target="_blank" href="/admin/ban/new?ip=<%= reply.ip %>">Ban this IP</a>]
+                <% } %>
 
                 <% if (reply.attachedFile) { %>
                     <div class="file">

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="nofollow">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/torichan.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="shortcut icon" href="/icons/favicon.ico" type="image/x-icon">
+    <%- include('fragments/tori-script') %>
+    <title><%= args.formDescription %> - <%- templateConstants.siteName %></title>
+</head>
+<body>
+    <%- include('fragments/admin-navbar') %>
+
+    <h1 class="tori-page-title"><%= args.formDescription %> - Management panel</h1>
+    <%- include('fragments/admin-welcome') %>
+
+    <%- include('fragments/admin-tabs') %>
+
+    <fieldset class="admin-form">
+        <legend><%= args.formDescription %></legend>
+        [<a href="/admin/board" style="text-align: center">Go back</a>]
+
+        <form action="<%= args.formHandler %>" method="post">
+            <table class="tori-post-form" width="1%">
+                <tr>
+                    <td>Slug</td>
+                    <td>
+                        <input
+                            name="slug"
+                            type="text"
+                            tabindex="1"
+                            size="32"
+                            required
+                            <% if (args.formMode !== 'CREATE') { %>value="<%= args.formData.slug %>" <% } %>
+                        >
+                    </td>
+                </tr>
+                <tr>
+                    <td>Name</td>
+                    <td>
+                        <input
+                            name="name"
+                            type="text"
+                            tabindex="1"
+                            size="32"
+                            required
+                            <% if (args.formMode !== 'CREATE') { %>value="<%= args.formData.name %>" <% } %>
+                        >
+                    </td>
+                </tr>
+            </table>
+            <input type="submit" value="Save changes" tabindex="1" size="32">
+        </form>
+    </fieldset>
+
+    <hr>
+
+    <% if (args.formMode !== 'CREATE') { %>
+        <div class="admin-danger">
+            <div class="header">Danger zone</div>
+            <p>
+                Deleting the board "<%= args.formData.name %>" once will mean that you will never be able to restore this record.<br>
+                <u>Are you sure of your intentions?</u>
+            </p>
+
+            <form action="/admin/board/<%= args.formData.id %>/delete" method="post">
+                <input type="submit" value="Delete board '<%= args.formData.name %>'">
+            </form>
+        </div>
+    <% } %>
+
+    <%- include('fragments/admin-navbar') %>
+
+    <script type="text/javascript" src="/js/admin.js"></script>
+
+    <%- include('fragments/tori-footer'); %>
+</body>

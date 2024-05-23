@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="nofollow">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/torichan.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="shortcut icon" href="/icons/favicon.ico" type="image/x-icon">
+    <%- include('fragments/tori-script') %>
+    <title>Comments - <%- templateConstants.siteName %></title>
+</head>
+<body>
+    <%- include('fragments/admin-navbar') %>
+
+    <h1 class="tori-page-title">Comments - Management panel</h1>
+    <%- include('fragments/admin-welcome') %>
+
+    <%- include('fragments/admin-tabs') %>
+
+    <form method="get" action="/admin/comment" style="text-align: center; margin-bottom: 10px">
+        <select name="slug">
+            <% allBoards.forEach(board => { %>
+                <% if (currentBoard) { %>
+                    <% if (currentBoard.slug === board.slug) { %>
+                        <option selected value="<%= board.slug %>">/<%= board.slug %>/ - <%= board.name %></option>
+                    <% } else { %>
+                        <option value="<%= board.slug %>">/<%= board.slug %>/ - <%= board.name %></option>
+                    <% } %>
+                <% } else { %>
+                    <option value="<%= board.slug %>">/<%= board.slug %>/ - <%= board.name %></option>
+                <% } %>
+            <% }) %>
+        </select>
+        <button type="submit">Select</button>
+    </form>
+
+    <table border="1" class="table-list">
+        <thead>
+        <tr>
+            <td>#</td>
+            <td>Created at</td>
+            <td>IP</td>
+            <td>Admin`s post</td>
+            <td>Name</td>
+            <td>Options</td>
+            <td>Subject</td>
+            <td>Comment</td>
+            <td>File</td>
+            <td>Link</td>
+            <td>Delete</td>
+            <td></td>
+        </tr>
+        </thead>
+        <tbody>
+        <% comments.forEach((comment, idx) => { %>
+            <tr>
+                <td><%= idx + 1 %></td>
+                <td><%= comment.createdAt %></td>
+                <td><%= comment.ip %></td>
+                <td><%= comment.isAdmin %></td>
+                <td><%= comment.name %></td>
+                <td><%= comment.options %></td>
+                <td><%= comment.subject %></td>
+                <td><%= comment.comment %></td>
+                <td>
+                    <% if (comment.attachedFile) { %>
+                        <% if (comment.attachedFile.isImage) { %>
+                            <a href="/files/<%= comment.boardSlug %>/src/<%= comment.attachedFile.path %>" target="_blank">
+                                <img src="/files/<%= comment.boardSlug %>/thumb/<%= comment.attachedFile.thumbnailPath %>" alt="<%= comment.attachedFile.path %>">
+                            </a>
+                        <% } else { %>
+                            File: <a href="/files/<%= comment.boardSlug %>/src/<%= comment.attachedFile.path %>"><%= comment.attachedFile.path %></a>
+                        <% }%>
+                    <% } else { %>——<% } %>
+                </td>
+                <td>
+                    <% if (comment.parentNumber) { %>
+                        <a target="_blank" href="/<%= comment.boardSlug %>/res/<%= comment.parentNumber %>#<%= comment.displayNumber %>">
+                            /<%= comment.boardSlug %>/res/<%= comment.parentNumber %>#<%= comment.displayNumber %>
+                        </a>
+                    <% } else { %>
+                        <a target="_blank" href="/<%= comment.boardSlug %>/res/<%= comment.displayNumber %>#<%= comment.displayNumber %>">
+                            /<%= comment.boardSlug %>/res/<%= comment.displayNumber %>#<%= comment.displayNumber %>
+                        </a>
+                    <% } %>
+                </td>
+                <td>
+                    <form action="/admin/ban/remove-comment" method="post" id="removeCommentForm">
+                        <button
+                            type="submit"
+                            form="removeCommentForm"
+                            name="payload"
+                            value="{&quot;mode&quot;:&quot;ONLY_COMMENT&quot;,&quot;commentId&quot;:&quot;<%= comment.id %>&quot;,&quot;ip&quot;:&quot;<%= comment.ip %>&quot;,&quot;redirectAfterDeletion&quot;:&quot;/admin/comment?slug=<%= comment.boardSlug %>&quot;}"
+                        >
+                            Comment
+                        </button>
+                        <button
+                            type="submit"
+                            form="removeCommentForm"
+                            name="payload"
+                            value="{&quot;mode&quot;:&quot;ONLY_FILE&quot;,&quot;commentId&quot;:&quot;<%= comment.id %>&quot;,&quot;ip&quot;:&quot;<%= comment.ip %>&quot;,&quot;redirectAfterDeletion&quot;:&quot;/admin/comment?slug=<%= comment.boardSlug %>&quot;}"
+                        >
+                            File
+                        </button>
+                        <button
+                            type="submit"
+                            form="removeCommentForm"
+                            name="payload"
+                            value="{&quot;mode&quot;:&quot;ALL_BY_IP&quot;,&quot;commentId&quot;:&quot;<%= comment.id %>&quot;,&quot;ip&quot;:&quot;<%= comment.ip %>&quot;,&quot;redirectAfterDeletion&quot;:&quot;/admin/comment?slug=<%= comment.boardSlug %>&quot;}"
+                        >
+                            All of IP
+                        </button>
+                    </form>
+                </td>
+                <td>[<a target="_blank" href="/admin/ban/new?ip=<%= comment.ip %>">Ban this IP</a>]</td>
+            </tr>
+        <% }); %>
+        </tbody>
+    </table>
+
+    <div class="simple-table-pagination">
+        <span>
+            <% if (currentPage > 0) { %>
+                <% if (currentBoard) { %>
+                    <a href="/admin/comment?slug=<%= currentBoard.slug %>&page=<%= currentPage - 1 %>">&laquo;</a>
+                <% } else { %>
+                    <a href="/admin/comment?page=<%= currentPage - 1 %>">&laquo;</a>
+                <% } %>
+            <% } else { %>
+                &laquo;
+            <% } %>
+        </span>
+        &nbsp;
+        <span>
+            <% if (currentPage < maxPage) { %>
+                <a href="/admin/comment?page=<%= currentPage + 1 %>">&raquo;</a>
+
+                <% if (currentBoard) { %>
+                    <a href="/admin/comment?slug=<%= currentBoard.slug %>&page=<%= currentPage + 1 %>">&raquo;</a>
+                <% } else { %>
+                    <a href="/admin/comment?page=<%= currentPage + 1 %>">&raquo;</a>
+                <% } %>
+            <% } else { %>
+                &raquo;
+            <% } %>
+        </span><br>
+    </div>
+
+    <%- include('fragments/admin-navbar') %>
+
+    <script type="text/javascript" src="/js/admin.js"></script>
+
+    <%- include('fragments/tori-footer'); %>
+</body>

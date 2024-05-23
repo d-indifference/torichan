@@ -1,9 +1,17 @@
 import { BoardDto } from '@backend/dto/board';
 import { AbstractPageable } from '@utils/abstract';
 import { ThreadDto } from '@frontend/dto';
+import { SessionPayloadDto } from '@admin/dto';
+import { CommentPageMode } from '@frontend/enums';
 
 export class BoardPage extends AbstractPageable {
+  session?: SessionPayloadDto;
+
+  pageMode: CommentPageMode;
+
   board: BoardDto;
+
+  boards: BoardDto[];
 
   password: string;
 
@@ -27,8 +35,28 @@ class BoardPageBuilder {
     return this;
   }
 
+  public session(session?: SessionPayloadDto): BoardPageBuilder {
+    if (session) {
+      this.boardPage.session = session;
+    } else {
+      this.boardPage.session = null;
+    }
+
+    return this;
+  }
+
+  public pageMode(pageMode: CommentPageMode): BoardPageBuilder {
+    this.boardPage.pageMode = pageMode;
+    return this;
+  }
+
   public board(board: BoardDto): BoardPageBuilder {
     this.boardPage.board = board;
+    return this;
+  }
+
+  public boards(boards: BoardDto[]): BoardPageBuilder {
+    this.boardPage.boards = boards;
     return this;
   }
 

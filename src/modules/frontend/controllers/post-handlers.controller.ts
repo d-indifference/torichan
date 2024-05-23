@@ -1,4 +1,4 @@
-import { Body, Controller, Param, ParseIntPipe, Post, Req, Res, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Param, ParseIntPipe, Post, Req, Res, Session, ValidationPipe } from '@nestjs/common';
 import { CommentService } from '@frontend//services';
 import { CommentCreateDto } from '@backend/dto/comment';
 import { Request, Response } from 'express';
@@ -6,6 +6,7 @@ import { FormDataRequest } from 'nestjs-form-data';
 import { ParsePositiveNumberPipe } from '@utils/pipes';
 import { CommentRemoveDto } from '@frontend/dto';
 import { NormalizeRemoveCommentDtoPipe } from '@frontend/pipes';
+import { SessionDto } from '@admin/dto';
 
 @Controller()
 export class PostHandlersController {
@@ -16,10 +17,11 @@ export class PostHandlersController {
   public async createThread(
     @Param('board') board: string,
     @Body(new ValidationPipe({ transform: true })) dto: CommentCreateDto,
+    @Session() session: SessionDto,
     @Req() req: Request,
     @Res() res: Response
   ): Promise<void> {
-    await this.commentService.createThread(board, req.ip, dto, res);
+    await this.commentService.createThread(board, req.ip, dto, res, session);
   }
 
   @Post('/:board/res/:displayNumber/post')
@@ -28,10 +30,11 @@ export class PostHandlersController {
     @Param('board') board: string,
     @Param('displayNumber', ParseIntPipe, ParsePositiveNumberPipe) displayNumber: number,
     @Body(new ValidationPipe({ transform: true })) dto: CommentCreateDto,
+    @Session() session: SessionDto,
     @Req() req: Request,
     @Res() res: Response
   ): Promise<void> {
-    await this.commentService.createReply(board, displayNumber, req.ip, dto, res);
+    await this.commentService.createReply(board, displayNumber, req.ip, dto, res, session);
   }
 
   @Post('/:board/delete')

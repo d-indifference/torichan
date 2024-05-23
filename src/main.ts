@@ -11,6 +11,7 @@ import { sessionConfig } from '@config/session.config';
 import * as fs from 'fs-extra';
 import { InternalServerErrorExceptionFilter, NotFoundExceptionFilter } from '@utils/filters/exceptions';
 import { BadRequestExceptionFilter } from '@utils/filters/exceptions/bad-request-exception.filter';
+import { templateConstants } from '@config/application-template-helpers';
 
 const bootstrap = async (): Promise<void> => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -21,6 +22,7 @@ const bootstrap = async (): Promise<void> => {
   const staticDirectory = path.join(process.cwd(), config.getOrThrow('paths.public'));
   const viewsDirectory = path.join(process.cwd(), config.getOrThrow('paths.views'));
   const filesDirectory = path.join(process.cwd(), config.getOrThrow('paths.files'));
+  const appVolume = path.join(process.cwd(), config.getOrThrow('paths.volume'));
 
   app.useStaticAssets(staticDirectory);
   app.setBaseViewsDir(viewsDirectory);
@@ -30,10 +32,13 @@ const bootstrap = async (): Promise<void> => {
   app.use(session(sessionConfig(config)));
 
   await fs.ensureDir(filesDirectory);
+  await fs.ensureDir(appVolume);
 
   app.useGlobalFilters(new NotFoundExceptionFilter());
   app.useGlobalFilters(new InternalServerErrorExceptionFilter());
   app.useGlobalFilters(new BadRequestExceptionFilter());
+
+  app.setLocal('templateConstants', templateConstants);
 
   await app.listen(port);
 

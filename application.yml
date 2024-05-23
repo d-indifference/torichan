@@ -5,6 +5,7 @@ paths:
   public: 'public'
   views: 'views'
   files: 'public/files'
+  volume: 'volumes/torichan'
 
 secure:
   secret:
@@ -18,9 +19,9 @@ constants:
     side: 200
   max:
     threads: 20
-    bump-limit: 5
+    bump-limit: 100
   pagination:
     default:
       threads: 10
-      preview-replies: 3
+      preview-replies: 5
       table-contains: 10

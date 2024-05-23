@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as path from 'path';
 import * as fs from 'fs/promises';
+import * as fsSync from 'fs';
 import * as fsExtra from 'fs-extra';
 import { FileSystemStoredFile } from 'nestjs-form-data';
 import { ConfigService } from '@nestjs/config';
@@ -77,6 +78,13 @@ export class FileSystemService {
     await fsExtra.ensureDir(fullPath);
   }
 
+  public async renameDir(dirPath: string, newName: string): Promise<void> {
+    const oldFullPath = this.buildFullPath(dirPath);
+    const newFullPath = this.buildFullPath(newName);
+
+    await fs.rename(oldFullPath, newFullPath);
+  }
+
   public async removePath(fileSystemPath: string): Promise<void> {
     const fullPath = this.buildFullPath(fileSystemPath);
 
@@ -87,5 +95,35 @@ export class FileSystemService {
     } else {
       this.logger.warn(`Path not removed: ${fileSystemPath}`);
     }
+  }
+
+  public async dirSize(dirPath: string): Promise<number> {
+    if (fsSync.existsSync(dirPath)) {
+      const stat = await fs.stat(dirPath);
+
+      if (stat.isDirectory()) {
+        let totalSize = 0;
+
+        const dirSizeRecursive = async (dirPath: string): Promise<void> => {
+          const stat = await fs.stat(dirPath);
+
+          if (stat.isDirectory()) {
+            const files = await fs.readdir(dirPath);
+
+            for (const file of files) {
+              await dirSizeRecursive(path.join(dirPath, file));
+            }
+          } else {
+            totalSize += stat.size;
+          }
+        };
+
+        await dirSizeRecursive(dirPath);
+
+        return totalSize;
+      }
+    }
+
+    return 0;
   }
 }

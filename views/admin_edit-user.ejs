@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="nofollow">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/torichan.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="shortcut icon" href="/icons/favicon.ico" type="image/x-icon">
+    <%- include('fragments/tori-script') %>
+    <title>Edit user - <%- templateConstants.siteName %></title>
+</head>
+<body>
+    <%- include('fragments/admin-navbar') %>
+
+    <h1 class="tori-page-title">Edit user - Management panel</h1>
+    <%- include('fragments/admin-welcome') %>
+
+    <%- include('fragments/admin-tabs') %>
+
+    <%- include('components/user-form', { args: args }) %>
+
+    <hr>
+
+    <% if (args.formMode !== 'CREATE') { %>
+        <div class="admin-danger">
+            <div class="header">Danger zone</div>
+            <p>
+                Deleting the user "<%= args.formData.username %>" once will mean that you will never be able to restore this record.<br>
+                <u>Are you sure of your intentions?</u>
+            </p>
+
+            <form action="/admin/staff/<%= args.formData.id %>/delete" method="post">
+                <input type="submit" value="Delete user '<%= args.formData.username %>'">
+            </form>
+        </div>
+    <% } %>
+
+    <%- include('fragments/admin-navbar') %>
+
+    <script type="text/javascript" src="/js/admin.js"></script>
+
+    <%- include('fragments/tori-footer'); %>
+</body>

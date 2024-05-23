@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="nofollow">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/torichan.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="shortcut icon" href="/icons/favicon.ico" type="image/x-icon">
+    <%- include('fragments/tori-script') %>
+    <title>Management Panel - <%- templateConstants.siteName %></title>
+</head>
+<body>
+
+    <h1 class="tori-page-title">Management panel</h1>
+
+    <fieldset class="admin-form">
+        <legend>Sign in to management panel</legend>
+        [<a href="/" style="text-align: center">Go back</a>]
+        <form action="/admin/sign-in" method="post">
+            <table class="tori-post-form" width="1%">
+                <tr>
+                    <td>Username</td>
+                    <td><input name="username" type="text" tabindex="1" size="32" value="root"></td>
+                </tr>
+                <tr>
+                    <td>Password</td>
+                    <td><input name="password" type="password" tabindex="1" size="32" value="root"></td>
+                </tr>
+            </table>
+
+            <input type="submit" value="Sign in" tabindex="1" size="32">
+        </form>
+    </fieldset>
+
+    <%- include('fragments/tori-footer'); %>
+</body>

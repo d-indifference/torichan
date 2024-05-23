@@ -19,6 +19,7 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@config/*": ["src/config/*"],
+      "@admin/*": ["src/modules/admin/*"],
       "@api/*": ["src/modules/api/*"],
       "@backend/*": ["src/modules/backend/*"],
       "@frontend/*": ["src/modules/frontend/*"],

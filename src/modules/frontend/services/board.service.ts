@@ -11,6 +11,8 @@ import { Prisma } from '@prisma/client';
 import { setPasswordFromCookies } from '@frontend/utils';
 import { ConfigService } from '@nestjs/config';
 import { reverse } from 'lodash';
+import { SessionDto } from '@admin/dto';
+import { CommentPageMode } from '@frontend/enums';
 
 @Injectable()
 export class BoardService {
@@ -21,8 +23,9 @@ export class BoardService {
     private readonly config: ConfigService
   ) {}
 
-  public async getBoardPage(slug: string, cookies: Record<string, unknown>, page = 0): Promise<BoardPage> {
+  public async getBoardPage(slug: string, cookies: Record<string, unknown>, session?: SessionDto, page = 0): Promise<BoardPage> {
     const board = await this.boardService.findBySlug(slug);
+    const boards = await this.boardService.findAll({}, null, { slug: 'asc' });
 
     const threadSearchCondition: Prisma.CommentWhereInput = { board: { slug }, lastHit: { not: null } };
 
@@ -38,7 +41,10 @@ export class BoardService {
       .builder()
       .maxPage(await this.commentService.getMaxPageNumber(threadSearchCondition))
       .currentPage(page)
+      .session(session.payload ?? null)
+      .pageMode(CommentPageMode.BOARD)
       .board(board)
+      .boards(boards)
       .password(this.setPassword(cookies))
       .threads(threadDtoList)
       .build();

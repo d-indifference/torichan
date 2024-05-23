@@ -2,6 +2,8 @@ import { AttachedFile } from '@prisma/client';
 import { filesize } from 'filesize';
 
 export class AttachedFileDto {
+  id: string;
+
   path: string;
 
   size: string;
@@ -21,6 +23,7 @@ export class AttachedFileDto {
   thumbnailHeight?: number;
 
   constructor(
+    id: string,
     path: string,
     size: string,
     isImage: boolean,
@@ -31,6 +34,7 @@ export class AttachedFileDto {
     thumbnailWidth: number,
     thumbnailHeight: number
   ) {
+    this.id = id;
     this.path = path;
     this.size = size;
     this.isImage = isImage;
@@ -48,6 +52,7 @@ export class AttachedFileDto {
     }
 
     return new AttachedFileDto(
+      model.id,
       model.path,
       filesize(model.size, { standard: 'jedec' }),
       model.isImage,

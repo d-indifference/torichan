@@ -6,6 +6,8 @@ import { setPasswordFromCookies } from '@frontend/utils';
 import { Prisma } from '@prisma/client';
 import { CommentDto } from '@backend/dto/comment';
 import { ThreadDto } from '@frontend/dto';
+import { SessionDto } from '@admin/dto';
+import { CommentPageMode } from '@frontend/enums';
 
 @Injectable()
 export class ThreadService {
@@ -14,8 +16,9 @@ export class ThreadService {
     private readonly commentService: BackendCommentService
   ) {}
 
-  public async getThreadPage(slug: string, displayNumber: number, cookies: Record<string, unknown>): Promise<ThreadPage> {
+  public async getThreadPage(slug: string, displayNumber: number, cookies: Record<string, unknown>, session?: SessionDto): Promise<ThreadPage> {
     const board = await this.boardService.findBySlug(slug);
+    const boards = await this.boardService.findAll({}, null, { slug: 'asc' });
 
     const threadSearchCondition: Prisma.CommentWhereInput = { displayNumber, board: { slug } };
 
@@ -23,7 +26,10 @@ export class ThreadService {
 
     return ThreadPage
       .builder()
+      .session(session.payload ?? null)
+      .pageMode(CommentPageMode.THREAD)
       .board(board)
+      .boards(boards)
       .thread(await this.mapThread(thread))
       .password(this.setPassword(cookies))
       .build();

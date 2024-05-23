@@ -3,9 +3,13 @@ import { DateTime } from 'luxon';
 import { AttachedFileDto } from '@backend/dto/comment/attached-file.dto';
 
 export class CommentDto {
+  id: string;
+
   createdAt: string;
 
   boardSlug: string;
+
+  parentNumber?: number;
 
   displayNumber: number;
 
@@ -24,6 +28,7 @@ export class CommentDto {
   attachedFile?: AttachedFileDto;
 
   constructor(
+    id: string,
     createdAt: string,
     boardSlug: string,
     displayNumber: number,
@@ -33,8 +38,10 @@ export class CommentDto {
     options: string,
     subject: string,
     comment: string,
-    attachedFile?: AttachedFileDto
+    attachedFile?: AttachedFileDto,
+    parentNumber?: number
   ) {
+    this.id = id;
     this.createdAt = createdAt;
     this.boardSlug = boardSlug;
     this.displayNumber = displayNumber;
@@ -48,10 +55,13 @@ export class CommentDto {
     if (attachedFile) {
       this.attachedFile = attachedFile;
     }
+
+    this.parentNumber = parentNumber ?? null;
   }
 
   public static fromModel(model: Comment, boardSlug: string, attachedFile?: AttachedFile): CommentDto {
     return new CommentDto(
+      model.id,
       DateTime.fromJSDate(model.createdAt).toFormat('EEE dd MMM yyyy HH:mm:ss'),
       boardSlug,
       model.displayNumber,
@@ -61,7 +71,8 @@ export class CommentDto {
       model.options,
       model.subject,
       model.comment,
-      AttachedFileDto.fromModel(attachedFile)
+      AttachedFileDto.fromModel(attachedFile),
+      model['parent'] ? model['parent'].displayNumber : null
     );
   }
 }

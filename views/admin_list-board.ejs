@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="nofollow">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/torichan.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="shortcut icon" href="/icons/favicon.ico" type="image/x-icon">
+    <%- include('fragments/tori-script') %>
+    <title>Boards - <%- templateConstants.siteName %></title>
+</head>
+<body>
+<%- include('fragments/admin-navbar') %>
+
+<h1 class="tori-page-title">Boards - Management panel</h1>
+<%- include('fragments/admin-welcome') %>
+
+<%- include('fragments/admin-tabs') %>
+
+<table border="1" class="table-list">
+    <thead>
+    <tr>
+        <td>#</td>
+        <td>Slug</td>
+        <td>Name</td>
+        <td></td>
+    </tr>
+    </thead>
+    <tbody>
+    <% boards.forEach((board, idx) => { %>
+        <tr>
+            <td><%= idx + 1 %></td>
+            <td><a target="_blank" href="/<%= board.slug %>">/<%= board.slug %>/</a></td>
+            <td><%= board.name %></td>
+            <td>[<a href="/admin/board/<%= board.id %>">Edit</a>]</td>
+        </tr>
+    <% }); %>
+    </tbody>
+</table>
+
+<div class="simple-table-pagination">
+    <span>
+        <% if (currentPage > 0) { %>
+            <a href="/admin/board?page=<%= currentPage - 1 %>">&laquo;</a>
+        <% } else { %>
+            &laquo;
+        <% } %>
+    </span>
+    &nbsp;
+    <span>
+        <% if (currentPage < maxPage) { %>
+            <a href="/admin/board?page=<%= currentPage + 1 %>">&raquo;</a>
+        <% } else { %>
+            &raquo;
+        <% } %>
+    </span><br>
+    [<a href="/admin/board/new">New board</a>]<br>
+</div>
+
+<%- include('fragments/admin-navbar') %>
+
+<script type="text/javascript" src="/js/admin.js"></script>
+
+<%- include('fragments/tori-footer'); %>
+</body>

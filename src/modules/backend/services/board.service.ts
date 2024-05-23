@@ -3,19 +3,25 @@ import { PrismaService } from '@utils/services';
 import { BoardCreateDto, BoardDto, BoardUpdateDto } from '@backend/dto/board';
 import { Board, Prisma } from '@prisma/client';
 import { PrismaTakeSkipDto } from '@utils/misc';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class BoardService {
   private readonly logger = new Logger(BoardService.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly config: ConfigService
+  ) {}
 
   public async findAll(
     where: Prisma.BoardWhereInput,
     selection?: PrismaTakeSkipDto,
     orderBy?: Prisma.BoardOrderByWithRelationInput | Prisma.BoardOrderByWithRelationInput[]
   ): Promise<BoardDto[]> {
-    this.logger.log(`findAll ({where: ${JSON.stringify(where)}, selection: ${selection.toString()}, orderBy: ${JSON.stringify(orderBy)}})`);
+    this.logger.log(
+      `findAll ({where: ${JSON.stringify(where)}, selection: ${selection ? selection.toString() : ''}, orderBy: ${JSON.stringify(orderBy)}})`
+    );
 
     const boards = await this.prisma.board.findMany({ where, ...selection, orderBy });
 
@@ -95,6 +101,14 @@ export class BoardService {
     const board = await this.findEntityById(id);
 
     await this.prisma.board.delete({ where: { id: board.id } });
+  }
+
+  public async getMaxPageNumber(where: Prisma.BoardWhereInput): Promise<number> {
+    const pageSize = this.config.getOrThrow<number>('constants.pagination.default.table-contains');
+
+    const count = await this.prisma.board.count({ where });
+
+    return Math.floor(count / pageSize);
   }
 
   private processNotFound(board: Board, message: string): void {

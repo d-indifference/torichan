@@ -5,12 +5,14 @@ import { PrismaService } from '@utils/services';
 import { BackendModule } from '@backend/backend.module';
 import { ApiModule } from '@api/api.module';
 import { FrontendModule } from '@frontend/frontend.module';
+import { AdminModule } from '@admin/admin.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       load: [applicationConfig]
     }),
+    AdminModule,
     BackendModule,
     ApiModule,
     FrontendModule

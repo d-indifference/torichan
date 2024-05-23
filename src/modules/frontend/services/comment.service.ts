@@ -1,23 +1,35 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CommentService as BackendCommentService } from '@backend/services';
 import { CommentCreateDto } from '@backend/dto/comment';
 import { Response } from 'express';
 import { CommentRemoveDto } from '@frontend/dto';
 import { Prisma } from '@prisma/client';
+import { SessionDto } from '@admin/dto';
 
 @Injectable()
 export class CommentService {
   constructor(private readonly commentService: BackendCommentService) {}
 
-  public async createThread(board: string, ip: string, dto: CommentCreateDto, res: Response): Promise<void> {
-    const comment = await this.commentService.createThread(board, ip, dto);
+  public async createThread(board: string, ip: string, dto: CommentCreateDto, res: Response, session: SessionDto): Promise<void> {
+    this.validateSession(dto, session);
+
+    const comment = await this.commentService.createThread(board, ip, dto, this.parseBooleanCheckbox(dto.isAdmin));
 
     this.setPassword(dto, res);
     res.redirect(`/${board}/res/${comment.displayNumber}#${comment.displayNumber}`);
   }
 
-  public async createReply(board: string, displayNumber: number, ip: string, dto: CommentCreateDto, res: Response): Promise<void> {
-    const comment = await this.commentService.createReply(board, displayNumber, ip, dto);
+  public async createReply(
+    board: string,
+    displayNumber: number,
+    ip: string,
+    dto: CommentCreateDto,
+    res: Response,
+    session: SessionDto
+  ): Promise<void> {
+    this.validateSession(dto, session);
+
+    const comment = await this.commentService.createReply(board, displayNumber, ip, dto, this.parseBooleanCheckbox(dto.isAdmin));
 
     this.setPassword(dto, res);
     res.redirect(`/${board}/res/${displayNumber}#${comment.displayNumber}`);
@@ -54,5 +66,15 @@ export class CommentService {
     expirationDate.setTime(expirationDate.getTime() + 365 * 24 * 60 * 60 * 1000);
 
     res.cookie('torichanPass', dto.password, { expires: expirationDate });
+  }
+
+  private validateSession(dto: CommentCreateDto, session: SessionDto): void {
+    if (dto.isAdmin === 'on' && !session.payload) {
+      throw new BadRequestException('You cannot write comments as admin without signing in.');
+    }
+  }
+
+  private parseBooleanCheckbox(val: 'on' | undefined): boolean {
+    return val === 'on';
   }
 }

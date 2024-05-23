@@ -1,0 +1,64 @@
+<fieldset class="admin-form">
+    <legend><%= args.formDescription %></legend>
+    [<a href="<%= args.formBackAddress %>" style="text-align: center">Go back</a>]
+    <form action="<%= args.formHandler %>" method="post">
+        <table class="tori-post-form" width="1%">
+            <tr>
+                <td>Username</td>
+                <td>
+                    <input
+                        name="username"
+                        type="text"
+                        tabindex="1"
+                        size="32"
+                        required
+                        <% if (args.formMode !== 'CREATE') { %>value="<%= args.formData.username %>" <% } %>
+                    >
+                </td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>
+                    <input
+                        name="email"
+                        type="email"
+                        tabindex="1"
+                        size="32"
+                        required
+                        <% if (args.formMode !== 'CREATE') { %>value="<%= args.formData.email %>" <% } %>
+                    >
+                </td>
+            </tr>
+            <tr>
+                <td>Role</td>
+                <td>
+                    <% if (args.formMode === 'CREATE') { %>
+                        <select name="role" tabindex="1" required>
+                            <option value="MODERATOR" selected>Moderator</option>
+                            <option value="ADMINISTRATOR">Administrator</option>
+                        </select>
+                    <% } else if (args.formData.id !== session.id) { %>
+                        <select name="role" tabindex="1" required>
+                            <option value="MODERATOR" <% if (args.formData.role === 'MODERATOR') { %>selected<% } %>>Moderator</option>
+                            <option value="ADMINISTRATOR" <% if (args.formData.role === 'ADMINISTRATOR') { %>selected<% } %>>Administrator</option>
+                        </select>
+                    <% } else { %>
+                        <b><%= args.formData.role %></b>
+                    <% } %>
+                </td>
+            </tr>
+
+            <% if (args.formMode !== 'UPDATE') { %>
+                <tr>
+                    <td>Password</td>
+                    <td>
+                        <input name="password" type="password" tabindex="1" size="32">
+                        <% if (args.formMode !== 'CREATE') { %><span>Leave it empty if you don't want to change it.</span><% } %>
+                    </td>
+                </tr>
+            <% } %>
+        </table>
+
+        <input type="submit" value="<%= args.formSubmit %>" tabindex="1" size="32">
+    </form>
+</fieldset>

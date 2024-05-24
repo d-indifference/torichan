@@ -10,3 +10,4 @@ export * from './sql-query-output.dto';
 export * from './sql-query.dto';
 export * from './spam-output.dto';
 export * from './spam-input.dto';
+export * from './ip-filter.update.dto';

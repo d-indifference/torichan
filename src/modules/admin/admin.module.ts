@@ -3,13 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BackendModule } from '@backend/backend.module';
 import { NestjsFormDataModule } from 'nestjs-form-data';
 import { nestjsFormDataConfig } from '@config/nestjs-form-data.config';
-import {
-  FileSystemService,
-  PaginationResolveService,
-  PasswordCryptoService,
-  PrismaService,
-  VolumeSettingsService
-} from '@utils/services';
+import { FileSystemService, PaginationResolveService, PasswordCryptoService, PrismaService, VolumeSettingsService } from '@utils/services';
 import {
   AuthController,
   BanController,
@@ -29,7 +23,7 @@ import {
   BanService,
   FileQueriesService,
   FileService,
-  SqlConsoleService,
+  SqlConsoleService
 } from '@admin/services';
 
 @Module({

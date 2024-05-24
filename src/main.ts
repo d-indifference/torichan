@@ -18,12 +18,15 @@ import {
 } from '@utils/filters/exceptions';
 import { templateConstants } from '@config/application-template-helpers';
 import { VolumeSettingsService } from '@utils/services';
+import { IpFilterGuard } from '@utils/guards';
+import { IpListFilesService } from './ip-list-files.service';
 
 const bootstrap = async (): Promise<void> => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   const config = app.get(ConfigService);
   const volumeSettingsService = app.get(VolumeSettingsService);
+  const ipListFilesService = app.get(IpListFilesService);
   const port = config.getOrThrow<number>('http.port');
 
   const staticDirectory = path.join(process.cwd(), config.getOrThrow('paths.public'));
@@ -50,6 +53,14 @@ const bootstrap = async (): Promise<void> => {
   app.setLocal('templateConstants', templateConstants);
 
   await volumeSettingsService.create('spam-list');
+  await ipListFilesService.create();
+
+  const whiteList = await ipListFilesService.getIpWhiteList();
+  const blackList = await ipListFilesService.getIpBlackList();
+
+  const ipGuardInstance = new IpFilterGuard(volumeSettingsService);
+
+  app.useGlobalGuards(ipGuardInstance);
 
   await app.listen(port);
 

@@ -6,3 +6,4 @@ export * from './edit.page';
 export * from './comment.list.page';
 export * from './ban.list.page';
 export * from './file.list.page';
+export * from './ip-filter.page';

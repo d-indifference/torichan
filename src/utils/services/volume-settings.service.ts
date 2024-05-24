@@ -20,7 +20,7 @@ export class VolumeSettingsService {
 
     const fullPathToFile = path.join(pathToVolume, fileName);
 
-    if (!(await this.checkIfFileExists(fullPathToFile))) {
+    if (!(await this.checkIfFileExists(fileName))) {
       await fs.writeFile(fullPathToFile, '', { encoding: 'utf8' });
     }
   }
@@ -30,7 +30,7 @@ export class VolumeSettingsService {
 
     const fullPathToFile = path.join(this.pathToVolume(), fileName);
 
-    if (await this.checkIfFileExists(fullPathToFile)) {
+    if (await this.checkIfFileExists(fileName)) {
       await fs.writeFile(fullPathToFile, content, { encoding: 'utf8' });
     }
   }
@@ -40,7 +40,7 @@ export class VolumeSettingsService {
 
     const fullPathToFile = path.join(this.pathToVolume(), fileName);
 
-    if (await this.checkIfFileExists(fullPathToFile)) {
+    if (await this.checkIfFileExists(fileName)) {
       return (await fs.readFile(fullPathToFile, { encoding: 'utf8' })).toString();
     }
   }
@@ -49,9 +49,9 @@ export class VolumeSettingsService {
     return path.join(process.cwd(), this.configService.getOrThrow('paths.volume'));
   }
 
-  private async checkIfFileExists(fileName: string): Promise<boolean> {
+  public async checkIfFileExists(fileName: string): Promise<boolean> {
     try {
-      await fs.access(fileName, fs.constants.F_OK);
+      await fs.access(path.join(this.pathToVolume(), fileName), fs.constants.F_OK);
       return true;
     } catch (error) {
       return false;

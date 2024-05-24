@@ -9,14 +9,21 @@ import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
 import { sessionConfig } from '@config/session.config';
 import * as fs from 'fs-extra';
-import { InternalServerErrorExceptionFilter, NotFoundExceptionFilter } from '@utils/filters/exceptions';
-import { BadRequestExceptionFilter } from '@utils/filters/exceptions/bad-request-exception.filter';
+import {
+  ForbiddenExceptionFilter,
+  InternalServerErrorExceptionFilter,
+  NotFoundExceptionFilter,
+  UnauthorizedExceptionFilter,
+  BadRequestExceptionFilter
+} from '@utils/filters/exceptions';
 import { templateConstants } from '@config/application-template-helpers';
+import { VolumeSettingsService } from '@utils/services';
 
 const bootstrap = async (): Promise<void> => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   const config = app.get(ConfigService);
+  const volumeSettingsService = app.get(VolumeSettingsService);
   const port = config.getOrThrow<number>('http.port');
 
   const staticDirectory = path.join(process.cwd(), config.getOrThrow('paths.public'));
@@ -37,8 +44,12 @@ const bootstrap = async (): Promise<void> => {
   app.useGlobalFilters(new NotFoundExceptionFilter());
   app.useGlobalFilters(new InternalServerErrorExceptionFilter());
   app.useGlobalFilters(new BadRequestExceptionFilter());
+  app.useGlobalFilters(new UnauthorizedExceptionFilter());
+  app.useGlobalFilters(new ForbiddenExceptionFilter());
 
   app.setLocal('templateConstants', templateConstants);
+
+  await volumeSettingsService.create('spam-list');
 
   await app.listen(port);
 

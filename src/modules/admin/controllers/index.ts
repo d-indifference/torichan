@@ -4,3 +4,6 @@ export * from './user.controller';
 export * from './board.controller';
 export * from './ban.controller';
 export * from './comment.controller';
+export * from './file.controller';
+export * from './sql-console.controller';
+export * from './spam.controller';

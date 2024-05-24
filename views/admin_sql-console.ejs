@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="nofollow">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/torichan.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="shortcut icon" href="/icons/favicon.ico" type="image/x-icon">
+    <%- include('fragments/tori-script') %>
+    <title>SQL Console - <%- templateConstants.siteName %></title>
+</head>
+<body>
+    <%- include('fragments/admin-navbar') %>
+
+    <h1 class="tori-page-title">SQL Console - Management panel</h1>
+    <%- include('fragments/admin-welcome') %>
+
+    <%- include('fragments/admin-tabs') %>
+
+
+    <fieldset class="admin-form">
+        <legend>Run SQL (PostgreSQL) query</legend>
+        [<a href="/admin/sql">Clear</a>]
+
+        <form action="/admin/sql" method="post">
+            <table class="tori-post-form" width="1%">
+                <tr>
+                    <td>SQL</td>
+                    <td><textarea name="query" tabindex="1" rows="15" cols="33"><% if (query) { %><%= query %><% } %></textarea></td>
+                </tr>
+            </table>
+            <input type="submit" value="Run query (I know, what I am doing)" tabindex="1" size="32">
+        </form>
+    </fieldset>
+
+    <% if (queryResult) { %>
+        <% if (queryResult.length > 0) { %>
+            <table border="1" class="table-list">
+                <thead>
+                <tr>
+                    <% Object.keys(queryResult[0]).forEach(key => { %>
+                        <td><%= key %></td>
+                    <% }); %>
+                </tr>
+                </thead>
+                <tbody>
+                <% queryResult.forEach(record => { %>
+                    <tr>
+                        <% Object.keys(record).forEach(key => { %>
+                            <td><%= record[key] %></td>
+                        <% }); %>
+                    </tr>
+                <% }); %>
+                </tbody>
+            </table>
+        <% } %>
+    <% } %>
+
+    <%- include('fragments/admin-navbar') %>
+
+    <script type="text/javascript" src="/js/admin.js"></script>
+
+    <%- include('fragments/tori-footer'); %>
+</body>

@@ -1,7 +1,8 @@
-import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
+import { CanActivate, ExecutionContext, ForbiddenException, HttpStatus, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { PrismaService } from '@utils/services';
 import { SessionDto } from '@admin/dto';
+import { Response } from 'express';
 
 @Injectable()
 export class SessionGuard implements CanActivate {
@@ -12,7 +13,7 @@ export class SessionGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
-    const res = context.switchToHttp().getResponse();
+    const res: Response = context.switchToHttp().getResponse();
 
     const session = req.session as SessionDto;
 
@@ -34,10 +35,10 @@ export class SessionGuard implements CanActivate {
           return true;
         }
       } else {
-        res.redirect('/admin/sign-in');
+        res.status(HttpStatus.FOUND).redirect('/admin/sign-in');
       }
     } else {
-      res.redirect('/admin/sign-in');
+      res.status(HttpStatus.FOUND).redirect('/admin/sign-in');
     }
   }
 }

@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="nofollow">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/torichan.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="shortcut icon" href="/icons/favicon.ico" type="image/x-icon">
+    <%- include('fragments/tori-script') %>
+    <title>Disk space usage - <%- templateConstants.siteName %></title>
+</head>
+<body>
+    <%- include('fragments/admin-navbar') %>
+
+    <h1 class="tori-page-title">Disk space usage - Management panel</h1>
+    <%- include('fragments/admin-welcome') %>
+
+    <%- include('fragments/admin-tabs') %>
+
+    <form method="get" action="/admin/file" style="text-align: center; margin-bottom: 10px">
+        <select name="slug">
+            <% allBoards.forEach(board => { %>
+                <% if (currentBoard) { %>
+                    <% if (currentBoard.slug === board.slug) { %>
+                        <option selected value="<%= board.slug %>">/<%= board.slug %>/ - <%= board.name %></option>
+                    <% } else { %>
+                        <option value="<%= board.slug %>">/<%= board.slug %>/ - <%= board.name %></option>
+                    <% } %>
+                <% } else { %>
+                    <option value="<%= board.slug %>">/<%= board.slug %>/ - <%= board.name %></option>
+                <% } %>
+            <% }) %>
+        </select>
+        <button type="submit">Select</button>
+    </form>
+
+    <table border="1" class="table-list">
+        <thead>
+        <tr>
+            <td>#</td>
+            <td>File</td>
+            <td>MIME</td>
+            <td>Size</td>
+            <td>Created at</td>
+            <td>Dimensions</td>
+            <td>Go to</td>
+            <td></td>
+        </tr>
+        </thead>
+        <tbody>
+        <% files.forEach((file, idx) => { %>
+            <tr>
+                <td><%= idx + 1 %></td>
+                <td>
+                    <a target="_blank" href="/files/<%= file.filename %>">
+                        <% if (file.thumbnail) { %>
+                            <img src="/files/<%= file.thumbnail %>" alt="<%= file.filename %>">
+                        <% } else { %>
+                            Go to source
+                        <% } %>
+                    </a>
+                </td>
+                <td><%= file.mimeType %></td>
+                <td><%= file.size %></td>
+                <td><%= file.createdAt %></td>
+                <td><% if (file.width && file.height) { %><%= file.width %>x<%= file.height %><% } else { %>——<% } %></td>
+                <td>
+                    [<a target="_blank" href="/files/<%= file.filename %>">Source</a>]<br>
+                    <% if (file.thumbnail) { %>
+                        [<a target="_blank" href="/files/<%= file.thumbnail %>">Thumbnail</a>]
+                    <% } %>
+                </td>
+                <td>
+                    <form action="/admin/file/delete" method="post">
+                        <input type="hidden" name="srcPath" value="<%= file.filename %>">
+
+                        <% if (file.thumbnail) { %>
+                            <input type="hidden" name="thumbnailPath" value="<%= file.thumbnail %>">
+                        <% } %>
+
+                        <input type="hidden" name="redirectTo" value="/admin/file?slug=<%= currentBoard.slug %>">
+                        <button type="submit">Remove</button>
+                    </form>
+                </td>
+            </tr>
+        <% }); %>
+        </tbody>
+    </table>
+
+    <div class="simple-table-pagination">
+            <span>
+                <% if (currentPage > 0) { %>
+                    <% if (currentBoard) { %>
+                        <a href="/admin/file?slug=<%= currentBoard.slug %>&page=<%= currentPage - 1 %>">&laquo;</a>
+                    <% } else { %>
+                        <a href="/admin/file?page=<%= currentPage - 1 %>">&laquo;</a>
+                    <% } %>
+                <% } else { %>
+                    &laquo;
+                <% } %>
+            </span>
+        &nbsp;
+        <span>
+            <% if (currentPage < maxPage) { %>
+                <a href="/admin/file?page=<%= currentPage + 1 %>">&raquo;</a>
+
+                <% if (currentBoard) { %>
+                    <a href="/admin/file?slug=<%= currentBoard.slug %>&page=<%= currentPage + 1 %>">&raquo;</a>
+                <% } else { %>
+                    <a href="/admin/file?page=<%= currentPage + 1 %>">&raquo;</a>
+                <% } %>
+            <% } else { %>
+                &raquo;
+            <% } %>
+        </span><br>
+    </div>
+
+    <%- include('fragments/admin-navbar') %>
+
+    <script type="text/javascript" src="/js/admin.js"></script>
+
+    <%- include('fragments/tori-footer'); %>
+</body>

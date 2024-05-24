@@ -1,11 +1,16 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import applicationConfig from '@config/application.config';
-import { PrismaService } from '@utils/services';
+import { PrismaService, VolumeSettingsService } from '@utils/services';
 import { BackendModule } from '@backend/backend.module';
 import { ApiModule } from '@api/api.module';
 import { FrontendModule } from '@frontend/frontend.module';
 import { AdminModule } from '@admin/admin.module';
+import { IpFilterGuard } from '@utils/guards';
+import { IpFilterController } from './ip-filter.controller';
+import { IpListFilesService } from './ip-list-files.service';
+import { NestjsFormDataModule } from 'nestjs-form-data';
+import { nestjsFormDataConfig } from '@config/nestjs-form-data.config';
 
 @Module({
   imports: [
@@ -15,9 +20,14 @@ import { AdminModule } from '@admin/admin.module';
     AdminModule,
     BackendModule,
     ApiModule,
-    FrontendModule
+    FrontendModule,
+    NestjsFormDataModule.configAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: nestjsFormDataConfig
+    })
   ],
-  controllers: [],
-  providers: [PrismaService]
+  controllers: [IpFilterController],
+  providers: [PrismaService, IpListFilesService, VolumeSettingsService, IpFilterGuard]
 })
 export class AppModule {}

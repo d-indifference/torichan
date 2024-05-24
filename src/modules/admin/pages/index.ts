@@ -5,3 +5,4 @@ export * from './board.list.page';
 export * from './edit.page';
 export * from './comment.list.page';
 export * from './ban.list.page';
+export * from './file.list.page';

@@ -1,6 +1,7 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { CanActivate, ExecutionContext, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '@utils/services';
 import { SessionDto } from '@admin/dto';
+import { Response } from 'express';
 
 @Injectable()
 export class SignInPageGuard implements CanActivate {
@@ -8,7 +9,7 @@ export class SignInPageGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
-    const res = context.switchToHttp().getResponse();
+    const res: Response = context.switchToHttp().getResponse();
 
     const session = req.session as SessionDto;
 
@@ -16,7 +17,7 @@ export class SignInPageGuard implements CanActivate {
       const user = await this.prisma.user.findUnique({ where: { id: session.payload.id } });
 
       if (user) {
-        res.redirect('/admin');
+        res.status(HttpStatus.FOUND).redirect('/admin');
       } else {
         return true;
       }

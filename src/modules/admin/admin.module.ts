@@ -3,9 +3,34 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BackendModule } from '@backend/backend.module';
 import { NestjsFormDataModule } from 'nestjs-form-data';
 import { nestjsFormDataConfig } from '@config/nestjs-form-data.config';
-import { FileSystemService, PaginationResolveService, PasswordCryptoService, PrismaService } from '@utils/services';
-import { AuthController, BanController, BoardController, CommentController, HomePageController, UserController } from '@admin/controllers';
-import { HomeService, UserService, BoardService, CommentService, BanService } from '@admin/services';
+import {
+  FileSystemService,
+  PaginationResolveService,
+  PasswordCryptoService,
+  PrismaService,
+  VolumeSettingsService
+} from '@utils/services';
+import {
+  AuthController,
+  BanController,
+  BoardController,
+  CommentController,
+  FileController,
+  HomePageController,
+  SpamController,
+  SqlConsoleController,
+  UserController
+} from '@admin/controllers';
+import {
+  HomeService,
+  UserService,
+  BoardService,
+  CommentService,
+  BanService,
+  FileQueriesService,
+  FileService,
+  SqlConsoleService,
+} from '@admin/services';
 
 @Module({
   imports: [
@@ -26,9 +51,23 @@ import { HomeService, UserService, BoardService, CommentService, BanService } fr
     BoardService,
     HomeService,
     CommentService,
-    BanService
+    BanService,
+    FileQueriesService,
+    FileService,
+    SqlConsoleService,
+    VolumeSettingsService
   ],
-  controllers: [HomePageController, AuthController, UserController, BoardController, BanController, CommentController],
+  controllers: [
+    HomePageController,
+    AuthController,
+    UserController,
+    BoardController,
+    BanController,
+    CommentController,
+    FileController,
+    SqlConsoleController,
+    SpamController
+  ],
   exports: []
 })
 export class AdminModule {}

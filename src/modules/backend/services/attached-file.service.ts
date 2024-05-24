@@ -12,6 +12,7 @@ import * as process from 'process';
 import * as path from 'path';
 import * as fsExtra from 'fs-extra';
 import { ConfigService } from '@nestjs/config';
+import { imageMimeList } from '@utils/misc';
 
 @Injectable()
 export class AttachedFileService {
@@ -97,8 +98,6 @@ export class AttachedFileService {
   }
 
   public checkIfAttachedImage(file: FileSystemStoredFile): boolean {
-    const imageMimeList = ['image/apng', 'image/avif', 'image/gif', 'image/jpeg', 'image/png', 'image/svg+xml', 'image/webp'];
-
     return imageMimeList.indexOf(file.mimeType) !== -1;
   }
 

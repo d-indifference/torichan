@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="nofollow">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/torichan.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="shortcut icon" href="/icons/favicon.ico" type="image/x-icon">
+    <%- include('fragments/tori-script') %>
+    <title>Spam list- <%- templateConstants.siteName %></title>
+</head>
+<body>
+<%- include('fragments/admin-navbar') %>
+
+<h1 class="tori-page-title">Spam list - Management panel</h1>
+<%- include('fragments/admin-welcome') %>
+
+<%- include('fragments/admin-tabs') %>
+
+
+<fieldset class="admin-form">
+    <legend>Edit spam list</legend>
+    <form action="/admin/spam" method="post">
+        <table class="tori-post-form" width="1%">
+            <tr>
+                <td>Spam</td>
+                <td><textarea name="spam" tabindex="1" rows="15" cols="33"><%= spam %></textarea></td>
+            </tr>
+        </table>
+        <input type="submit" value="Save" tabindex="1" size="32">
+    </form>
+</fieldset>
+
+<%- include('fragments/admin-navbar') %>
+
+<script type="text/javascript" src="/js/admin.js"></script>
+
+<%- include('fragments/tori-footer'); %>
+</body>

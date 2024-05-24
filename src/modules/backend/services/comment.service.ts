@@ -9,6 +9,7 @@ import { BoardService } from '@backend/services/board.service';
 import { AttachedFileService } from '@backend/services/attached-file.service';
 import { PrismaTakeSkipDto } from '@utils/misc';
 import { BanService } from '@backend/services/ban.service';
+import { SpamService } from '@backend/services/spam.service';
 
 @Injectable()
 export class CommentService {
@@ -23,7 +24,8 @@ export class CommentService {
     private readonly config: ConfigService,
     private readonly boardService: BoardService,
     private readonly attachedFileService: AttachedFileService,
-    private readonly banService: BanService
+    private readonly banService: BanService,
+    private readonly spamService: SpamService
   ) {}
 
   public async findAll(
@@ -94,13 +96,14 @@ export class CommentService {
   public async createThread(board: string, ip: string, dto: CommentCreateDto, isAdmin = false): Promise<Comment> {
     this.logger.log(`createThread ({board: ${board}, ip: ${ip}, dto: ${dto.toString()}, isAdmin: ${isAdmin}})`);
 
+    await this.checkFieldSpam(dto, isAdmin);
+
     const foundBoard = await this.boardService.findEntityBySlug(board);
 
     dto.comment = this.escapeHtmlIfAdmin(dto, isAdmin);
     dto.name = this.processPosterName(dto.name, isAdmin);
 
     await this.checkIpBan(ip);
-    this.checkFieldSpam(dto);
     this.checkFile(dto);
     await this.checkMaxActiveCommentSize(board);
     await this.checkDelay(ip, this.delayAfterThread);
@@ -132,6 +135,8 @@ export class CommentService {
   public async createReply(board: string, displayNumber: number, ip: string, dto: CommentCreateDto, isAdmin = false): Promise<Comment> {
     this.logger.log(`createReply ({board: ${board}, displayNumber: ${displayNumber}, ip: ${ip}, dto: ${dto.toString()}, isAdmin: ${isAdmin}})`);
 
+    await this.checkFieldSpam(dto, isAdmin);
+
     const foundBoard = await this.boardService.findEntityBySlug(board);
     const foundParent = await this.findOneEntity({ displayNumber, board: { slug: board } });
 
@@ -139,7 +144,6 @@ export class CommentService {
     dto.name = this.processPosterName(dto.name, isAdmin);
 
     await this.checkIpBan(ip);
-    this.checkFieldSpam(dto);
     this.checkFile(dto);
     await this.checkDelay(ip, this.delayAfterReply);
 
@@ -243,7 +247,13 @@ export class CommentService {
     await this.banService.checkActiveBan(ip);
   }
 
-  private checkFieldSpam(dto: CommentCreateDto): void {}
+  private async checkFieldSpam(dto: CommentCreateDto, isAdmin: boolean): Promise<void> {
+    if (!isAdmin) {
+      await this.spamService.checkSpam(dto.name);
+      await this.spamService.checkSpam(dto.subject);
+      await this.spamService.checkSpam(dto.comment);
+    }
+  }
 
   private checkFile(dto: CommentCreateDto) {
     if (dto.file) {

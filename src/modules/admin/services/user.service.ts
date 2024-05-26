@@ -1,6 +1,6 @@
 import { PaginationResolveService, PasswordCryptoService, PrismaService } from '@utils/services';
 import { BadRequestException, Injectable, InternalServerErrorException, Logger, UnauthorizedException } from '@nestjs/common';
-import { SessionDto, SessionPayloadDto, SignInDto } from '@admin/dto';
+import { SessionDto, SessionPayloadDto, SignInDto, SignUpDto } from '@admin/dto';
 import { Request, Response } from 'express';
 import { UserService as BackendUserService } from '@backend/services';
 import { UserEditPage, UserEditPageFormMode, UserListPage } from '@admin/pages';
@@ -115,6 +115,22 @@ export class UserService {
     session.payload = await this.authorize(dto);
 
     res.redirect('/admin');
+  }
+
+  public async signUp(dto: SignUpDto, session: SessionDto, res: Response): Promise<void> {
+    this.logger.log(`signUp ({dto: ${JSON.stringify(dto)}, session: ${JSON.stringify(session)})`);
+
+    const userDto: UserCreateDto = new UserCreateDto();
+    userDto.username = dto.username;
+    userDto.email = dto.email;
+    userDto.password = dto.password;
+    userDto.role = UserRole.ADMINISTRATOR;
+
+    const user = await this.userService.create(userDto);
+
+    this.logger.log(`Object created: [User] {id: ${user.id}}`);
+
+    await this.signIn({ username: user.username, password: dto.password }, session, res);
   }
 
   public signOut(req: Request, res: Response): void {

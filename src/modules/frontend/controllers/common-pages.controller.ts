@@ -19,6 +19,14 @@ export class CommonPagesController {
     return await this.indexService.index();
   }
 
+  @Get('/faq')
+  @Render('faq')
+  public faq(): void {}
+
+  @Get('/rules')
+  @Render('rules')
+  public rules(): void {}
+
   @Get('/:slug')
   @Render('board')
   public async board(@Param('slug') slug: string, @Session() session: SessionDto, @Req() req: Request): Promise<BoardPage> {

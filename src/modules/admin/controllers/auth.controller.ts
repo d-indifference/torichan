@@ -1,11 +1,11 @@
 import { Body, Controller, Get, Post, Render, Req, Res, Session, UseGuards, ValidationPipe } from '@nestjs/common';
-import { SessionGuard, SignInPageGuard } from '@admin/guards';
+import { SessionGuard, SignInPageGuard, SignUpPageGuard } from '@admin/guards';
 import { Roles } from '@admin/decorators';
 import { UserRole } from '@prisma/client';
 import { Request, Response } from 'express';
 import { UserService } from '@admin/services';
 import { FormDataRequest } from 'nestjs-form-data';
-import { SessionDto, SignInDto } from '@admin/dto';
+import { SessionDto, SignInDto, SignUpDto } from '@admin/dto';
 
 @Controller('admin')
 export class AuthController {
@@ -32,5 +32,21 @@ export class AuthController {
   @UseGuards(SessionGuard)
   public signOut(@Req() req: Request, @Res() res: Response): void {
     this.userService.signOut(req, res);
+  }
+
+  @Get('sign-up')
+  @UseGuards(SignUpPageGuard)
+  @Render('admin_sign-up')
+  public getSignUpPage(): void {}
+
+  @Post('sign-up')
+  @UseGuards(SignUpPageGuard)
+  @FormDataRequest()
+  public async signUp(
+    @Body(new ValidationPipe({ transform: true })) dto: SignUpDto,
+    @Session() session: SessionDto,
+    @Res() res: Response
+  ): Promise<void> {
+    await this.userService.signUp(dto, session, res);
   }
 }

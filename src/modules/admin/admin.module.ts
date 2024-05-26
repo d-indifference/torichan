@@ -11,6 +11,7 @@ import {
   CommentController,
   FileController,
   HomePageController,
+  IpFilterController,
   SpamController,
   SqlConsoleController,
   UserController
@@ -23,7 +24,9 @@ import {
   BanService,
   FileQueriesService,
   FileService,
-  SqlConsoleService
+  SqlConsoleService,
+  IpListFilesService,
+  IpFilterService
 } from '@admin/services';
 
 @Module({
@@ -49,7 +52,9 @@ import {
     FileQueriesService,
     FileService,
     SqlConsoleService,
-    VolumeSettingsService
+    VolumeSettingsService,
+    IpListFilesService,
+    IpFilterService
   ],
   controllers: [
     HomePageController,
@@ -60,7 +65,8 @@ import {
     CommentController,
     FileController,
     SqlConsoleController,
-    SpamController
+    SpamController,
+    IpFilterController
   ],
   exports: []
 })

@@ -6,3 +6,5 @@ export * from './ban.service';
 export * from './file-queries.service';
 export * from './file.service';
 export * from './sql-console.service';
+export * from './ip-list-files.service';
+export * from './ip-filter.service';

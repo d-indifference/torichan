@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -11,20 +12,33 @@
     <link rel="stylesheet" href="/css/start-page.css">
     <link rel="shortcut icon" href="/icons/favicon.ico" type="image/x-icon">
     <%- include('fragments/tori-script') %>
-    <title><%- templateConstants.siteName %></title>
+    <title>Rules - <%- templateConstants.siteName %></title>
 </head>
 <body>
-    <%- include('fragments/tori-navbar'); %>
+    <div class="tori-navbar">
+        [<a href="/">Home</a>] [<a href="/admin">Management</a>]
+    </div>
     <br clear="all">
 
-    <h1 class="tori-title"><%- templateConstants.siteName %></h1>
-    <em style="text-align: center; display: block; font-size: 14pt"><%- templateConstants.siteSlogan %></em>
-    <p class="tori-main-links">
-        [<a href="/rules">global rules</a>] / [<a href="/admin">management</a>] / [<a href="https://github.com/d-indifference/torichan">torichan 0.0.1</a>]
-    </p>
+    <h1 class="tori-title">Rules</h1>
 
-    <%- include('fragments/tori-navbar'); %>
-    <br clear="all">
+    <div class="info-page">
+        <table style="text-align: left">
+            <tr>
+                <td>
+                    <ol>
+                        <li>No CP</li>
+                        <li>No shitposting</li>
+                        <li>Moderator is always right</li>
+                    </ol>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="tori-navbar">
+        [<a href="/">Home</a>] [<a href="/admin">Management</a>]
+    </div>
 
     <%- include('fragments/tori-footer') %>
 </body>

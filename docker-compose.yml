@@ -7,11 +7,32 @@ services:
     image: postgres:13.3
     env_file:
       - .env
-    volumes:
-      - ./volumes/postgres:/var/lib/postgresql/data
     ports:
       - '${POSTGRES_PORT}:${POSTGRES_PORT}'
+    volumes:
+      - ./volumes/postgres:/var/lib/postgresql/data
+      - ./prisma/migrations/20240526135358_init/migration.sql:/docker-entrypoint-initdb.d/init.sql
     restart: unless-stopped
+    networks:
+      - torichan-network
+
+  torichan:
+    container_name: app.torichan
+    hostname: app.torichan
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    build:
+      context: '.'
+      dockerfile: './Dockerfile'
+    ports:
+      - '13000:3000'
+    expose:
+      - '13000'
+    volumes:
+      - ./public/files:/app/public/files
+      - ./volumes/torichan:/app/volumes/torichan
     networks:
       - torichan-network
 

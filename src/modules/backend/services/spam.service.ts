@@ -20,6 +20,6 @@ export class SpamService {
 
   private async getSpamList(): Promise<string[]> {
     const spamStringRead = await this.volumeSettingsService.read('spam-list');
-    return spamStringRead.split('\r\n');
+    return spamStringRead.split('\r\n').filter((item: string) => item !== '');
   }
 }

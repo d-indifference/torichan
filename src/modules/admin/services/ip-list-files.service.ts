@@ -1,32 +1,33 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { VolumeSettingsService } from '@utils/services';
-import { IpFilterGuard } from '@utils/guards';
+import { IpFilterService } from '@admin/services/ip-filter.service';
 
 @Injectable()
 export class IpListFilesService {
   private readonly logger = new Logger(IpListFilesService.name);
 
-  private readonly whiteListDefault = ['^(([1-9]?\\d|[12]\\d\\d)\\.){3}([1-9]?\\d|[12]\\d\\d)$', '(^::1)'];
+  private readonly whiteListDefault = [];
 
   private readonly blackListDefault = [];
 
   constructor(
     private readonly volumeSettingsService: VolumeSettingsService,
-    private readonly ipFilterGuard: IpFilterGuard
+    private readonly ipListService: IpFilterService
   ) {}
 
   public async create(): Promise<void> {
     this.logger.log('create ({})');
 
-    const whiteListString = this.whiteListDefault.join('\r\n');
-    const blackListString = this.blackListDefault.join('\r\n');
-
     if (!(await this.volumeSettingsService.checkIfFileExists('ip-whitelist'))) {
+      const whiteListString = this.whiteListDefault.join('\r\n');
+
       await this.volumeSettingsService.create('ip-whitelist');
       await this.volumeSettingsService.write('ip-whitelist', whiteListString);
     }
 
     if (!(await this.volumeSettingsService.checkIfFileExists('ip-blacklist'))) {
+      const blackListString = this.blackListDefault.join('\r\n');
+
       await this.volumeSettingsService.create('ip-blacklist');
       await this.volumeSettingsService.write('ip-blacklist', blackListString);
     }
@@ -45,14 +46,14 @@ export class IpListFilesService {
   }
 
   public async setIpWhiteList(whiteList: string[]): Promise<void> {
+    this.ipListService.setWhiteList(whiteList);
     const string = whiteList.join('\r\n');
-    this.ipFilterGuard.setWhiteList(whiteList);
     await this.volumeSettingsService.write('ip-whitelist', string);
   }
 
   public async setIpBlackList(blackList: string[]): Promise<void> {
+    this.ipListService.setBlackList(blackList);
     const string = blackList.join('\r\n');
-    this.ipFilterGuard.setBlackList(blackList);
     await this.volumeSettingsService.write('ip-blacklist', string);
   }
 }

@@ -10,14 +10,12 @@ import { AttachedFileService } from '@backend/services/attached-file.service';
 import { PrismaTakeSkipDto } from '@utils/misc';
 import { BanService } from '@backend/services/ban.service';
 import { SpamService } from '@backend/services/spam.service';
+import * as he from 'he';
+import { replyMarkdown, threadMarkdown } from '@backend/functions';
 
 @Injectable()
 export class CommentService {
   private readonly logger: Logger = new Logger(CommentService.name);
-
-  private readonly delayAfterThread: number = 0;
-
-  private readonly delayAfterReply = 0;
 
   constructor(
     private readonly prisma: PrismaService,
@@ -98,15 +96,16 @@ export class CommentService {
 
     await this.checkFieldSpam(dto, isAdmin);
 
+    const delayAfterThread = this.config.getOrThrow<number>('constants.max.delay-between-threads');
+
     const foundBoard = await this.boardService.findEntityBySlug(board);
 
-    dto.comment = this.escapeHtmlIfAdmin(dto, isAdmin);
+    dto.comment = this.processThreadMarkdown(dto, isAdmin);
     dto.name = this.processPosterName(dto.name, isAdmin);
 
     await this.checkIpBan(ip);
     this.checkFile(dto);
-    await this.checkMaxActiveCommentSize(board);
-    await this.checkDelay(ip, this.delayAfterThread);
+    await this.checkDelay(ip, delayAfterThread);
 
     const attachedFile = await this.attachedFileService.saveFile(board, dto);
 
@@ -129,6 +128,8 @@ export class CommentService {
 
     this.logger.log(`Object created: [Comment] {id: ${createdThread.id}}`);
 
+    await this.rotateThreads(board);
+
     return createdThread;
   }
 
@@ -137,15 +138,17 @@ export class CommentService {
 
     await this.checkFieldSpam(dto, isAdmin);
 
+    const delayAfterReply = this.config.getOrThrow<number>('constants.max.delay-between-replies');
+
     const foundBoard = await this.boardService.findEntityBySlug(board);
     const foundParent = await this.findOneEntity({ displayNumber, board: { slug: board } });
 
-    dto.comment = this.escapeHtmlIfAdmin(dto, isAdmin);
+    dto.comment = this.processReplyMarkdown(dto, board, displayNumber, isAdmin);
     dto.name = this.processPosterName(dto.name, isAdmin);
 
     await this.checkIpBan(ip);
     this.checkFile(dto);
-    await this.checkDelay(ip, this.delayAfterReply);
+    await this.checkDelay(ip, delayAfterReply);
 
     const attachedFile = await this.attachedFileService.saveFile(board, dto);
 
@@ -207,6 +210,25 @@ export class CommentService {
     await this.removeOrphans();
   }
 
+  private async rotateThreads(boardSlug: string): Promise<void> {
+    this.logger.log(`rotateThreads ({boardSlug: ${boardSlug}})`);
+
+    const maxThreads = this.config.getOrThrow<number>('constants.max.threads');
+    const maxThreadLivingTime = this.config.getOrThrow<number>('constants.max.thread-living-ms');
+    const currentThreadCount = await this.count({ lastHit: { not: null }, board: { slug: boardSlug } });
+
+    if (currentThreadCount > maxThreads) {
+      this.logger.log('Threads will be rotated');
+
+      const oldThreadTimeCreation = DateTime
+        .now()
+        .minus({ milliseconds: maxThreadLivingTime })
+        .toJSDate();
+
+      await this.remove({ lastHit: { lte: oldThreadTimeCreation }, board: { slug: boardSlug } });
+    }
+  }
+
   private async removeOrphans(): Promise<void> {
     const orphanedComments = await this.prisma.comment.findMany({ where: { lastHit: null, parent: null }, include: { attachedFile: true } });
 
@@ -219,12 +241,24 @@ export class CommentService {
     }
   }
 
-  private escapeHtmlIfAdmin(dto: CommentCreateDto, isAdmin: boolean): string {
+  private processThreadMarkdown(dto: CommentCreateDto, isAdmin: boolean): string {
+    let commentStr = dto.comment;
+
     if (!isAdmin) {
-      dto.comment = this.escapeHtml(dto.comment);
+      commentStr = this.escapeHtml(dto.comment, isAdmin);
     }
 
-    return dto.comment;
+    return threadMarkdown(commentStr);
+  }
+
+  private processReplyMarkdown(dto: CommentCreateDto, slug: string, parent: number, isAdmin: boolean): string {
+    let commentStr = dto.comment;
+
+    if (!isAdmin) {
+      commentStr = this.escapeHtml(dto.comment, isAdmin);
+    }
+
+    return replyMarkdown(commentStr, slug, parent);
   }
 
   private processPosterName(name: string, isAdmin: boolean): string {
@@ -239,8 +273,12 @@ export class CommentService {
     return name;
   }
 
-  private escapeHtml(comment: string): string {
-    return comment;
+  private escapeHtml(comment: string, isAdmin: boolean): string {
+    if (isAdmin) {
+      return comment;
+    }
+
+    return he.encode(comment);
   }
 
   private async checkIpBan(ip: string): Promise<void> {
@@ -263,21 +301,6 @@ export class CommentService {
         this.logger.warn(message);
         throw new BadRequestException(message);
       }
-    }
-  }
-
-  private async checkMaxActiveCommentSize(board: string): Promise<void> {
-    const currentThreadCount = await this.prisma.comment.count({
-      where: { board: { slug: board }, lastHit: { not: null } },
-    });
-
-    const maxThreads = this.config.getOrThrow<number>('constants.max.threads');
-
-    if (currentThreadCount + 1 > maxThreads) {
-      const message = `Thread limit has been reached on board /${board}: ${currentThreadCount}`;
-
-      this.logger.warn(message);
-      throw new BadRequestException(message);
     }
   }
 

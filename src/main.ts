@@ -16,10 +16,11 @@ import {
   UnauthorizedExceptionFilter,
   BadRequestExceptionFilter
 } from '@utils/filters/exceptions';
-import { templateConstants } from '@config/application-template-helpers';
+import { helperCollapseText, templateConstants } from '@config/application-template-helpers';
 import { VolumeSettingsService } from '@utils/services';
 import { IpFilterGuard } from '@utils/guards';
-import { IpListFilesService } from './ip-list-files.service';
+import { IpListFilesService } from '@admin/services/ip-list-files.service';
+import { IpFilterService } from '@admin/services';
 
 const bootstrap = async (): Promise<void> => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -27,6 +28,7 @@ const bootstrap = async (): Promise<void> => {
   const config = app.get(ConfigService);
   const volumeSettingsService = app.get(VolumeSettingsService);
   const ipListFilesService = app.get(IpListFilesService);
+  const ipFilterService = app.get(IpFilterService);
   const port = config.getOrThrow<number>('http.port');
 
   const staticDirectory = path.join(process.cwd(), config.getOrThrow('paths.public'));
@@ -51,6 +53,7 @@ const bootstrap = async (): Promise<void> => {
   app.useGlobalFilters(new ForbiddenExceptionFilter());
 
   app.setLocal('templateConstants', templateConstants);
+  app.setLocal('helperCollapseText', helperCollapseText);
 
   await volumeSettingsService.create('spam-list');
   await ipListFilesService.create();
@@ -58,9 +61,11 @@ const bootstrap = async (): Promise<void> => {
   const whiteList = await ipListFilesService.getIpWhiteList();
   const blackList = await ipListFilesService.getIpBlackList();
 
-  const ipGuardInstance = new IpFilterGuard(volumeSettingsService);
-
+  const ipGuardInstance = new IpFilterGuard(ipFilterService);
   app.useGlobalGuards(ipGuardInstance);
+
+  ipFilterService.setWhiteList(whiteList);
+  ipFilterService.setBlackList(blackList);
 
   await app.listen(port);
 

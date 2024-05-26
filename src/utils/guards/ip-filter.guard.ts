@@ -1,29 +1,21 @@
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable, Logger } from '@nestjs/common';
 import { Request } from 'express';
-import { VolumeSettingsService } from '@utils/services';
-import { lineBrokenStringToArray } from '@utils/misc';
+import { IpFilterService } from '@admin/services';
 
 @Injectable()
 export class IpFilterGuard implements CanActivate {
-  private whiteList: string[];
+  constructor(private readonly ipFilterService: IpFilterService) {}
 
-  private blackList: string[];
-
-  constructor(private readonly volumeSettingsService: VolumeSettingsService) {}
-
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    this.whiteList = lineBrokenStringToArray(await this.volumeSettingsService.read('ip-whitelist'));
-    this.blackList = lineBrokenStringToArray(await this.volumeSettingsService.read('ip-blacklist'));
-
+  canActivate(context: ExecutionContext): boolean {
     const req: Request = context.switchToHttp().getRequest();
 
-    const inWhiteList = this.checkWhiteList(req.ip);
+    const inWhiteList = this.checkInList(req.ip, this.ipFilterService.getWhiteList());
 
     if (inWhiteList) {
       return true;
     }
 
-    const inBlackList = this.checkBlackList(req.ip);
+    const inBlackList = this.checkInList(req.ip, this.ipFilterService.getBlackList());
 
     if (inBlackList) {
       const message = `IP in blacklist: ${req.ip}`;
@@ -34,28 +26,12 @@ export class IpFilterGuard implements CanActivate {
     return true;
   }
 
-  public setWhiteList(whiteList: string[]): void {
-    this.whiteList = whiteList;
-  }
-
-  public setBlackList(blackList: string[]): void {
-    this.blackList = blackList;
-  }
-
-  private checkWhiteList(ip: string): boolean {
-    for (const position of this.whiteList) {
-      if (ip.search(`${position}`) !== -1) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  private checkBlackList(ip: string): boolean {
-    for (const position of this.blackList) {
-      if (ip.search(`${position}`) !== -1) {
-        return true;
+  private checkInList(ip: string, list: string[]): boolean {
+    for (const position of list) {
+      if (list.length > 1 || !(list.length === 1 && list[0] === '')) {
+        if (ip.search(`${position}`) !== -1) {
+          return true;
+        }
       }
     }
 

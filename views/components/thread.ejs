@@ -72,7 +72,11 @@
                 <% if (pageMode === 'BOARD') { %>[<a href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>">Reply</a>]<% } %>
             </div><br>
 
-            <blockquote class="post-message"><%= thread.openingPost.comment %></blockquote>
+            <% if (pageMode === 'BOARD') { %>
+                <blockquote class="post-message"><%- helperCollapseText(thread.openingPost.comment, board.slug, thread.openingPost.displayNumber, thread.openingPost.displayNumber) %></blockquote>
+            <% } else { %>
+                <blockquote class="post-message"><%- thread.openingPost.comment %></blockquote>
+            <% } %>
 
             <% if (thread.omittedPosts) { %>
                 <% if (thread.omittedPosts.needToDisplay) { %>
@@ -155,7 +159,11 @@
                     </div>
                 <% } %>
 
-                <blockquote class="post-message"><%= reply.comment %></blockquote>
+                <% if (pageMode === 'BOARD') { %>
+                    <blockquote class="post-message"><%- helperCollapseText(reply.comment, board.slug, thread.openingPost.displayNumber, reply.displayNumber) %></blockquote>
+                <% } else { %>
+                    <blockquote class="post-message"><%- reply.comment %></blockquote>
+                <% } %>
             </div>
         </div>
     <% }); %>

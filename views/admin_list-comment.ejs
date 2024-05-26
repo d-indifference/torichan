@@ -65,7 +65,7 @@
                 <td><%= comment.name %></td>
                 <td><%= comment.options %></td>
                 <td><%= comment.subject %></td>
-                <td><%= comment.comment %></td>
+                <td><%- comment.comment %></td>
                 <td>
                     <% if (comment.attachedFile) { %>
                         <% if (comment.attachedFile.isImage) { %>

@@ -6,7 +6,7 @@ import { IpFilterUpdateDto, SessionDto } from '@admin/dto';
 import { IpFilterPage } from '@admin/pages';
 import { FormDataRequest } from 'nestjs-form-data';
 import { Response } from 'express';
-import { IpListFilesService } from './ip-list-files.service';
+import { IpListFilesService } from '@admin/services';
 import { lineBrokenStringToArray } from '@utils/misc';
 
 @Controller('admin/filter')
@@ -40,7 +40,7 @@ export class IpFilterController {
   @UseGuards(SessionGuard)
   @FormDataRequest()
   public async updateBlackList(@Body(new ValidationPipe()) dto: IpFilterUpdateDto, @Res() res: Response): Promise<void> {
-    await this.ipListFilesService.setIpBlackList(dto.mapListToArray());
+    await this.ipListFilesService.setIpBlackList(lineBrokenStringToArray(dto.ipList));
 
     res.redirect('/admin/filter');
   }

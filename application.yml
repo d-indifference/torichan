@@ -18,8 +18,11 @@ constants:
   thumbnail:
     side: 200
   max:
-    threads: 20
+    threads: 5
     bump-limit: 100
+    thread-living-ms: 86400000
+    delay-between-threads: 30000
+    delay-between-replies: 15000
   pagination:
     default:
       threads: 10

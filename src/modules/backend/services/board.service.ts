@@ -80,6 +80,7 @@ export class BoardService {
   public async update(id: string, dto: BoardUpdateDto): Promise<Board> {
     this.logger.log(`update ({id: ${id}, dto: ${dto.toString()}})`);
 
+    this.validateSlug(dto.slug);
     await this.checkSlugUniquenessOnUpdate(id, dto);
 
     const board = await this.findEntityById(id);
@@ -90,6 +91,7 @@ export class BoardService {
   public async create(dto: BoardCreateDto): Promise<Board> {
     this.logger.log(`create ({dto: ${dto.toString()}})`);
 
+    this.validateSlug(dto.slug);
     await this.checkSlugUniquenessOnCreate(dto);
 
     return (await this.prisma.board.create({ data: dto.toCreateInput() })) as Board;
@@ -138,6 +140,16 @@ export class BoardService {
       const message: string = `Board with slug: ${dto.slug} already exists`;
 
       this.logger.log(message);
+      throw new BadRequestException(message);
+    }
+  }
+
+  private validateSlug(slug: string): void {
+    const reservedUrls = ['faq', 'rules', 'admin', 'files'];
+
+    if (reservedUrls.indexOf(slug) !== -1) {
+      const message = `This slug is reserved by system: ${slug}. You cannot create a board with it.`;
+      this.logger.warn(message);
       throw new BadRequestException(message);
     }
   }

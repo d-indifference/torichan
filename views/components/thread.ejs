@@ -36,7 +36,15 @@
                 <% if (!thread.openingPost.isAdmin) { %><span class="name"><%= thread.openingPost.name %></span><% } else { %><span class="admin-name" title="Highlight posts by Moderators">##&nbsp;<%= thread.openingPost.name %></span><% } %>
                 <span class="dateTime"><%= thread.openingPost.createdAt %></span>
             </label>
-            <a class="postNum" href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#<%= thread.openingPost.displayNumber %>">No. <%= thread.openingPost.displayNumber %></a>
+            <a
+                class="postNum"
+                <% if (pageMode === 'BOARD') { %>href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#<%= thread.openingPost.displayNumber %>"<% } %>
+                <% if (pageMode === 'THREAD') { %>onclick="insert('posting_form', '>><%= thread.openingPost.displayNumber %>');" <% } %>
+                <% if (pageMode === 'THREAD') { %>style="cursor: pointer;" <% } %>
+                <% if (pageMode === 'THREAD') { %>title="Reply on this post" <% } %>
+            >
+                No. <%= thread.openingPost.displayNumber %>
+            </a>
 
             <div class="reply-link">
                 <% if (session) { %>
@@ -99,7 +107,16 @@
                     <% if (!reply.isAdmin) { %><span class="name"><%= reply.name %></span><% } else { %><span class="admin-name" title="Highlight posts by Moderators">##&nbsp;<%= reply.name %></span><% } %>
                     <span class="dateTime"><%= reply.createdAt %></span>
                 </label>
-                <a class="postNum" href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#<%= reply.displayNumber %>">No. <%= reply.displayNumber %></a>
+
+                <a
+                    class="postNum"
+                    <% if (pageMode === 'BOARD') { %>href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#<%= reply.displayNumber %>"<% } %>
+                    <% if (pageMode === 'THREAD') { %>onclick="insert('posting_form', '>><%= reply.displayNumber %>');" <% } %>
+                    <% if (pageMode === 'THREAD') { %>style="cursor: pointer;" <% } %>
+                    <% if (pageMode === 'THREAD') { %>title="Reply on this post" <% } %>
+                >
+                    No. <%= reply.displayNumber %>
+                </a>
 
                 <% if (session) { %>
                     &nbsp;&nbsp;

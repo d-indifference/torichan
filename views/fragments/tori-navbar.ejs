@@ -1,4 +1,11 @@
 <div class="tori-navbar">
+    <form class="changeStyleForm">
+        <select name="styleList" onchange="changeStyle(this, styleCookie);">
+            <option value="Burichan">Burichan</option>
+            <option value="Futaba">Futaba</option>
+            <option value="Photon">Photon</option>
+        </select>
+    </form>
     [<% boards.forEach(board => { %>
         /<a href="/<%= board.slug %>" title="<%= board.name %>"><%= board.slug %></a>/
     <% }); %>] ||

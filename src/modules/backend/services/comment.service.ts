@@ -220,13 +220,31 @@ export class CommentService {
     if (currentThreadCount > maxThreads) {
       this.logger.log('Threads will be rotated');
 
-      const oldThreadTimeCreation = DateTime
+      const oldThreadLastHitTme = DateTime
         .now()
         .minus({ milliseconds: maxThreadLivingTime })
         .toJSDate();
 
-      await this.remove({ lastHit: { lte: oldThreadTimeCreation }, board: { slug: boardSlug } });
+      await this.removeOldestThread(boardSlug, oldThreadLastHitTme);
     }
+  }
+
+  private async removeOldestThread(boardSlug: string, lastHist: Date): Promise<void> {
+    this.logger.log(`removeOldestThread ({boardSlug: ${boardSlug}, lastHist: ${lastHist})`);
+
+    const oldestThread = await this.prisma.comment.findFirst({
+      where: { lastHit: { lte: lastHist }, board: { slug: boardSlug } },
+      include: { attachedFile: true },
+      orderBy: { createdAt: 'desc' }
+    });
+
+    if (oldestThread.attachedFile) {
+      await this.attachedFileService.removeEntity(oldestThread.attachedFile);
+    }
+
+    await this.prisma.comment.delete({ where: { id: oldestThread.id } });
+
+    await this.removeOrphans();
   }
 
   private async removeOrphans(): Promise<void> {

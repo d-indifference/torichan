@@ -6,9 +6,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="/css/global.css">
-    <link rel="stylesheet" href="/css/torichan.css">
-    <link rel="shortcut icon" href="/icons/favicon.ico" type="image/x-icon">
+    <%- include("fragments/styles-common"); %>
     <%- include('fragments/tori-script') %>
     <title>/<%= board.slug %>/ - <% if (thread.openingPost.subject) { %><%= thread.openingPost.subject %><% } else { %>Reply to thread #<%= thread.openingPost.displayNumber %><% } %></title>
 </head>
@@ -27,7 +25,7 @@
         <fieldset>
             <legend>Mode: Reply</legend>
 
-            <form action="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>/post" method="post" enctype="multipart/form-data">
+            <form id="posting_form" action="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>/post" method="post" enctype="multipart/form-data">
                 <table class="tori-post-form" width="1%">
                     <tr>
                         <td>Name</td>

@@ -19,29 +19,27 @@ const processBoldText = (text: string): string => text.replace(/___(.*)___/gm, '
 
 const processItalicText = (text: string): string => text.replace(/__(.*)__/gm, '<i>$1</i>');
 
-const processHyperLinks = (text: string): string =>
-  text.replace(/(http:\/\/|https:\/\/|ftp:\/\/|irc:\/\/|mailto:|news:)(\S+)/gi, '<a href="$1" rel="noreferrer">$1</a>');
+const processHyperLinks = (text: string[]): string[] =>
+  text.map(symbol =>
+    symbol.replace(/^(http:\/\/|https:\/\/|ftp:\/\/|irc:\/\/|mailto:|news:)(\S+)$/gm, '<a href="$1$2" rel="noreferrer" target="_blank">$1$2</a>')
+  );
 
 const processInitMarkdownThread = (text: string): string => {
-  return processQuote(processNewLine(text)).join('<br>');
+  return processHyperLinks(processQuote(processNewLine(text))).join('<br>');
 };
 
 const processInitMarkdownReply = (text: string, slug: string, parent: number): string => {
-  return processQuote(processReplyLink(processNewLine(text), slug, parent)).join('<br>');
+  return processHyperLinks(processQuote(processReplyLink(processNewLine(text), slug, parent))).join('<br>');
 };
 
 export const threadMarkdown = (text: string): string => {
   const markdownInitial = processInitMarkdownThread(text);
 
-  return processHyperLinks(
-    processItalicText(processBoldText(processUnderlineText(processStrokeText(processCowText(processCode(processSpoiler(markdownInitial)))))))
-  );
+  return processItalicText(processBoldText(processUnderlineText(processStrokeText(processCowText(processCode(processSpoiler(markdownInitial)))))));
 };
 
 export const replyMarkdown = (text: string, slug: string, parent: number): string => {
   const markdownInitial = processInitMarkdownReply(text, slug, parent);
 
-  return processHyperLinks(
-    processItalicText(processBoldText(processUnderlineText(processStrokeText(processCowText(processCode(processSpoiler(markdownInitial)))))))
-  );
+  return processItalicText(processBoldText(processUnderlineText(processStrokeText(processCowText(processCode(processSpoiler(markdownInitial)))))));
 };

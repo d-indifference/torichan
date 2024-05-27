@@ -32,3 +32,43 @@ function getCookie(name) {
 function eraseCookie(name) {
   document.cookie = name + '=; Max-Age=-99999999;';
 }
+
+function insert(formId, text) {
+  var form = document.getElementById(formId);
+
+  if (form) {
+    if (form.comment) {
+      form.comment.value += text + '\n';
+    }
+  }
+}
+
+function setStyle(cookieName) {
+  if (!getCookie(cookieName)) {
+    setCookie(cookieName, 'Burichan', 365);
+  }
+
+  const currentStyle = getCookie(cookieName);
+
+  $('link[rel][title]').each(function () {
+    this.disabled = this.title !== currentStyle;
+  });
+
+  $('select[name=styleList]').each(function () {
+    for (var i = 0; i < this.options.length; i++) {
+      if (this.options[i].value === currentStyle) {
+        this.options[i].selected = true;
+      } else {
+        this.options[i].selected = false;
+      }
+    }
+  });
+}
+
+function changeStyle(select, cookieName) {
+  const selectedStyle = select.selectedOptions[0].value;
+
+  setCookie(cookieName, selectedStyle, 365);
+
+  setStyle(cookieName);
+}

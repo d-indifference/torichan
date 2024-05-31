@@ -1,0 +1,101 @@
+html, body {
+  color: #000000;
+  background-color: #ffddb5;
+}
+
+a {
+  color: #932a30;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline !important;
+}
+
+.tori-title {
+  color: #af0a0f;
+}
+
+.tori-navbar {
+  color: #f8a188;
+}
+
+.tori-page-title {
+  color: #af0a0f;
+}
+
+hr {
+  border-top-color: #f8a188;
+}
+
+table.tori-post-form > tbody > tr > td:first-child {
+  background-color: #f68d45;
+  color: #613032;
+  border: 1px solid #000;
+}
+
+span.subject {
+  color: #eb037c;
+}
+
+span.name {
+  color: #e61c25;
+}
+
+div.post a.postNum {
+  color: #932a30;
+}
+
+div.post a.postNum:hover {
+  text-decoration: underline; !important;
+}
+
+.tori-page-list {
+  color: #f8a188;
+}
+
+.side-arrows {
+  color: #f8a188;
+}
+
+div.post.reply {
+  background-color: #fcb478;
+  border: 1px solid #f8a188;
+  border-left: none;
+  border-top: none;
+}
+
+span.omitted-posts, span.abbrev {
+  color: #ba5a2a;
+}
+
+span.admin-name {
+  font-weight: 900;
+  color: purple !important;
+}
+
+.admin-preview-username a {
+  color: #34345c;
+}
+
+.admin-options a {
+  background-color: #f68d45;
+  border: 1px solid #000;
+}
+
+.simple-table-pagination {
+  color: #f8a188;
+}
+
+span.quote {
+  color: #789922;
+}
+
+span.spoiler {
+  background-color: #000000;
+  color: #000000;
+}
+
+span.spoiler:hover {
+  color: #fff !important;
+}

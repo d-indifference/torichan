@@ -209,7 +209,7 @@ export class AttachedFileService {
   private async saveThumbnail(sourcePath: string, targetPath: string, width: number, height: number): Promise<void> {
     this.logger.log(`saveThumbnail ({sourcePath: ${sourcePath}, targetPath: ${targetPath}, width: ${width}, height: ${height})`);
 
-    await sharp(sourcePath)
+    await sharp(sourcePath, { failOn: 'truncated' })
       .resize({ fit: 'contain', width, height })
       .jpeg({ quality: 80 })
       .toFile(targetPath);

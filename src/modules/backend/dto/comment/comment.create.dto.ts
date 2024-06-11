@@ -6,6 +6,10 @@ import { isUndefined } from 'lodash';
 export class CommentCreateDto {
   @IsString()
   @IsOptional()
+  nya?: string;
+
+  @IsString()
+  @IsOptional()
   @MaxLength(256)
   name?: string;
 
@@ -27,7 +31,7 @@ export class CommentCreateDto {
 
   @IsFile()
   @IsOptional()
-  @MaxFileSize(3e6)
+  @MaxFileSize(20e6 - 1)
   file?: FileSystemStoredFile;
 
   @IsString()
@@ -35,6 +39,10 @@ export class CommentCreateDto {
   @MinLength(8)
   @MaxLength(8)
   password: string;
+
+  @IsString()
+  @IsOptional()
+  captcha?: string;
 
   @IsString()
   @IsOptional()

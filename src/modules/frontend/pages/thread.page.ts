@@ -1,5 +1,5 @@
 import { BoardDto } from '@backend/dto/board';
-import { ThreadDto } from '@frontend/dto';
+import { CaptchaDto, ThreadDto } from '@frontend/dto';
 import { SessionPayloadDto } from '@admin/dto';
 import { CommentPageMode } from '@frontend/enums';
 
@@ -11,6 +11,8 @@ export class ThreadPage {
   board: BoardDto;
 
   boards: BoardDto[];
+
+  captcha: CaptchaDto;
 
   password: string;
 
@@ -31,6 +33,11 @@ class ThreadPageBuilder {
 
   public password(password: string): ThreadPageBuilder {
     this.threadPage.password = password;
+    return this;
+  }
+
+  public captcha(captcha: CaptchaDto): ThreadPageBuilder {
+    this.threadPage.captcha = captcha;
     return this;
   }
 

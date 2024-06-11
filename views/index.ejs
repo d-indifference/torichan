@@ -15,10 +15,21 @@
     <br clear="all">
 
     <h1 class="tori-title"><%- templateConstants.siteName %></h1>
-    <em style="text-align: center; display: block; font-size: 14pt"><%- templateConstants.siteSlogan %></em>
+    <em class="tori-slogan"><%- templateConstants.siteSlogan %></em>
     <p class="tori-main-links">
-        [<a href="/rules">global rules</a>] / [<a href="/admin">management</a>] / [<a href="https://github.com/d-indifference/torichan">torichan 0.0.1</a>]
+        [<a href="/rules">global rules</a>] / [<a href="/admin">management</a>] / [<a href="https://github.com/d-indifference/torichan">torichan 0.1.0</a>]
     </p>
+
+    <table border="1" class="tori-board-list" cellpadding="5">
+        <% boards.forEach(board => { %>
+            <tr>
+                <td>
+                    <strong><a href="/<%= board.slug %>">/<%= board.slug %>/ - <%= board.name %></a></strong>
+                    <p><%- board.description %></p>
+                </td>
+            </tr>
+        <% }); %>
+    </table>
 
     <%- include('fragments/tori-navbar'); %>
     <br clear="all">

@@ -1,5 +1,6 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, StreamableFile } from '@nestjs/common';
 import { PrismaService } from '@utils/services';
+import { Response } from 'express';
 
 @Injectable()
 export class SqlConsoleService {
@@ -16,5 +17,20 @@ export class SqlConsoleService {
       this.logger.warn(e.message);
       throw new BadRequestException(e.message);
     }
+  }
+
+  public async saveToFile(query: string, res: Response): Promise<StreamableFile> {
+    this.logger.log(`saveToFile (query: {${query}})`);
+
+    const queryResult = await this.runQuery(query);
+
+    res.set({
+      'Content-Type': 'application/json',
+      'Content-Disposition': `attachment; filename="${new Date().getTime()}.json"`
+    });
+
+    const fileBuffer = Buffer.from(JSON.stringify(queryResult), 'utf-8');
+
+    return new StreamableFile(fileBuffer);
   }
 }

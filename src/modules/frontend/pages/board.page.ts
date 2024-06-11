@@ -1,6 +1,6 @@
 import { BoardDto } from '@backend/dto/board';
 import { AbstractPageable } from '@utils/abstract';
-import { ThreadDto } from '@frontend/dto';
+import { CaptchaDto, ThreadDto } from '@frontend/dto';
 import { SessionPayloadDto } from '@admin/dto';
 import { CommentPageMode } from '@frontend/enums';
 
@@ -12,6 +12,8 @@ export class BoardPage extends AbstractPageable {
   board: BoardDto;
 
   boards: BoardDto[];
+
+  captcha: CaptchaDto;
 
   password: string;
 
@@ -67,6 +69,11 @@ class BoardPageBuilder {
 
   public password(password: string): BoardPageBuilder {
     this.boardPage.password = password;
+    return this;
+  }
+
+  public captcha(captcha: CaptchaDto): BoardPageBuilder {
+    this.boardPage.captcha = captcha;
     return this;
   }
 

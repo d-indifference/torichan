@@ -22,6 +22,7 @@ a:hover {
 
 .tori-page-title {
   color: #ff6600;
+  font-family: "Trebuchet MS",Trebuchet,tahoma,serif !important;
 }
 
 hr {
@@ -119,4 +120,12 @@ span.spoiler {
 
 span.spoiler:hover {
   color: #333333 !important;
+}
+
+.table-list tbody tr:nth-child(odd) {
+  background-color: #f6f6f6;
+}
+
+.table-list tbody tr:nth-child(even) {
+  background-color: #d6d6f6;
 }

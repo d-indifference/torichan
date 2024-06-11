@@ -11,20 +11,20 @@ secure:
   secret:
     session: 'insecure-10b0e2d0-6618-4e57-8fa3-c82e0835e9d9'
     password: 'insecure-a3253b30-0fa4-4dd0-83b8-5fc6e0b31592'
+    captcha: 'insecure-43bb37c1-b168-47e2-8cb4-56be05255e01'
 
 constants:
-  placeholders:
-    name: 'Anonymous'
   thumbnail:
     side: 200
-  max:
-    threads: 5
-    bump-limit: 100
-    thread-living-ms: 86400000
-    delay-between-threads: 30000
-    delay-between-replies: 15000
   pagination:
     default:
       threads: 10
       preview-replies: 5
       table-contains: 10
+
+captcha:
+  size: 6
+  ignoreChars: '0o1i'
+  noise: 3
+  color: true
+  background: '#cc9966'

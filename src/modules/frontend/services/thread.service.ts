@@ -8,17 +8,19 @@ import { CommentDto } from '@backend/dto/comment';
 import { ThreadDto } from '@frontend/dto';
 import { SessionDto } from '@admin/dto';
 import { CommentPageMode } from '@frontend/enums';
+import { CaptchaService } from '@utils/services/captcha.service';
 
 @Injectable()
 export class ThreadService {
   constructor(
     private readonly boardService: BackendBoardService,
-    private readonly commentService: BackendCommentService
+    private readonly commentService: BackendCommentService,
+    private readonly captchaService: CaptchaService
   ) {}
 
   public async getThreadPage(slug: string, displayNumber: number, cookies: Record<string, unknown>, session?: SessionDto): Promise<ThreadPage> {
     const board = await this.boardService.findBySlug(slug);
-    const boards = await this.boardService.findAll({}, null, { slug: 'asc' });
+    const boards = await this.boardService.findAll({ visible: true }, null, { slug: 'asc' });
 
     const threadSearchCondition: Prisma.CommentWhereInput = { displayNumber, board: { slug } };
 
@@ -32,6 +34,7 @@ export class ThreadService {
       .boards(boards)
       .thread(await this.mapThread(thread))
       .password(this.setPassword(cookies))
+      .captcha(this.captchaService.generateCaptcha())
       .build();
   }
 

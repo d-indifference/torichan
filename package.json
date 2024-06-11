@@ -1,8 +1,8 @@
 {
   "name": "torichan",
-  "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "version": "0.1.0",
+  "description": "Yet another imageboard implementation",
+  "author": "d-indifference <umaruchan825@gmail.com>",
   "private": true,
   "license": "GPLV2",
   "scripts": {
@@ -46,6 +46,7 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
     "sharp": "^0.33.3",
+    "svg-captcha": "^1.4.0",
     "uuidv4": "^6.2.13"
   },
   "devDependencies": {

@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CommonPagesController, PostHandlersController } from '@frontend/controllers';
 import { BackendModule } from '@backend/backend.module';
 import { BoardService, CommentService, IndexService, ThreadService } from '@frontend/services';
-import { PaginationResolveService } from '@utils/services';
+import { CaptchaService, PaginationResolveService } from '@utils/services';
 import { NestjsFormDataModule } from 'nestjs-form-data';
 import { nestjsFormDataConfig } from '@config/nestjs-form-data.config';
 
@@ -17,7 +17,7 @@ import { nestjsFormDataConfig } from '@config/nestjs-form-data.config';
       useFactory: nestjsFormDataConfig
     })
   ],
-  providers: [IndexService, BoardService, PaginationResolveService, CommentService, ThreadService],
+  providers: [IndexService, BoardService, PaginationResolveService, CommentService, ThreadService, CaptchaService],
   controllers: [CommonPagesController, PostHandlersController],
   exports: []
 })

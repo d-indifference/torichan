@@ -23,7 +23,7 @@ export class BoardService {
       `findAll ({where: ${JSON.stringify(where)}, selection: ${selection ? selection.toString() : ''}, orderBy: ${JSON.stringify(orderBy)}})`
     );
 
-    const boards = await this.prisma.board.findMany({ where, ...selection, orderBy });
+    const boards = await this.prisma.board.findMany({ where, ...selection, orderBy, include: { boardSettings: true } });
 
     return boards.map(board => BoardDto.fromModel(board));
   }
@@ -31,7 +31,7 @@ export class BoardService {
   public async findEntityById(id: string): Promise<Board> {
     this.logger.log(`findEntityById ({id: ${id}})`);
 
-    const board = await this.prisma.board.findFirst({ where: { id } });
+    const board = await this.prisma.board.findFirst({ where: { id }, include: { boardSettings: true } });
 
     this.processNotFound(board, `Board with id: ${id} was not found`);
 
@@ -41,7 +41,7 @@ export class BoardService {
   public async findEntityBySlug(slug: string): Promise<Board> {
     this.logger.log(`findEntityBySlug ({slug: ${slug}})`);
 
-    const board = await this.prisma.board.findFirst({ where: { slug } });
+    const board = await this.prisma.board.findFirst({ where: { slug }, include: { boardSettings: true } });
 
     this.processNotFound(board, `Board with slug: ${slug} was not found`);
 
@@ -59,7 +59,7 @@ export class BoardService {
   public async findBySlug(slug: string): Promise<BoardDto> {
     this.logger.log(`findBySlug ({slug: ${slug}})`);
 
-    const board = await this.prisma.board.findFirst({ where: { slug } });
+    const board = await this.prisma.board.findFirst({ where: { slug }, include: { boardSettings: true } });
 
     this.processNotFound(board, `Page with address: /${slug} was not found`);
 
@@ -85,7 +85,7 @@ export class BoardService {
 
     const board = await this.findEntityById(id);
 
-    return (await this.prisma.board.update({ where: { id: board.id }, data: dto.toUpdateInput() })) as Board;
+    return (await this.prisma.board.update({ where: { id: board.id }, data: dto.toUpdateInput(board.id) })) as Board;
   }
 
   public async create(dto: BoardCreateDto): Promise<Board> {
@@ -102,6 +102,7 @@ export class BoardService {
 
     const board = await this.findEntityById(id);
 
+    await this.prisma.boardSettings.delete({ where: { id: board.id } });
     await this.prisma.board.delete({ where: { id: board.id } });
   }
 

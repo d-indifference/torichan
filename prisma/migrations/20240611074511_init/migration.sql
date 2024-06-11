@@ -1,4 +1,7 @@
 -- CreateEnum
+CREATE TYPE "FileAttachmentMode" AS ENUM ('STRICT', 'OPTIONAL', 'FORBIDDEN');
+
+-- CreateEnum
 CREATE TYPE "UserRole" AS ENUM ('ADMINISTRATOR', 'MODERATOR');
 
 -- CreateTable
@@ -7,8 +10,34 @@ CREATE TABLE "Board" (
     "slug" VARCHAR(256) NOT NULL,
     "name" VARCHAR(256) NOT NULL,
     "postCount" INTEGER NOT NULL DEFAULT 0,
+    "visible" BOOLEAN NOT NULL DEFAULT true,
+    "description" TEXT NOT NULL,
 
     CONSTRAINT "Board_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "BoardSettings" (
+    "id" UUID NOT NULL,
+    "allowPosting" BOOLEAN NOT NULL DEFAULT true,
+    "strictAnonymity" BOOLEAN NOT NULL DEFAULT false,
+    "threadFileAttachmentMode" "FileAttachmentMode" NOT NULL DEFAULT 'OPTIONAL',
+    "replyFileAttachmentMode" "FileAttachmentMode" NOT NULL DEFAULT 'OPTIONAL',
+    "delayAfterThread" INTEGER NOT NULL DEFAULT 30,
+    "delayAfterReply" INTEGER NOT NULL DEFAULT 15,
+    "minFileSize" INTEGER NOT NULL DEFAULT 1,
+    "maxFileSize" INTEGER NOT NULL DEFAULT 19922944,
+    "allowMarkdown" BOOLEAN NOT NULL DEFAULT true,
+    "maxThreadsOnBoard" INTEGER NOT NULL DEFAULT 100,
+    "bumpLimit" INTEGER NOT NULL DEFAULT 250,
+    "maxStringFieldSize" INTEGER NOT NULL DEFAULT 100,
+    "maxCommentSize" INTEGER NOT NULL DEFAULT 2000,
+    "maxThreadLivingTime" INTEGER NOT NULL DEFAULT 86400000,
+    "defaultPosterName" VARCHAR(256) NOT NULL DEFAULT 'Anonymous',
+    "defaultModeratorName" VARCHAR(256) NOT NULL DEFAULT 'Moderator',
+    "rules" TEXT NOT NULL,
+
+    CONSTRAINT "BoardSettings_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -79,6 +108,9 @@ CREATE UNIQUE INDEX "AttachedFile_commentId_key" ON "AttachedFile"("commentId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- AddForeignKey
+ALTER TABLE "BoardSettings" ADD CONSTRAINT "BoardSettings_id_fkey" FOREIGN KEY ("id") REFERENCES "Board"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Comment" ADD CONSTRAINT "Comment_boardId_fkey" FOREIGN KEY ("boardId") REFERENCES "Board"("id") ON DELETE CASCADE ON UPDATE CASCADE;

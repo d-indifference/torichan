@@ -18,7 +18,7 @@ export class ThreadService {
 
   public async getThreadPage(slug: string, displayNumber: number, cookies: Record<string, unknown>, session?: SessionDto): Promise<ThreadPage> {
     const board = await this.boardService.findBySlug(slug);
-    const boards = await this.boardService.findAll({}, null, { slug: 'asc' });
+    const boards = await this.boardService.findAll({ visible: true }, null, { slug: 'asc' });
 
     const threadSearchCondition: Prisma.CommentWhereInput = { displayNumber, board: { slug } };
 

@@ -7,7 +7,7 @@ export class IndexService {
   constructor(private readonly boardService: BoardService) {}
 
   public async index(): Promise<IndexPage> {
-    const boards = await this.boardService.findAll({}, null, { slug: 'asc' });
+    const boards = await this.boardService.findAll({ visible: true }, null, { slug: 'asc' });
 
     return { boards };
   }

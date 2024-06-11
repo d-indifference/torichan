@@ -50,6 +50,152 @@
                         >
                     </td>
                 </tr>
+                <tr>
+                    <td>Visible</td>
+                    <td>
+                        <input
+                            name="visible"
+                            type="checkbox"
+                            tabindex="1"
+                            <% if (args.formMode !== 'CREATE' && args.formData.visible) { %>checked<% } %>
+                            <% if (args.formMode === 'CREATE') { %>checked<% } %>
+                        >
+                    </td>
+                </tr>
+                <tr>
+                    <td>Description</td>
+                    <td>
+                        <textarea name="description" cols="33" rows="11" required><% if (args.formMode !== 'CREATE') { %><%= args.formData.description %><% } %></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Allow posting</td>
+                    <td>
+                        <input
+                            name="allowPosting"
+                            type="checkbox"
+                            tabindex="1"
+                            <% if (args.formMode !== 'CREATE' && args.formData.allowPosting) { %>checked<% } %>
+                            <% if (args.formMode === 'CREATE') { %>checked<% } %>
+                        >
+                    </td>
+                </tr>
+                <tr>
+                    <td>Strict anonymity</td>
+                    <td>
+                        <input
+                            name="strictAnonymity"
+                            type="checkbox"
+                            tabindex="1"
+                            <% if (args.formMode !== 'CREATE' && args.formData.strictAnonymity) { %>checked<% } %>
+                        >
+                    </td>
+                </tr>
+                <tr>
+                    <td>Thread file attachment</td>
+                    <td>
+                        <select name="threadFileAttachmentMode" required>
+                            <option value="STRICT" <% if (args.formMode !== 'CREATE' && args.formData.threadFileAttachmentMode === 'STRICT') { %>selected<% } %>>Strict</option>
+                            <option value="OPTIONAL" <% if (args.formMode !== 'CREATE' && args.formData.threadFileAttachmentMode === 'OPTIONAL') { %>selected<% } %><% if (args.formMode === 'CREATE') { %>selected<% } %>>Optional</option>
+                            <option value="FORBIDDEN" <% if (args.formMode !== 'CREATE' && args.formData.threadFileAttachmentMode === 'FORBIDDEN') { %>selected<% } %>>Forbidden</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Reply file attachment</td>
+                    <td>
+                        <select name="replyFileAttachmentMode" required>
+                            <option value="STRICT" <% if (args.formMode !== 'CREATE' && args.formData.replyFileAttachmentMode === 'STRICT') { %>selected<% } %>>Strict</option>
+                            <option value="OPTIONAL" <% if (args.formMode !== 'CREATE' && args.formData.replyFileAttachmentMode === 'OPTIONAL') { %>selected<% } %><% if (args.formMode === 'CREATE') { %>selected<% } %>>Optional</option>
+                            <option value="FORBIDDEN" <% if (args.formMode !== 'CREATE' && args.formData.replyFileAttachmentMode === 'FORBIDDEN') { %>selected<% } %>>Forbidden</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Delay after thread</td>
+                    <td>
+                        <input type="number" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.delayAfterThread %><% } else { %>30<% } %>" name="delayAfterThread" min="0" required>, seconds.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Delay after reply</td>
+                    <td>
+                        <input type="number" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.delayAfterReply %><% } else { %>15<% } %>" name="delayAfterReply" min="0">, seconds.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Minimum file size</td>
+                    <td>
+                        <input type="number" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.minFileSize %><% } else { %>1<% } %>" name="minFileSize" min="0">, bytes.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Maximum file size</td>
+                    <td>
+                        <input type="number" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.maxFileSize %><% } else { %>3145728<% } %>" name="maxFileSize" min="0">, bytes.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Allow markdown [<abbr title="If you uncheck the box, then the only markdown that will be available to you is replies, citations and links">?</abbr>]</td>
+                    <td>
+                        <input
+                            name="allowMarkdown"
+                            type="checkbox"
+                            tabindex="1"
+                            <% if (args.formMode !== 'CREATE' && args.formData.allowMarkdown) { %>checked<% } %>
+                            <% if (args.formMode === 'CREATE') { %>checked<% } %>
+                        >
+                    </td>
+                </tr>
+                <tr>
+                    <td>Maximum thread on boards</td>
+                    <td>
+                        <input type="number" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.maxThreadsOnBoard %><% } else { %>100<% } %>" name="maxThreadsOnBoard" min="0">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Bump limit</td>
+                    <td>
+                        <input type="number" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.bumpLimit %><% } else { %>250<% } %>" name="bumpLimit" min="0">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Max string field size [<abbr title="Name, options, subject">?</abbr>]</td>
+                    <td>
+                        <input type="number" name="maxStringFieldSize" min="0" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.maxStringFieldSize %><% } else { %>100<% } %>">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Max comment size</td>
+                    <td>
+                        <input type="number" name="maxCommentSize" min="0" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.maxCommentSize %><% } else { %>2048<% } %>">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Max thread living time</td>
+                    <td>
+                        <input type="number" name="maxThreadLivingTime" min="0" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.maxThreadLivingTime %><% } else { %>86400000<% } %>">, milliseconds
+                    </td>
+                </tr>
+                <tr>
+                    <td>Default poster name</td>
+                    <td>
+                        <input type="text" name="defaultPosterName" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.defaultPosterName %><% } else { %>Anonymous<% } %>" placeholder="Anonymous" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Default moderator name</td>
+                    <td>
+                        <input type="text" name="defaultModeratorName" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.defaultModeratorName %><% } else { %>Moderator<% } %>"  placeholder="Moderator" required>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Rules</td>
+                    <td>
+                        <textarea name="rules" cols="33" rows="11" required><% if (args.formMode !== 'CREATE') { %><%= args.formData.rules %><% } %></textarea>
+                    </td>
+                </tr>
             </table>
             <input type="submit" value="Save changes" tabindex="1" size="32">
         </form>

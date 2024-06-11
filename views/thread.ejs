@@ -21,59 +21,75 @@
 
     <hr class="tori-above-post-form">
 
-    <div class="tori-posting-form">
-        <fieldset>
-            <legend>Mode: Reply</legend>
+    <% if (board.allowPosting) { %>
+        <div class="tori-posting-form">
+            <fieldset>
+                <legend>Mode: Reply</legend>
 
-            <form id="posting_form" action="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>/post" method="post" enctype="multipart/form-data">
-                <table class="tori-post-form" width="1%">
-                    <tr>
-                        <td>Name</td>
-                        <td>
-                            <input name="name" type="text" tabindex="1" placeholder="<% if (session) { %>Moderator<% } else { %>Anonymous<% } %>" size="32">
-                            <% if (session) { %><label><input type="checkbox" name="isAdmin" checked>Mark me as administrator</label><% } %>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Options</td>
-                        <td><input name="options" type="text" tabindex="1" size="32"></td>
-                    </tr>
-                    <tr>
-                        <td>Subject</td>
-                        <td><input name="subject" type="text" tabindex="1" size="27"><input type="submit" value="Post"></td>
-                    </tr>
-                    <tr>
-                        <td>Comment</td>
-                        <td><textarea name="comment" tabindex="1" rows="11" cols="33"></textarea></td>
-                    </tr>
-                    <tr>
-                        <td>File</td>
-                        <td><input name="file" type="file" tabindex="1" size="8"></td>
-                    </tr>
-                    <tr>
-                        <td>Password</td>
-                        <td><input
-                                    name="password"
-                                    type="password"
-                                    tabindex="1"
-                                    size="8"
-                                    value="<%= password %>"
-                            > (For comments & files deletion)</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" class="rules">
-                            <ul class="rules">
-                                <li>Image files up to 3072 kB in size are supported.</li>
-                                <li>Images larger than 200x200 will be reduced in size.</li>
-                                <li>Moderator is always right.</li>
-                                <li>Please read the <a href="/rules">Rules</a> and <a href="/faq">FAQ</a> before posting.</li>
-                            </ul>
-                        </td>
-                    </tr>
-                </table>
-            </form>
-        </fieldset>
-    </div>
+                <form id="posting_form" action="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>/post" method="post" enctype="multipart/form-data">
+                    <table class="tori-post-form" width="1%">
+                        <% if (!board.strictAnonymity) { %>
+                            <tr>
+                                <td>Name</td>
+                                <td>
+                                    <input name="name" type="text" tabindex="1" placeholder="<% if (session) { %>Moderator<% } else { %>Anonymous<% } %>" size="32">
+                                    <% if (session) { %><label><input type="checkbox" name="isAdmin" checked>Mark me as administrator</label><% } %>
+                                </td>
+                            </tr>
+                        <% } else { %>
+                            <% if (session) { %>
+                                <tr>
+                                    <td>Name</td>
+                                    <td><label><input type="checkbox" name="isAdmin" checked>Mark me as administrator</label></td>
+                                </tr>
+                            <% } %>
+                        <% } %>
+                        <tr>
+                            <td>Options</td>
+                            <td><input name="options" type="text" tabindex="1" size="32"></td>
+                        </tr>
+                        <tr>
+                            <td>Subject</td>
+                            <td><input name="subject" type="text" tabindex="1" size="27"><input type="submit" value="Post"></td>
+                        </tr>
+                        <tr>
+                            <td>Comment</td>
+                            <td><textarea name="comment" tabindex="1" rows="11" cols="33"></textarea></td>
+                        </tr>
+                            <% if (board.replyFileAttachmentMode !== 'FORBIDDEN') { %>
+                                <tr>
+                                    <td>File</td>
+                                    <td><input name="file" type="file" tabindex="1" size="8"></td>
+                                </tr>
+                            <% } %>
+                        <tr>
+                            <td>Password</td>
+                            <td><input
+                                        name="password"
+                                        type="password"
+                                        tabindex="1"
+                                        size="8"
+                                        value="<%= password %>"
+                                > (For comments & files deletion)</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="rules">
+                                <ul class="rules">
+                                    <% if (board.replyFileAttachmentMode !== 'FORBIDDEN') { %>
+                                        <li>Image files up to <%= board.maxFileSize %> in size are supported.</li>
+                                        <li>Images larger than 200x200 will be reduced in size.</li>
+                                    <% } %>
+                                    <li>Moderator is always right.</li>
+                                    <li>Please read the <a href="/rules">Rules</a> and <a href="/faq">FAQ</a> before posting.</li>
+                                </ul>
+                                <%- board.rules %>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </fieldset>
+        </div>
+    <% } %>
 
     <hr>
     <div class="reply-navbar">

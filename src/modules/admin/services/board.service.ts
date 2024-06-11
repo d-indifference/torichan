@@ -4,7 +4,7 @@ import { BoardService as BackendBoardService } from '@backend/services';
 import { SessionPayloadDto } from '@admin/dto';
 import { BoardListPage, EditPage, EditPageFormArgsMode } from '@admin/pages';
 import { validateNotEmptyPage } from '@utils/misc';
-import { BoardCreateDto, BoardDto, BoardUpdateDto } from '@backend/dto/board';
+import { BoardCreateDto, BoardUpdateDto } from '@backend/dto/board';
 import { Response } from 'express';
 
 @Injectable()
@@ -28,8 +28,8 @@ export class BoardService {
     };
   }
 
-  public async findById(session: SessionPayloadDto, id: string): Promise<EditPage<BoardDto>> {
-    const board = await this.boardService.findById(id);
+  public async findById(session: SessionPayloadDto, id: string): Promise<EditPage<BoardUpdateDto>> {
+    const board = await this.boardService.findEntityById(id);
 
     return {
       session,
@@ -37,7 +37,7 @@ export class BoardService {
         formDescription: `Edit board: ${board.name}`,
         formHandler: `/admin/board/${board.id}`,
         formMode: EditPageFormArgsMode.UPDATE,
-        formData: board
+        formData: BoardUpdateDto.fromModel(board)
       }
     };
   }

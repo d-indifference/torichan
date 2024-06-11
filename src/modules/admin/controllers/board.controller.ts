@@ -50,7 +50,7 @@ export class BoardController {
   @Roles(UserRole.ADMINISTRATOR)
   @UseGuards(SessionGuard)
   @Render('admin_edit-board')
-  public async getBoardForUpdate(@Session() session: SessionDto, @Param('id', ParseUUIDPipe) id: string): Promise<EditPage<BoardDto>> {
+  public async getBoardForUpdate(@Session() session: SessionDto, @Param('id', ParseUUIDPipe) id: string): Promise<EditPage<BoardUpdateDto>> {
     return await this.boardService.findById(session.payload, id);
   }
 

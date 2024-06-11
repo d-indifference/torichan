@@ -8,12 +8,44 @@ datasource db {
 }
 
 model Board {
-  id        String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  slug      String @unique @db.VarChar(256)
-  name      String @db.VarChar(256)
-  postCount Int    @default(0)
+  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  slug        String  @unique @db.VarChar(256)
+  name        String  @db.VarChar(256)
+  postCount   Int     @default(0)
+  visible     Boolean @default(true) @db.Boolean
+  description String  @db.Text
 
-  comments Comment[]
+  comments      Comment[]
+  boardSettings BoardSettings?
+}
+
+enum FileAttachmentMode {
+  STRICT
+  OPTIONAL
+  FORBIDDEN
+}
+
+model BoardSettings {
+  id                       String             @id @db.Uuid
+  allowPosting             Boolean            @default(true) @db.Boolean
+  strictAnonymity          Boolean            @default(false) @db.Boolean
+  threadFileAttachmentMode FileAttachmentMode @default(OPTIONAL)
+  replyFileAttachmentMode  FileAttachmentMode @default(OPTIONAL)
+  delayAfterThread         Int                @default(30) @db.Integer
+  delayAfterReply          Int                @default(15) @db.Integer
+  minFileSize              Int                @default(1) @db.Integer
+  maxFileSize              Int                @default(19922944) @db.Integer
+  allowMarkdown            Boolean            @default(true) @db.Boolean
+  maxThreadsOnBoard        Int                @default(100) @db.Integer
+  bumpLimit                Int                @default(250) @db.Integer
+  maxStringFieldSize       Int                @default(100) @db.Integer
+  maxCommentSize           Int                @default(2000) @db.Integer
+  maxThreadLivingTime      Int                @default(86400000) @db.Integer
+  defaultPosterName        String             @default("Anonymous") @db.VarChar(256)
+  defaultModeratorName     String             @default("Moderator") @db.VarChar(256)
+  rules                    String             @db.Text
+
+  board Board @relation(fields: [id], references: [id], onDelete: Cascade)
 }
 
 model Comment {
@@ -67,7 +99,8 @@ model User {
   encryptedPassword String   @db.VarChar(256)
   email             String   @unique @db.VarChar(256)
   role              UserRole
-  bans              Ban[]
+
+  bans Ban[]
 }
 
 model Ban {

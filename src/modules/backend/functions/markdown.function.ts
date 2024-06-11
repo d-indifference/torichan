@@ -24,22 +24,22 @@ const processHyperLinks = (text: string[]): string[] =>
     symbol.replace(/^(http:\/\/|https:\/\/|ftp:\/\/|irc:\/\/|mailto:|news:)(\S+)$/gm, '<a href="$1$2" rel="noreferrer" target="_blank">$1$2</a>')
   );
 
-const processInitMarkdownThread = (text: string): string => {
+export const threadSimpleMarkdown = (text: string): string => {
   return processHyperLinks(processQuote(processNewLine(text))).join('<br>');
 };
 
-const processInitMarkdownReply = (text: string, slug: string, parent: number): string => {
+export const replySimpleMarkdown = (text: string, slug: string, parent: number): string => {
   return processHyperLinks(processQuote(processReplyLink(processNewLine(text), slug, parent))).join('<br>');
 };
 
 export const threadMarkdown = (text: string): string => {
-  const markdownInitial = processInitMarkdownThread(text);
+  const markdownInitial = threadSimpleMarkdown(text);
 
   return processItalicText(processBoldText(processUnderlineText(processStrokeText(processCowText(processCode(processSpoiler(markdownInitial)))))));
 };
 
 export const replyMarkdown = (text: string, slug: string, parent: number): string => {
-  const markdownInitial = processInitMarkdownReply(text, slug, parent);
+  const markdownInitial = replySimpleMarkdown(text, slug, parent);
 
   return processItalicText(processBoldText(processUnderlineText(processStrokeText(processCowText(processCode(processSpoiler(markdownInitial)))))));
 };

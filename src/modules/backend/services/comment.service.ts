@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier  */
 import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@utils/services';
-import { AttachedFile, Comment, Prisma } from '@prisma/client';
+import { AttachedFile, BoardSettings, Comment, FileAttachmentMode, Prisma } from '@prisma/client';
 import { CommentCreateDto, CommentDto } from '@backend/dto/comment';
 import { DateTime } from 'luxon';
 import { ConfigService } from '@nestjs/config';
@@ -11,7 +11,7 @@ import { PrismaTakeSkipDto } from '@utils/misc';
 import { BanService } from '@backend/services/ban.service';
 import { SpamService } from '@backend/services/spam.service';
 import * as he from 'he';
-import { replyMarkdown, threadMarkdown } from '@backend/functions';
+import { replyMarkdown, replySimpleMarkdown, threadMarkdown, threadSimpleMarkdown } from '@backend/functions';
 
 @Injectable()
 export class CommentService {
@@ -96,12 +96,15 @@ export class CommentService {
 
     await this.checkFieldSpam(dto, isAdmin);
 
-    const delayAfterThread = this.config.getOrThrow<number>('constants.max.delay-between-threads');
-
     const foundBoard = await this.boardService.findEntityBySlug(board);
+    const boardSettings: BoardSettings = foundBoard['boardSettings'];
 
-    dto.comment = this.processThreadMarkdown(dto, isAdmin);
-    dto.name = this.processPosterName(dto.name, isAdmin);
+    this.applySettingsPolicy(boardSettings, dto, false);
+
+    const delayAfterThread = boardSettings.delayAfterThread * 1000;
+
+    dto.comment = this.processThreadMarkdown(dto, isAdmin, boardSettings);
+    dto.name = this.processPosterName(dto.name, isAdmin, boardSettings);
 
     await this.checkIpBan(ip);
     this.checkFile(dto);
@@ -138,13 +141,16 @@ export class CommentService {
 
     await this.checkFieldSpam(dto, isAdmin);
 
-    const delayAfterReply = this.config.getOrThrow<number>('constants.max.delay-between-replies');
-
     const foundBoard = await this.boardService.findEntityBySlug(board);
     const foundParent = await this.findOneEntity({ displayNumber, board: { slug: board } });
+    const boardSettings: BoardSettings = foundBoard['boardSettings'];
 
-    dto.comment = this.processReplyMarkdown(dto, board, displayNumber, isAdmin);
-    dto.name = this.processPosterName(dto.name, isAdmin);
+    this.applySettingsPolicy(boardSettings, dto, true);
+
+    const delayAfterReply = boardSettings.delayAfterReply * 1000;
+
+    dto.comment = this.processReplyMarkdown(dto, board, displayNumber, isAdmin, boardSettings);
+    dto.name = this.processPosterName(dto.name, isAdmin, boardSettings);
 
     await this.checkIpBan(ip);
     this.checkFile(dto);
@@ -170,10 +176,64 @@ export class CommentService {
 
     this.logger.log(`Object created: [Comment] {id: ${createdReply.id}}`);
 
-    await this.updateLastHit(foundParent, dto);
+    await this.updateLastHit(foundParent, dto, boardSettings);
     await this.boardService.incrementPostCount(foundBoard.id);
 
     return createdReply;
+  }
+
+  private applySettingsPolicy(settings: BoardSettings, dto: CommentCreateDto, isReply: boolean): void {
+    if (!settings.allowPosting) {
+      throw new BadRequestException('You cannot post any comments to this board!');
+    }
+
+    if (settings.strictAnonymity && dto.name) {
+      throw new BadRequestException('You must be anonymous on this board!');
+    }
+
+    if (isReply) {
+      if (dto.file && settings.replyFileAttachmentMode === FileAttachmentMode.FORBIDDEN) {
+        throw new BadRequestException('Posting of files is not allowed here!');
+      }
+
+      if (!dto.file && settings.replyFileAttachmentMode === FileAttachmentMode.STRICT) {
+        throw new BadRequestException('Please attach any file.');
+      }
+    } else {
+      if (dto.file && settings.threadFileAttachmentMode === FileAttachmentMode.FORBIDDEN) {
+        throw new BadRequestException('Posting of files is not allowed here!');
+      }
+
+      if (!dto.file && settings.threadFileAttachmentMode === FileAttachmentMode.STRICT) {
+        throw new BadRequestException('Please attach any file.');
+      }
+    }
+
+    if (dto.file) {
+      if (dto.file.size < settings.minFileSize) {
+        throw new BadRequestException('Your file is too small.');
+      }
+
+      if (dto.file.size > settings.maxFileSize) {
+        throw new BadRequestException('Your file is too big.');
+      }
+    }
+
+    if (!settings.strictAnonymity && dto.name.length > settings.maxStringFieldSize) {
+      throw new BadRequestException('Your name is too long');
+    }
+
+    if (dto.options.length > settings.maxStringFieldSize) {
+      throw new BadRequestException('Your options is too long');
+    }
+
+    if (dto.subject.length > settings.maxStringFieldSize) {
+      throw new BadRequestException('Your subject is too long');
+    }
+
+    if (dto.comment.length > settings.maxCommentSize) {
+      throw new BadRequestException('Your comment is too long');
+    }
   }
 
   private async setFileToComment(commentId: string, attachedFile: AttachedFile): Promise<void> {
@@ -213,8 +273,11 @@ export class CommentService {
   private async rotateThreads(boardSlug: string): Promise<void> {
     this.logger.log(`rotateThreads ({boardSlug: ${boardSlug}})`);
 
-    const maxThreads = this.config.getOrThrow<number>('constants.max.threads');
-    const maxThreadLivingTime = this.config.getOrThrow<number>('constants.max.thread-living-ms');
+    const board = await this.boardService.findEntityBySlug(boardSlug);
+    const settings: BoardSettings = board['boardSettings'];
+
+    const maxThreads = settings.maxThreadsOnBoard;
+    const maxThreadLivingTime = settings.maxThreadLivingTime;
     const currentThreadCount = await this.count({ lastHit: { not: null }, board: { slug: boardSlug } });
 
     if (currentThreadCount > maxThreads) {
@@ -259,33 +322,41 @@ export class CommentService {
     }
   }
 
-  private processThreadMarkdown(dto: CommentCreateDto, isAdmin: boolean): string {
+  private processThreadMarkdown(dto: CommentCreateDto, isAdmin: boolean, settings: BoardSettings): string {
     let commentStr = dto.comment;
 
     if (!isAdmin) {
       commentStr = this.escapeHtml(dto.comment, isAdmin);
     }
 
-    return threadMarkdown(commentStr);
+    if (settings.allowMarkdown) {
+      return threadMarkdown(commentStr);
+    }
+
+    return threadSimpleMarkdown(commentStr);
   }
 
-  private processReplyMarkdown(dto: CommentCreateDto, slug: string, parent: number, isAdmin: boolean): string {
+  private processReplyMarkdown(dto: CommentCreateDto, slug: string, parent: number, isAdmin: boolean, settings: BoardSettings): string {
     let commentStr = dto.comment;
 
     if (!isAdmin) {
       commentStr = this.escapeHtml(dto.comment, isAdmin);
     }
 
-    return replyMarkdown(commentStr, slug, parent);
+    if (settings.allowMarkdown) {
+      return replyMarkdown(commentStr, slug, parent);
+    }
+
+    return replySimpleMarkdown(commentStr, slug, parent);
   }
 
-  private processPosterName(name: string, isAdmin: boolean): string {
+  private processPosterName(name: string, isAdmin: boolean, settings: BoardSettings): string {
     if (name === '' || name === undefined) {
       if (isAdmin) {
-        return 'Moderator';
+        return settings.defaultModeratorName;
       }
 
-      return this.config.getOrThrow('constants.placeholders.name');
+      return settings.defaultPosterName;
     }
 
     return name;
@@ -339,12 +410,12 @@ export class CommentService {
     }
   }
 
-  private async updateLastHit(comment: Comment, dto: CommentCreateDto): Promise<void> {
+  private async updateLastHit(comment: Comment, dto: CommentCreateDto, settings: BoardSettings): Promise<void> {
     this.logger.log(`updateLastHit ({comment: ${JSON.stringify(comment)}, dto: ${dto.toString()})`);
 
     const option = dto.options.trim().toLowerCase();
 
-    const bumpLimit = this.config.getOrThrow<number>('constants.max.bump-limit');
+    const bumpLimit = settings.bumpLimit;
     const currentRepliesLength = comment['children'].length;
 
     if (option !== 'sage' && currentRepliesLength <= bumpLimit) {

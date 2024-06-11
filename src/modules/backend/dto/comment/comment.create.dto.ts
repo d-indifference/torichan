@@ -27,7 +27,7 @@ export class CommentCreateDto {
 
   @IsFile()
   @IsOptional()
-  @MaxFileSize(3e6)
+  @MaxFileSize(20e6 - 1)
   file?: FileSystemStoredFile;
 
   @IsString()

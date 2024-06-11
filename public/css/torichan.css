@@ -99,3 +99,11 @@ span.spoiler {
 span.spoiler:hover {
   color: #fff !important;
 }
+
+.table-list tbody tr:nth-child(odd) {
+  background-color: #f6f6f6;
+}
+
+.table-list tbody tr:nth-child(even) {
+  background-color: #d6d6f6;
+}

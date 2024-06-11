@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, Render, Res, Session, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Render, Res, Session, StreamableFile, UseGuards, ValidationPipe } from '@nestjs/common';
 import { Roles } from '@admin/decorators';
 import { UserRole } from '@prisma/client';
 import { SessionGuard } from '@admin/guards';
@@ -27,5 +27,13 @@ export class SqlConsoleController {
   @FormDataRequest()
   public runSql(@Body(new ValidationPipe()) dto: SqlQueryDto, @Res() res: Response): void {
     res.redirect(`/admin/sql?query=${dto.query}`);
+  }
+
+  @Post('save')
+  @Roles(UserRole.ADMINISTRATOR)
+  @UseGuards(SessionGuard)
+  @FormDataRequest()
+  public async saveSqlQuery(@Body(new ValidationPipe()) dto: SqlQueryDto, @Res({ passthrough: true }) res: Response): Promise<StreamableFile> {
+    return await this.sqlConsoleService.saveToFile(dto.query, res);
   }
 }

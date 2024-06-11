@@ -108,6 +108,11 @@ export class BoardCreateDto {
 
   @IsString()
   @IsOptional()
+  @MaxLength(2)
+  enableCaptcha: 'on' | undefined;
+
+  @IsString()
+  @IsOptional()
   @MaxLength(2048)
   rules: string;
 
@@ -135,6 +140,7 @@ export class BoardCreateDto {
           maxThreadLivingTime: normalizeInteger(this.maxThreadLivingTime, { min: 0, max: Number.MAX_SAFE_INTEGER - 1 }),
           defaultPosterName: this.defaultPosterName,
           defaultModeratorName: this.defaultModeratorName,
+          enableCaptcha: normalizeBoolean(this.enableCaptcha),
           rules: this.rules
         }
       }
@@ -163,6 +169,7 @@ export class BoardCreateDto {
       maxThreadLivingTime: ${this.maxThreadLivingTime},
       defaultPosterName: ${this.defaultPosterName},
       defaultModeratorName: ${this.defaultModeratorName},
+      enableCaptcha: ${this.enableCaptcha},
       rules: ${this.rules}
     }`;
   }

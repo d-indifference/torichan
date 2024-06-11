@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier  */
 import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '@utils/services';
+import { CaptchaService, PrismaService } from '@utils/services';
 import { AttachedFile, BoardSettings, Comment, FileAttachmentMode, Prisma } from '@prisma/client';
 import { CommentCreateDto, CommentDto } from '@backend/dto/comment';
 import { DateTime } from 'luxon';
@@ -23,7 +23,8 @@ export class CommentService {
     private readonly boardService: BoardService,
     private readonly attachedFileService: AttachedFileService,
     private readonly banService: BanService,
-    private readonly spamService: SpamService
+    private readonly spamService: SpamService,
+    private readonly captchaService: CaptchaService
   ) {}
 
   public async findAll(
@@ -99,6 +100,7 @@ export class CommentService {
     const foundBoard = await this.boardService.findEntityBySlug(board);
     const boardSettings: BoardSettings = foundBoard['boardSettings'];
 
+    this.applyCaptchaPolicy(dto, isAdmin, boardSettings);
     this.applySettingsPolicy(boardSettings, dto, false);
 
     const delayAfterThread = boardSettings.delayAfterThread * 1000;
@@ -145,6 +147,7 @@ export class CommentService {
     const foundParent = await this.findOneEntity({ displayNumber, board: { slug: board } });
     const boardSettings: BoardSettings = foundBoard['boardSettings'];
 
+    this.applyCaptchaPolicy(dto, isAdmin, boardSettings);
     this.applySettingsPolicy(boardSettings, dto, true);
 
     const delayAfterReply = boardSettings.delayAfterReply * 1000;
@@ -233,6 +236,12 @@ export class CommentService {
 
     if (dto.comment.length > settings.maxCommentSize) {
       throw new BadRequestException('Your comment is too long');
+    }
+  }
+
+  private applyCaptchaPolicy(dto: CommentCreateDto, isAdmin: boolean, settings: BoardSettings): void {
+    if (!isAdmin && settings.enableCaptcha) {
+      this.captchaService.solveCaptcha(dto.captcha, dto.nya);
     }
   }
 

@@ -54,6 +54,11 @@
                 <% }); %>
                 </tbody>
             </table>
+
+            <form action="/admin/sql/save" method="post" class="download-result">
+                <input type="hidden" name="query" value="<%= query %>">
+                <button type="submit">Save query result (JSON)</button>
+            </form>
         <% } %>
     <% } %>
 

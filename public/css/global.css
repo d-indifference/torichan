@@ -14,6 +14,12 @@ html, body {
   clear: both;
 }
 
+em.tori-slogan {
+  text-align: center;
+  display: block;
+  font-size: 14pt
+}
+
 .tori-footer a {
   text-decoration: none;
 }
@@ -218,4 +224,9 @@ form.changeStyleForm {
   letter-spacing: 0.33em;
   margin-left: 6px;
   text-shadow: -1px 0px orange, -2px 0px yellow, -3px 0px green, -4px 0px blue, -5px 0px indigo, -6px 0px violet;
+}
+
+.download-result {
+  margin-top: 10px;
+  text-align: center;
 }

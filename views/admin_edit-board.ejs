@@ -189,7 +189,17 @@
                         <input type="text" name="defaultModeratorName" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.defaultModeratorName %><% } else { %>Moderator<% } %>"  placeholder="Moderator" required>
                     </td>
                 </tr>
-
+                <tr>
+                    <td>Enable captcha</td>
+                    <td>
+                        <input
+                            name="enableCaptcha"
+                            type="checkbox"
+                            tabindex="1"
+                            <% if (args.formMode !== 'CREATE' && args.formData.enableCaptcha) { %>checked<% } %>
+                        >
+                    </td>
+                </tr>
                 <tr>
                     <td>Rules</td>
                     <td>

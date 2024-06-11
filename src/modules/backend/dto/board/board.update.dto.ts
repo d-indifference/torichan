@@ -108,6 +108,11 @@ export class BoardUpdateDto {
 
   @IsString()
   @IsOptional()
+  @MaxLength(2)
+  enableCaptcha: 'on' | undefined;
+
+  @IsString()
+  @IsOptional()
   @MaxLength(2048)
   rules?: string;
 
@@ -137,13 +142,12 @@ export class BoardUpdateDto {
     this.setFieldToInputTemplate(inputBoardSettings, 'defaultPosterName');
     this.setFieldToInputTemplate(inputBoardSettings, 'defaultModeratorName');
     this.setFieldToInputTemplate(inputBoardSettings, 'rules');
+    this.setBooleanFieldToInputTemplate(inputBoardSettings, 'enableCaptcha');
 
     const prismaInputBoardSettings: Prisma.BoardSettingsUpdateInput = inputBoardSettings as Prisma.BoardSettingsUpdateInput;
     const prismaInputBoard: Prisma.BoardUpdateInput = inputBoard as Prisma.BoardUpdateInput;
 
     prismaInputBoard.boardSettings = { update: { where: { id }, data: prismaInputBoardSettings } };
-
-    console.log(JSON.stringify(prismaInputBoardSettings));
 
     return prismaInputBoard;
   }
@@ -172,6 +176,7 @@ export class BoardUpdateDto {
     dto.maxThreadLivingTime = boardSettings.maxThreadLivingTime.toString();
     dto.defaultPosterName = boardSettings.defaultPosterName;
     dto.defaultModeratorName = boardSettings.defaultModeratorName;
+    dto.enableCaptcha = boardSettings.enableCaptcha ? 'on' : null;
     dto.rules = boardSettings.rules;
 
     return dto;
@@ -199,6 +204,7 @@ export class BoardUpdateDto {
       maxThreadLivingTime: ${this.maxThreadLivingTime},
       defaultPosterName: ${this.defaultPosterName},
       defaultModeratorName: ${this.defaultModeratorName},
+      enableCaptcha: ${this.enableCaptcha}
       rules: ${this.rules}
     }`;
   }

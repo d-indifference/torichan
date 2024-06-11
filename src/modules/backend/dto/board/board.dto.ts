@@ -22,6 +22,8 @@ export class BoardDto {
 
   maxFileSize: string;
 
+  enableCaptcha: boolean;
+
   rules: string;
 
   constructor(
@@ -35,6 +37,7 @@ export class BoardDto {
     replyFileAttachmentMode: FileAttachmentMode,
     minFileSize: string,
     maxFileSize: string,
+    enableCaptcha: boolean,
     rules: string
   ) {
     this.id = id;
@@ -47,6 +50,7 @@ export class BoardDto {
     this.replyFileAttachmentMode = replyFileAttachmentMode;
     this.minFileSize = minFileSize;
     this.maxFileSize = maxFileSize;
+    this.enableCaptcha = enableCaptcha;
     this.rules = rules;
   }
 
@@ -63,6 +67,7 @@ export class BoardDto {
       boardSettings.replyFileAttachmentMode,
       filesize(boardSettings.minFileSize, { standard: 'jedec' }),
       filesize(boardSettings.maxFileSize, { standard: 'jedec' }),
+      boardSettings.enableCaptcha,
       boardSettings.rules
     );
   }

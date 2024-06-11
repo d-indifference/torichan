@@ -27,6 +27,10 @@
                 <legend>Mode: Reply</legend>
 
                 <form id="posting_form" action="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>/post" method="post" enctype="multipart/form-data">
+                    <% if (board.enableCaptcha) { %>
+                        <input type="hidden" name="nya" value="<%= captcha.text %>">
+                    <% } %>
+
                     <table class="tori-post-form" width="1%">
                         <% if (!board.strictAnonymity) { %>
                             <tr>
@@ -56,12 +60,22 @@
                             <td>Comment</td>
                             <td><textarea name="comment" tabindex="1" rows="11" cols="33"></textarea></td>
                         </tr>
-                            <% if (board.replyFileAttachmentMode !== 'FORBIDDEN') { %>
-                                <tr>
-                                    <td>File</td>
-                                    <td><input name="file" type="file" tabindex="1" size="8"></td>
-                                </tr>
-                            <% } %>
+                        <% if (board.replyFileAttachmentMode !== 'FORBIDDEN') { %>
+                            <tr>
+                                <td>File</td>
+                                <td><input name="file" type="file" tabindex="1" size="8"></td>
+                            </tr>
+                        <% } %>
+                        <% if (board.enableCaptcha) { %>
+                            <tr>
+                                <td>Captcha</td>
+                                <td>
+                                    <%- captcha.data %>
+                                    <input type="text" name="captcha" size="16">
+                                    <% if (session) { %><br>Tick `Mark me as administrator` to skip the captcha<% } %>
+                                </td>
+                            </tr>
+                        <% } %>
                         <tr>
                             <td>Password</td>
                             <td><input

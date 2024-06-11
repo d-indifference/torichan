@@ -35,6 +35,7 @@ CREATE TABLE "BoardSettings" (
     "maxThreadLivingTime" INTEGER NOT NULL DEFAULT 86400000,
     "defaultPosterName" VARCHAR(256) NOT NULL DEFAULT 'Anonymous',
     "defaultModeratorName" VARCHAR(256) NOT NULL DEFAULT 'Moderator',
+    "enableCaptcha" BOOLEAN NOT NULL DEFAULT false,
     "rules" TEXT NOT NULL,
 
     CONSTRAINT "BoardSettings_pkey" PRIMARY KEY ("id")

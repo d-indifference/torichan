@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CommentService as BackendCommentService } from '@backend/services';
+import { CommentService as BackendCommentService, CommentsQueries } from '@backend/services';
 import { CommentCreateDto } from '@backend/dto/comment';
 import { Response } from 'express';
 import { CommentRemoveDto } from '@frontend/dto';
@@ -8,7 +8,10 @@ import { SessionDto } from '@admin/dto';
 
 @Injectable()
 export class CommentService {
-  constructor(private readonly commentService: BackendCommentService) {}
+  constructor(
+    private readonly commentService: BackendCommentService,
+    private readonly commentQueries: CommentsQueries
+  ) {}
 
   public async createThread(board: string, ip: string, dto: CommentCreateDto, res: Response, session: SessionDto): Promise<void> {
     this.validateSession(dto, session);
@@ -44,7 +47,7 @@ export class CommentService {
   public async removeAndRedirectToThread(board: string, displayNumber: number, dto: CommentRemoveDto, res: Response): Promise<void> {
     await this.remove(board, dto);
 
-    if (await this.commentService.existsByBoardAndDisplayNumber(board, displayNumber)) {
+    if (await this.commentQueries.existsByBoardAndDisplayNumber(board, displayNumber)) {
       res.redirect(`/${board}/res/${displayNumber}`);
     } else {
       res.redirect(`/${board}`);

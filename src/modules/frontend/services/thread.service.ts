@@ -1,6 +1,10 @@
 /* eslint-disable prettier/prettier  */
 import { Injectable } from '@nestjs/common';
-import { BoardService as BackendBoardService, CommentService as BackendCommentService } from '@backend/services';
+import {
+  BoardService as BackendBoardService,
+  CommentService as BackendCommentService,
+  CommentsQueries
+} from '@backend/services';
 import { ThreadPage } from '@frontend/pages';
 import { setPasswordFromCookies } from '@frontend/utils';
 import { Prisma } from '@prisma/client';
@@ -8,13 +12,13 @@ import { CommentDto } from '@backend/dto/comment';
 import { ThreadDto } from '@frontend/dto';
 import { SessionDto } from '@admin/dto';
 import { CommentPageMode } from '@frontend/enums';
-import { CaptchaService } from '@utils/services/captcha.service';
+import { CaptchaService } from '@utils/services';
 
 @Injectable()
 export class ThreadService {
   constructor(
     private readonly boardService: BackendBoardService,
-    private readonly commentService: BackendCommentService,
+    private readonly commentQueries: CommentsQueries,
     private readonly captchaService: CaptchaService
   ) {}
 
@@ -24,7 +28,7 @@ export class ThreadService {
 
     const threadSearchCondition: Prisma.CommentWhereInput = { displayNumber, board: { slug } };
 
-    const thread = await this.commentService.findOne(threadSearchCondition);
+    const thread = await this.commentQueries.findOne(threadSearchCondition);
 
     return ThreadPage
       .builder()
@@ -46,7 +50,7 @@ export class ThreadService {
     const repliesSearchCondition: Prisma.CommentWhereInput =
       { parent: { board: { slug: openingPost.boardSlug }, displayNumber: openingPost.displayNumber } };
 
-    const replies = await this.commentService.findAll(repliesSearchCondition, {}, { createdAt: 'asc' });
+    const replies = await this.commentQueries.findAll(repliesSearchCondition, {}, { createdAt: 'asc' });
 
     return new ThreadDto(openingPost, replies);
   }

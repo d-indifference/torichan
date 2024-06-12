@@ -22,9 +22,6 @@ export class CaptchaService {
 
     const decryptedAnswer = crypto.decrypt(answer);
 
-    console.log('decryptedAnswer', decryptedAnswer);
-    console.log('input', input);
-
     if (input !== decryptedAnswer) {
       throw new ForbiddenException('Captcha is invalid!');
     }

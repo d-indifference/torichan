@@ -33,7 +33,7 @@ After saving the source code, do the following:
     DATABASE_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public" 
     ```
 4. Edit configurations in the file `application.yml` as you wish, 
-but we strongly recommend you to change default values by paths `secure.secret.session` and `secure.secret.password`.
+but we strongly recommend you to change default values by paths `secure.secret.session`, `secure.secret.password` and `secure.secret.captcha`.
 5. Next run the following commands:
     ```sh
     $ docker-compose build

@@ -12,3 +12,4 @@ export * from './spam-output.dto';
 export * from './spam-input.dto';
 export * from './ip-filter.update.dto';
 export * from './sign-up.dto';
+export * from './global-settings.dto';

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="nofollow">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <%- include("fragments/styles-admin"); %>
+    <%- include('fragments/tori-script') %>
+    <title>Global site settings - <%- templateConstants.siteName() %></title>
+</head>
+<body>
+<%- include('fragments/admin-navbar') %>
+
+<h1 class="tori-page-title">Global site settings - Management panel</h1>
+<%- include('fragments/admin-welcome') %>
+
+<%- include('fragments/admin-tabs') %>
+
+
+<fieldset class="admin-form">
+    <legend><%= args.formDescription %></legend>
+    <form action="<%= args.formHandler %>" method="post">
+        <table class="tori-post-form" width="1%">
+            <tr>
+                <td>Site name</td>
+                <td><input type="text" name="siteName" size="29" value="<%= args.formData.siteName %>"></td>
+            </tr>
+            <tr>
+                <td>Site slogan</td>
+                <td><input type="text" name="siteSlogan" value="<%= args.formData.siteSlogan %>" size="29"></td>
+            </tr>
+            <tr>
+                <td>Site navbar</td>
+                <td><textarea name="siteNavbar" cols="30" rows="10"><%= args.formData.siteNavbar %></textarea></td>
+            </tr>
+            <tr>
+                <td>FAQ page</td>
+                <td><textarea name="faqPage" cols="30" rows="10"><%= args.formData.faqPage %></textarea></td>
+            </tr>
+            <tr>
+                <td>Rules page</td>
+                <td><textarea name="rulesPage" cols="30" rows="10"><%= args.formData.rulesPage %></textarea></td>
+            </tr>
+        </table>
+        <input type="submit" value="Save" tabindex="1" size="32">
+    </form>
+</fieldset>
+
+<%- include('fragments/admin-navbar') %>
+
+<script type="text/javascript" src="/js/admin.js"></script>
+
+<%- include('fragments/tori-footer'); %>
+</body>

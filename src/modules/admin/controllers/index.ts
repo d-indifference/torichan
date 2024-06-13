@@ -8,3 +8,4 @@ export * from './file.controller';
 export * from './sql-console.controller';
 export * from './spam.controller';
 export * from './ip-filter.controller';
+export * from './global-settings.controller';

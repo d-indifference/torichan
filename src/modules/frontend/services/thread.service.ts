@@ -2,7 +2,6 @@
 import { Injectable } from '@nestjs/common';
 import {
   BoardService as BackendBoardService,
-  CommentService as BackendCommentService,
   CommentsQueries
 } from '@backend/services';
 import { ThreadPage } from '@frontend/pages';
@@ -24,7 +23,6 @@ export class ThreadService {
 
   public async getThreadPage(slug: string, displayNumber: number, cookies: Record<string, unknown>, session?: SessionDto): Promise<ThreadPage> {
     const board = await this.boardService.findBySlug(slug);
-    const boards = await this.boardService.findAll({ visible: true }, null, { slug: 'asc' });
 
     const threadSearchCondition: Prisma.CommentWhereInput = { displayNumber, board: { slug } };
 
@@ -35,7 +33,6 @@ export class ThreadService {
       .session(session.payload ?? null)
       .pageMode(CommentPageMode.THREAD)
       .board(board)
-      .boards(boards)
       .thread(await this.mapThread(thread))
       .password(this.setPassword(cookies))
       .captcha(this.captchaService.generateCaptcha())

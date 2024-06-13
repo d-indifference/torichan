@@ -10,6 +10,7 @@ import {
   BoardController,
   CommentController,
   FileController,
+  GlobalSettingsController,
   HomePageController,
   IpFilterController,
   SpamController,
@@ -26,7 +27,8 @@ import {
   FileService,
   SqlConsoleService,
   IpListFilesService,
-  IpFilterService
+  IpFilterService,
+  GlobalSettingsService
 } from '@admin/services';
 
 @Module({
@@ -54,7 +56,8 @@ import {
     SqlConsoleService,
     VolumeSettingsService,
     IpListFilesService,
-    IpFilterService
+    IpFilterService,
+    GlobalSettingsService
   ],
   controllers: [
     HomePageController,
@@ -66,7 +69,8 @@ import {
     FileController,
     SqlConsoleController,
     SpamController,
-    IpFilterController
+    IpFilterController,
+    GlobalSettingsController
   ],
   exports: []
 })

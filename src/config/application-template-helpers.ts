@@ -1,8 +1,13 @@
 /* eslint-disable prettier/prettier  */
 
+import { GlobalSettingsDto } from '@admin/dto';
+
 export const templateConstants = {
-  siteName: 'Torichan Imageboard Engine',
-  siteSlogan: 'Put your slogan here...'
+  siteName: () => (global['global-settings'] as GlobalSettingsDto).siteName,
+  siteSlogan: () => (global['global-settings'] as GlobalSettingsDto).siteSlogan,
+  siteNavbar: () => (global['global-settings'] as GlobalSettingsDto).siteNavbar,
+  faqPage: () => (global['global-settings'] as GlobalSettingsDto).faqPage,
+  rulesPage: () => (global['global-settings'] as GlobalSettingsDto).rulesPage,
 };
 
 export const helperCollapseText = (text: string, slug: number, parent: number, displayNumber: number): string => {

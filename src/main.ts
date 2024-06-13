@@ -20,7 +20,7 @@ import { helperCollapseText, templateConstants } from '@config/application-templ
 import { VolumeSettingsService } from '@utils/services';
 import { IpFilterGuard } from '@utils/guards';
 import { IpListFilesService } from '@admin/services/ip-list-files.service';
-import { IpFilterService } from '@admin/services';
+import { GlobalSettingsService, IpFilterService } from '@admin/services';
 
 const bootstrap = async (): Promise<void> => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -29,6 +29,7 @@ const bootstrap = async (): Promise<void> => {
   const volumeSettingsService = app.get(VolumeSettingsService);
   const ipListFilesService = app.get(IpListFilesService);
   const ipFilterService = app.get(IpFilterService);
+  const globalSettingsService = app.get(GlobalSettingsService);
   const port = config.getOrThrow<number>('http.port');
 
   const staticDirectory = path.join(process.cwd(), config.getOrThrow('paths.public'));
@@ -66,6 +67,8 @@ const bootstrap = async (): Promise<void> => {
 
   ipFilterService.setWhiteList(whiteList);
   ipFilterService.setBlackList(blackList);
+
+  await globalSettingsService.create();
 
   await app.listen(port);
 

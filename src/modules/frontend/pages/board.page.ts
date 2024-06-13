@@ -11,8 +11,6 @@ export class BoardPage extends AbstractPageable {
 
   board: BoardDto;
 
-  boards: BoardDto[];
-
   captcha: CaptchaDto;
 
   password: string;
@@ -54,11 +52,6 @@ class BoardPageBuilder {
 
   public board(board: BoardDto): BoardPageBuilder {
     this.boardPage.board = board;
-    return this;
-  }
-
-  public boards(boards: BoardDto[]): BoardPageBuilder {
-    this.boardPage.boards = boards;
     return this;
   }
 

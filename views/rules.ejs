@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -9,34 +8,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <%- include("fragments/styles-start"); %>
     <%- include('fragments/tori-script') %>
-    <title>Rules - <%- templateConstants.siteName %></title>
+    <title>Rules - <%- templateConstants.siteName() %></title>
 </head>
 <body>
-    <div class="tori-navbar">
-        [<a href="/faq">FAQ</a>] [<a href="/rules">Rules</a>] [<a href="/admin">Management</a>] [<a href="/">Home</a>]
-    </div>
-    <br clear="all">
-
-    <h1 class="tori-title">Rules</h1>
-
-    <div class="info-page">
-        <table style="text-align: left">
-            <tr>
-                <td>
-                    <ol>
-                        <li>No CP</li>
-                        <li>No shitposting</li>
-                        <li>Moderator is always right</li>
-                    </ol>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="tori-navbar">
-        [<a href="/faq">FAQ</a>] [<a href="/rules">Rules</a>] [<a href="/admin">Management</a>] [<a href="/">Home</a>]
-    </div>
-    <br clear="all">
+    <%- templateConstants.rulesPage() %>
 
     <%- include('fragments/tori-footer') %>
 </body>

@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { BoardService as BackendBoardService } from '@backend/services/board.service';
 import { BoardPage } from '@frontend/pages';
 import { PaginationResolveService, CaptchaService } from '@utils/services';
-import { CommentService as BackendCommentService, CommentsQueries } from '@backend/services';
+import { CommentsQueries } from '@backend/services';
 import { OmittedPostsDto, ThreadDto } from '@frontend/dto';
 import { PrismaTakeSkipDto, validateNotEmptyPage } from '@utils/misc';
 import { CommentDto } from '@backend/dto/comment';
@@ -18,7 +18,6 @@ import { CommentPageMode } from '@frontend/enums';
 export class BoardService {
   constructor(
     private readonly boardService: BackendBoardService,
-    private readonly commentService: BackendCommentService,
     private readonly commentQueries: CommentsQueries,
     private readonly paginationResolve: PaginationResolveService,
     private readonly config: ConfigService,
@@ -27,7 +26,6 @@ export class BoardService {
 
   public async getBoardPage(slug: string, cookies: Record<string, unknown>, session?: SessionDto, page = 0): Promise<BoardPage> {
     const board = await this.boardService.findBySlug(slug);
-    const boards = await this.boardService.findAll({ visible: true }, null, { slug: 'asc' });
 
     const threadSearchCondition: Prisma.CommentWhereInput = { board: { slug }, lastHit: { not: null } };
 
@@ -46,7 +44,6 @@ export class BoardService {
       .session(session.payload ?? null)
       .pageMode(CommentPageMode.BOARD)
       .board(board)
-      .boards(boards)
       .password(this.setPassword(cookies))
       .threads(threadDtoList)
       .captcha(this.captchaService.generateCaptcha())

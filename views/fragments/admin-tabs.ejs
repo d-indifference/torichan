@@ -1,6 +1,7 @@
 <div class="admin-options">
     <a href="/admin">Home</a>
     <a href="/admin/staff/me">My profile</a>
+    <% if (session.role === 'ADMINISTRATOR') { %><a href="/admin/global-settings">Global settings</a><% } %>
     <% if (session.role === 'ADMINISTRATOR') { %><a href="/admin/staff">Staff</a><% } %>
     <% if (session.role === 'ADMINISTRATOR') { %><a href="/admin/sql">SQL Console</a><% } %>
     <% if (session.role === 'ADMINISTRATOR') { %><a href="/admin/spam">Spam list</a><% } %>

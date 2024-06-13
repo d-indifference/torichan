@@ -10,8 +10,6 @@ export class ThreadPage {
 
   board: BoardDto;
 
-  boards: BoardDto[];
-
   captcha: CaptchaDto;
 
   password: string;
@@ -43,11 +41,6 @@ class ThreadPageBuilder {
 
   public thread(thread: ThreadDto): ThreadPageBuilder {
     this.threadPage.thread = thread;
-    return this;
-  }
-
-  public boards(boards: BoardDto[]): ThreadPageBuilder {
-    this.threadPage.boards = boards;
     return this;
   }
 

@@ -15,7 +15,7 @@
             <fieldset>
                 <legend>Mode: Thread</legend>
 
-                <form action="/<%= board.slug %>/post" method="post" enctype="multipart/form-data">
+                <form id="posting_form" action="/<%= board.slug %>/post" method="post" enctype="multipart/form-data">
                     <% if (board.enableCaptcha) { %>
                         <input type="hidden" name="nya" value="<%= captcha.text %>">
                     <% } %>

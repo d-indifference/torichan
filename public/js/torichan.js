@@ -85,3 +85,14 @@ function changeStyle(select, cookieName) {
 
   menuFrame.setStyle(cookieName);
 }
+
+function setNameFromCookies(cookieName, formId) {
+  var name = getCookie(cookieName);
+  var form = document.getElementById(formId);
+
+  if (form) {
+    if (form.name) {
+      form.name.value = decodeURIComponent(name);
+    }
+  }
+}

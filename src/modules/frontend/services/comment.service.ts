@@ -18,7 +18,7 @@ export class CommentService {
 
     const comment = await this.commentService.createThread(board, ip, dto, this.parseBooleanCheckbox(dto.isAdmin));
 
-    this.setPassword(dto, res);
+    this.setPasswordAndName(dto, res);
     res.redirect(`/${board}/res/${comment.displayNumber}#${comment.displayNumber}`);
   }
 
@@ -34,7 +34,7 @@ export class CommentService {
 
     const comment = await this.commentService.createReply(board, displayNumber, ip, dto, this.parseBooleanCheckbox(dto.isAdmin));
 
-    this.setPassword(dto, res);
+    this.setPasswordAndName(dto, res);
     res.redirect(`/${board}/res/${displayNumber}#${comment.displayNumber}`);
   }
 
@@ -64,11 +64,17 @@ export class CommentService {
     }
   }
 
-  private setPassword(dto: CommentCreateDto, res: Response): void {
+  private setPasswordAndName(dto: CommentCreateDto, res: Response): void {
     const expirationDate = new Date();
     expirationDate.setTime(expirationDate.getTime() + 365 * 24 * 60 * 60 * 1000);
 
     res.cookie('torichanPass', dto.password, { expires: expirationDate });
+
+    if (dto.name) {
+      res.cookie('torichan_name', dto.name, { expires: expirationDate });
+    } else {
+      res.clearCookie('torichan_name');
+    }
   }
 
   private validateSession(dto: CommentCreateDto, session: SessionDto): void {

@@ -1,0 +1,53 @@
+<%- include('components/head-admin', { paramPageTitle: 'Global site settings' }) %>
+<body>
+<%- include('fragments/admin-navbar') %>
+
+<h1 class="tori-page-title">Global site settings - Management panel</h1>
+<%- include('fragments/admin-welcome') %>
+
+<%- include('fragments/admin-tabs') %>
+
+
+<fieldset class="admin-form">
+    <legend><%= args.formDescription %></legend>
+    <form action="<%= args.formHandler %>" method="post">
+        <table class="tori-post-form" width="1%">
+            <tr>
+                <td>Site name</td>
+                <td><input type="text" name="siteName" size="29" value="<%= args.formData.siteName %>"></td>
+            </tr>
+            <tr>
+                <td>Site slogan</td>
+                <td><input type="text" name="siteSlogan" value="<%= args.formData.siteSlogan %>" size="29"></td>
+            </tr>
+            <tr>
+                <td>Site navbar</td>
+                <td><textarea name="siteNavbar" cols="30" rows="10"><%= args.formData.siteNavbar %></textarea></td>
+            </tr>
+            <tr>
+                <td>Menu frame</td>
+                <td><textarea name="menuFrame" cols="30" rows="10"><%= args.formData.menuFrame %></textarea></td>
+            </tr>
+            <tr>
+                <td>Start page</td>
+                <td><textarea name="startPage" cols="30" rows="10"><%= args.formData.startPage %></textarea></td>
+            </tr>
+            <tr>
+                <td>FAQ page</td>
+                <td><textarea name="faqPage" cols="30" rows="10"><%= args.formData.faqPage %></textarea></td>
+            </tr>
+            <tr>
+                <td>Rules page</td>
+                <td><textarea name="rulesPage" cols="30" rows="10"><%= args.formData.rulesPage %></textarea></td>
+            </tr>
+        </table>
+        <input type="submit" value="Save" tabindex="1" size="32">
+    </form>
+</fieldset>
+
+<%- include('fragments/admin-navbar') %>
+
+<script type="text/javascript" src="/js/admin.js"></script>
+
+<%- include('fragments/tori-footer'); %>
+</body>

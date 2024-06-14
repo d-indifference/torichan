@@ -1,39 +1,17 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="robots" content="nofollow">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <%- include("fragments/styles-start"); %>
-    <%- include('fragments/tori-script') %>
-    <title><%- templateConstants.siteName %></title>
+    <title><%- templateConstants.siteName() %></title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <link rel="shortcut icon" href="/icons/favicon.ico">
 </head>
-<body>
-    <%- include('fragments/tori-navbar'); %>
-    <br clear="all">
 
-    <h1 class="tori-title"><%- templateConstants.siteName %></h1>
-    <em class="tori-slogan"><%- templateConstants.siteSlogan %></em>
-    <p class="tori-main-links">
-        [<a href="/rules">global rules</a>] / [<a href="/admin">management</a>] / [<a href="https://github.com/d-indifference/torichan">torichan 0.1.0</a>]
-    </p>
-
-    <table border="1" class="tori-board-list" cellpadding="5">
-        <% boards.forEach(board => { %>
-            <tr>
-                <td>
-                    <strong><a href="/<%= board.slug %>">/<%= board.slug %>/ - <%= board.name %></a></strong>
-                    <p><%- board.description %></p>
-                </td>
-            </tr>
-        <% }); %>
-    </table>
-
-    <%- include('fragments/tori-navbar'); %>
-    <br clear="all">
-
-    <%- include('fragments/tori-footer') %>
-</body>
+<frameset cols="16%,*">
+    <frame src="/menu" name="menu" noresize scrolling="auto" frameborder="1">
+    <frame src="/main" name="main" noresize>
+</frameset>
+<noframes>
+    Your browser doesn't support frames, which <%- templateConstants.siteName() %> requires.<br>
+    Please upgrade to something newer.
+</noframes>
 </html>

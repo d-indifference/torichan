@@ -1,16 +1,18 @@
 .tori-title {
   color: #af0a0f;
-  text-align: center;
   font-size: 30px;
 }
 
 .tori-main-links {
-  text-align: center;
   font-weight: 700;
   font-size: 18px;
 }
 
 .tori-board-list {
-  margin: 0 auto;
   font-size: 16px
+}
+
+em.tori-slogan {
+  display: block;
+  font-size: 14pt
 }

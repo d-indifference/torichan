@@ -11,7 +11,7 @@ services:
       - '${POSTGRES_PORT}:${POSTGRES_PORT}'
     volumes:
       - ./volumes/postgres:/var/lib/postgresql/data
-      - ./prisma/migrations/20240611135006_init/migration.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./prisma/migrations/20240614071354_init/migration.sql:/docker-entrypoint-initdb.d/init.sql
     restart: unless-stopped
     networks:
       - torichan-network

@@ -70,6 +70,11 @@ export class BoardUpdateDto {
   allowMarkdown?: 'on' | undefined;
 
   @IsString()
+  @IsOptional()
+  @MaxLength(2)
+  allowTripcodes?: 'on' | undefined;
+
+  @IsString()
   @IsNotEmpty()
   @IsNumberString()
   maxThreadsOnBoard?: string;
@@ -134,6 +139,7 @@ export class BoardUpdateDto {
     this.setIntegerFieldToInputTemplate(inputBoardSettings, 'minFileSize', { min: 0, max: 19922944 });
     this.setIntegerFieldToInputTemplate(inputBoardSettings, 'maxFileSize', { min: 0, max: 19922944 });
     this.setBooleanFieldToInputTemplate(inputBoardSettings, 'allowMarkdown');
+    this.setBooleanFieldToInputTemplate(inputBoardSettings, 'allowTripcodes');
     this.setIntegerFieldToInputTemplate(inputBoardSettings, 'maxThreadsOnBoard', { min: 0, max: Number.MAX_SAFE_INTEGER - 1 });
     this.setIntegerFieldToInputTemplate(inputBoardSettings, 'bumpLimit', { min: 0, max: Number.MAX_SAFE_INTEGER - 1 });
     this.setIntegerFieldToInputTemplate(inputBoardSettings, 'maxStringFieldSize', { min: 0, max: Number.MAX_SAFE_INTEGER - 1 });
@@ -169,6 +175,7 @@ export class BoardUpdateDto {
     dto.minFileSize = boardSettings.minFileSize.toString();
     dto.maxFileSize = boardSettings.maxFileSize.toString();
     dto.allowMarkdown = boardSettings.allowMarkdown ? 'on' : null;
+    dto.allowTripcodes = boardSettings.allowTripcodes ? 'on' : null;
     dto.maxThreadsOnBoard = boardSettings.maxThreadsOnBoard.toString();
     dto.bumpLimit = boardSettings.bumpLimit.toString();
     dto.maxStringFieldSize = boardSettings.maxStringFieldSize.toString();
@@ -197,6 +204,7 @@ export class BoardUpdateDto {
       minFileSize: ${this.minFileSize},
       maxFileSize: ${this.maxFileSize},
       allowMarkdown: ${this.allowMarkdown},
+      allowTripcodes: ${this.allowTripcodes},
       maxThreadsOnBoard: ${this.maxThreadsOnBoard},
       bumpLimit: ${this.bumpLimit},
       maxStringFieldSize: ${this.maxStringFieldSize},

@@ -1,22 +1,11 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="robots" content="nofollow">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <%- include("fragments/styles-admin"); %>
-    <%- include('fragments/tori-script') %>
-    <title>Management Panel - <%- templateConstants.siteName %></title>
-</head>
+<%- include('components/head-admin', { paramPageTitle: 'Management Panel' }) %>
 <body>
 
     <h1 class="tori-page-title">Management panel</h1>
 
     <fieldset class="admin-form">
         <legend>Sign in to management panel</legend>
-        [<a href="/" style="text-align: center">Go back</a>]
+        [<a href="/main" style="text-align: center">Go back</a>]
         <form action="/admin/sign-in" method="post">
             <table class="tori-post-form" width="1%">
                 <tr>

@@ -1,42 +1,6 @@
-
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="robots" content="nofollow">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <%- include("fragments/styles-start"); %>
-    <%- include('fragments/tori-script') %>
-    <title>Rules - <%- templateConstants.siteName %></title>
-</head>
+<%- include('components/head-start') %>
 <body>
-    <div class="tori-navbar">
-        [<a href="/faq">FAQ</a>] [<a href="/rules">Rules</a>] [<a href="/admin">Management</a>] [<a href="/">Home</a>]
-    </div>
-    <br clear="all">
-
-    <h1 class="tori-title">Rules</h1>
-
-    <div class="info-page">
-        <table style="text-align: left">
-            <tr>
-                <td>
-                    <ol>
-                        <li>No CP</li>
-                        <li>No shitposting</li>
-                        <li>Moderator is always right</li>
-                    </ol>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="tori-navbar">
-        [<a href="/faq">FAQ</a>] [<a href="/rules">Rules</a>] [<a href="/admin">Management</a>] [<a href="/">Home</a>]
-    </div>
-    <br clear="all">
+    <%- templateConstants.rulesPage() %>
 
     <%- include('fragments/tori-footer') %>
 </body>

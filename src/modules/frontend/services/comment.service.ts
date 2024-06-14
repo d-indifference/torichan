@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CommentService as BackendCommentService } from '@backend/services';
+import { CommentService as BackendCommentService, CommentsQueries } from '@backend/services';
 import { CommentCreateDto } from '@backend/dto/comment';
 import { Response } from 'express';
 import { CommentRemoveDto } from '@frontend/dto';
@@ -8,14 +8,17 @@ import { SessionDto } from '@admin/dto';
 
 @Injectable()
 export class CommentService {
-  constructor(private readonly commentService: BackendCommentService) {}
+  constructor(
+    private readonly commentService: BackendCommentService,
+    private readonly commentQueries: CommentsQueries
+  ) {}
 
   public async createThread(board: string, ip: string, dto: CommentCreateDto, res: Response, session: SessionDto): Promise<void> {
     this.validateSession(dto, session);
 
     const comment = await this.commentService.createThread(board, ip, dto, this.parseBooleanCheckbox(dto.isAdmin));
 
-    this.setPassword(dto, res);
+    this.setPasswordAndName(dto, res);
     res.redirect(`/${board}/res/${comment.displayNumber}#${comment.displayNumber}`);
   }
 
@@ -31,7 +34,7 @@ export class CommentService {
 
     const comment = await this.commentService.createReply(board, displayNumber, ip, dto, this.parseBooleanCheckbox(dto.isAdmin));
 
-    this.setPassword(dto, res);
+    this.setPasswordAndName(dto, res);
     res.redirect(`/${board}/res/${displayNumber}#${comment.displayNumber}`);
   }
 
@@ -44,7 +47,7 @@ export class CommentService {
   public async removeAndRedirectToThread(board: string, displayNumber: number, dto: CommentRemoveDto, res: Response): Promise<void> {
     await this.remove(board, dto);
 
-    if (await this.commentService.existsByBoardAndDisplayNumber(board, displayNumber)) {
+    if (await this.commentQueries.existsByBoardAndDisplayNumber(board, displayNumber)) {
       res.redirect(`/${board}/res/${displayNumber}`);
     } else {
       res.redirect(`/${board}`);
@@ -61,11 +64,17 @@ export class CommentService {
     }
   }
 
-  private setPassword(dto: CommentCreateDto, res: Response): void {
+  private setPasswordAndName(dto: CommentCreateDto, res: Response): void {
     const expirationDate = new Date();
     expirationDate.setTime(expirationDate.getTime() + 365 * 24 * 60 * 60 * 1000);
 
     res.cookie('torichanPass', dto.password, { expires: expirationDate });
+
+    if (dto.name) {
+      res.cookie('torichan_name', dto.name, { expires: expirationDate });
+    } else {
+      res.clearCookie('torichan_name');
+    }
   }
 
   private validateSession(dto: CommentCreateDto, session: SessionDto): void {

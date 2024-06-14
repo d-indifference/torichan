@@ -1,4 +1,12 @@
 <script src="/js/jquery-1.4.min.js" type="text/javascript"></script>
 <script src="/js/torichan.js" type="text/javascript"></script>
-<script>var styleCookie = 'torichan_style';</script>
-<script>window.onload = function() { setStyle(styleCookie); }</script>
+<script>
+  var styleCookie = 'torichan_style';
+  var nameCookie = 'torichan_name'
+</script>
+<script>
+  window.onload = function() {
+    setStyle(styleCookie);
+    setNameFromCookies(nameCookie, 'posting_form');
+  }
+</script>

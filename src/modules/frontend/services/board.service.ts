@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { BoardService as BackendBoardService } from '@backend/services/board.service';
 import { BoardPage } from '@frontend/pages';
 import { PaginationResolveService, CaptchaService } from '@utils/services';
-import { CommentService as BackendCommentService } from '@backend/services';
+import { CommentsQueries } from '@backend/services';
 import { OmittedPostsDto, ThreadDto } from '@frontend/dto';
 import { PrismaTakeSkipDto, validateNotEmptyPage } from '@utils/misc';
 import { CommentDto } from '@backend/dto/comment';
@@ -18,7 +18,7 @@ import { CommentPageMode } from '@frontend/enums';
 export class BoardService {
   constructor(
     private readonly boardService: BackendBoardService,
-    private readonly commentService: BackendCommentService,
+    private readonly commentQueries: CommentsQueries,
     private readonly paginationResolve: PaginationResolveService,
     private readonly config: ConfigService,
     private readonly captchaService: CaptchaService
@@ -26,11 +26,10 @@ export class BoardService {
 
   public async getBoardPage(slug: string, cookies: Record<string, unknown>, session?: SessionDto, page = 0): Promise<BoardPage> {
     const board = await this.boardService.findBySlug(slug);
-    const boards = await this.boardService.findAll({ visible: true }, null, { slug: 'asc' });
 
     const threadSearchCondition: Prisma.CommentWhereInput = { board: { slug }, lastHit: { not: null } };
 
-    const threads = await this.commentService.findAll(
+    const threads = await this.commentQueries.findAll(
       threadSearchCondition, this.paginationResolve.resolveThreadSelection(page), { lastHit: 'desc' }
     );
 
@@ -40,12 +39,11 @@ export class BoardService {
 
     return BoardPage
       .builder()
-      .maxPage(await this.commentService.getMaxPageNumber(threadSearchCondition))
+      .maxPage(await this.commentQueries.getMaxPageNumber(threadSearchCondition))
       .currentPage(page)
       .session(session.payload ?? null)
       .pageMode(CommentPageMode.BOARD)
       .board(board)
-      .boards(boards)
       .password(this.setPassword(cookies))
       .threads(threadDtoList)
       .captcha(this.captchaService.generateCaptcha())
@@ -60,7 +58,7 @@ export class BoardService {
       const repliesSearchCondition: Prisma.CommentWhereInput = { parent: { board: { slug: thread.boardSlug }, displayNumber: thread.displayNumber } };
       const repliesOrderBy: Prisma.CommentOrderByWithRelationInput = { createdAt: 'desc' };
 
-      const replies = await this.commentService.findAll(repliesSearchCondition, new PrismaTakeSkipDto(lastRepliesCount, 0), repliesOrderBy);
+      const replies = await this.commentQueries.findAll(repliesSearchCondition, new PrismaTakeSkipDto(lastRepliesCount, 0), repliesOrderBy);
 
       const mappedThread = new ThreadDto(thread, reverse(replies), await this.calculateOmittedPosts(lastRepliesCount, thread, replies));
       threadDtoList.push(mappedThread);
@@ -74,8 +72,8 @@ export class BoardService {
   }
 
   private async calculateOmittedPosts(lastRepliesCount: number, thread: CommentDto, displayReplies: CommentDto[]): Promise<OmittedPostsDto> {
-    const allRepliesCount = await this.commentService.count({ parent: { board: { slug: thread.boardSlug }, displayNumber: thread.displayNumber } });
-    const allImagesCount = await this.commentService.count(
+    const allRepliesCount = await this.commentQueries.count({ parent: { board: { slug: thread.boardSlug }, displayNumber: thread.displayNumber } });
+    const allImagesCount = await this.commentQueries.count(
       { parent: { board: { slug: thread.boardSlug }, displayNumber: thread.displayNumber }, attachedFile: { isNot: null } });
 
     const previewImagesCount = displayReplies.filter(reply => reply.attachedFile !== undefined).length;

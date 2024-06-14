@@ -1,15 +1,4 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="robots" content="nofollow">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <%- include("fragments/styles-admin"); %>
-    <%- include('fragments/tori-script') %>
-    <title><%= args.formDescription %> - <%- templateConstants.siteName %></title>
-</head>
+<%- include('components/head-admin', { paramPageTitle: args.formDescription }) %>
 <body>
     <%- include('fragments/admin-navbar') %>
 
@@ -144,6 +133,17 @@
                             tabindex="1"
                             <% if (args.formMode !== 'CREATE' && args.formData.allowMarkdown) { %>checked<% } %>
                             <% if (args.formMode === 'CREATE') { %>checked<% } %>
+                        >
+                    </td>
+                </tr>
+                <tr>
+                    <td>Allow tripcodes</td>
+                    <td>
+                        <input
+                             name="allowTripcodes"
+                             type="checkbox"
+                             tabindex="1"
+                             <% if (args.formMode !== 'CREATE' && args.formData.allowTripcodes) { %>checked<% } %>
                         >
                     </td>
                 </tr>

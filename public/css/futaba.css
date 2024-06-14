@@ -116,3 +116,13 @@ span.spoiler {
 span.spoiler:hover {
   color: #800000 !important;
 }
+
+.menu-header {
+  background-color: #eeaa88;
+  color: #800000;
+}
+
+a.menu-link:hover {
+  background-color: #f0e0d6;
+  text-decoration: none !important;
+}

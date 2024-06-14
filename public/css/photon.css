@@ -129,3 +129,12 @@ span.spoiler:hover {
 .table-list tbody tr:nth-child(even) {
   background-color: #d6d6f6;
 }
+
+.menu-header {
+  background-color: #dddddd;
+  color: #ff6600;
+}
+
+a.menu-link:hover {
+  text-decoration: underline !important;
+}

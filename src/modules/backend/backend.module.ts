@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { CaptchaService, FileSystemService, PasswordCryptoService, PrismaService, VolumeSettingsService } from '@utils/services';
-import { AttachedFileService, BanService, BoardService, CommentService, SpamService, UserService } from '@backend/services';
+import { AttachedFileService, BanService, BoardService, CommentService, CommentsQueries, SpamService, UserService } from '@backend/services';
 
 @Module({
   imports: [ConfigModule],
@@ -11,6 +11,7 @@ import { AttachedFileService, BanService, BoardService, CommentService, SpamServ
     PasswordCryptoService,
     BoardService,
     CommentService,
+    CommentsQueries,
     AttachedFileService,
     UserService,
     BanService,
@@ -19,6 +20,6 @@ import { AttachedFileService, BanService, BoardService, CommentService, SpamServ
     CaptchaService
   ],
   controllers: [],
-  exports: [BoardService, CommentService, UserService, AttachedFileService, BanService]
+  exports: [BoardService, CommentService, CommentsQueries, UserService, AttachedFileService, BanService]
 })
 export class BackendModule {}

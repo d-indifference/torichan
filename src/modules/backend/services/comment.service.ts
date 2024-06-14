@@ -1,17 +1,16 @@
 /* eslint-disable prettier/prettier  */
-import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { CaptchaService, PrismaService } from '@utils/services';
 import { AttachedFile, BoardSettings, Comment, FileAttachmentMode, Prisma } from '@prisma/client';
-import { CommentCreateDto, CommentDto } from '@backend/dto/comment';
+import { CommentCreateDto } from '@backend/dto/comment';
 import { DateTime } from 'luxon';
-import { ConfigService } from '@nestjs/config';
 import { BoardService } from '@backend/services/board.service';
 import { AttachedFileService } from '@backend/services/attached-file.service';
-import { PrismaTakeSkipDto } from '@utils/misc';
 import { BanService } from '@backend/services/ban.service';
 import { SpamService } from '@backend/services/spam.service';
 import * as he from 'he';
-import { replyMarkdown, replySimpleMarkdown, threadMarkdown, threadSimpleMarkdown } from '@backend/functions';
+import { replyMarkdown, replySimpleMarkdown, threadMarkdown, threadSimpleMarkdown, generateTripcode } from '@backend/functions';
+import { CommentsQueries } from '@backend/services/comment.queries';
 
 @Injectable()
 export class CommentService {
@@ -19,78 +18,13 @@ export class CommentService {
 
   constructor(
     private readonly prisma: PrismaService,
-    private readonly config: ConfigService,
     private readonly boardService: BoardService,
     private readonly attachedFileService: AttachedFileService,
     private readonly banService: BanService,
     private readonly spamService: SpamService,
-    private readonly captchaService: CaptchaService
+    private readonly captchaService: CaptchaService,
+    private readonly commentQueries: CommentsQueries
   ) {}
-
-  public async findAll(
-    where: Prisma.CommentWhereInput,
-    selection?: PrismaTakeSkipDto,
-    orderBy?: Prisma.CommentOrderByWithRelationInput | Prisma.CommentOrderByWithRelationInput[]
-  ): Promise<CommentDto[]> {
-    this.logger.log(`findAll ({where: ${JSON.stringify(where)}, selection: ${selection.toString()}, orderBy: ${JSON.stringify(orderBy)}})`);
-
-    const comments = await this.prisma.comment.findMany({
-      where,
-      ...selection,
-      orderBy,
-      include: { board: true, attachedFile: true, children: true, parent: true }
-    });
-
-    return comments.map(comment => CommentDto.fromModel(comment, comment.board.slug, comment.attachedFile));
-  }
-
-  public async count(where: Prisma.CommentWhereInput, needToLog?: boolean): Promise<number> {
-    if (needToLog) {
-      this.logger.log(`count ({where: ${JSON.stringify(where)}})`);
-    }
-
-    return (await this.prisma.comment.count({ where })) as number;
-  }
-
-  public async findOne(where: Prisma.CommentWhereInput): Promise<CommentDto> {
-    this.logger.log(`findOne ({where: ${JSON.stringify(where)}})`);
-
-    const comment = await this.findOneEntity(where);
-
-    return CommentDto.fromModel(comment, comment['board'].slug, comment['attachedFile']);
-  }
-
-  public async findOneEntity(where: Prisma.CommentWhereInput): Promise<Comment> {
-    this.logger.log(`findOneEntity ({where: ${JSON.stringify(where)}})`);
-
-    const comment = await this.prisma.comment.findFirst({ where, include: { board: true, attachedFile: true, children: true, parent: true } });
-
-    if (!comment) {
-      const message = 'Comment was not found';
-      this.logger.warn(`${message}, params: ${JSON.stringify(where)}`);
-      throw new NotFoundException(message);
-    }
-
-    return comment;
-  }
-
-  public async existsByBoardAndDisplayNumber(board: string, displayNumber: number): Promise<boolean> {
-    const comment = await this.prisma.comment.findFirst({ include: { board: true }, where: { displayNumber, board: { slug: board } } });
-
-    return comment !== null;
-  }
-
-  public async getMaxPageNumber(where: Prisma.CommentWhereInput, needToLog?: boolean): Promise<number> {
-    if (needToLog) {
-      this.logger.log(`getMaxPageNumber ({where: ${JSON.stringify(where)})`);
-    }
-
-    const pageSize = this.config.getOrThrow<number>('constants.pagination.default.threads');
-
-    const count = await this.prisma.comment.count({ where });
-
-    return Math.floor(count / pageSize);
-  }
 
   public async createThread(board: string, ip: string, dto: CommentCreateDto, isAdmin = false): Promise<Comment> {
     this.logger.log(`createThread ({board: ${board}, ip: ${ip}, dto: ${dto.toString()}, isAdmin: ${isAdmin}})`);
@@ -117,6 +51,7 @@ export class CommentService {
     const newThread = dto.toCreateInput(foundBoard.postCount + 1, ip);
     newThread.board = { connect: { id: foundBoard.id } };
     newThread.lastHit = new Date();
+    newThread.tripcode = this.applyTripcodePolicy(dto.name, boardSettings);
 
     if (attachedFile) {
       newThread.attachedFile = { connect: { id: attachedFile.id } };
@@ -144,7 +79,7 @@ export class CommentService {
     await this.checkFieldSpam(dto, isAdmin);
 
     const foundBoard = await this.boardService.findEntityBySlug(board);
-    const foundParent = await this.findOneEntity({ displayNumber, board: { slug: board } });
+    const foundParent = await this.commentQueries.findOneEntity({ displayNumber, board: { slug: board } });
     const boardSettings: BoardSettings = foundBoard['boardSettings'];
 
     this.applyCaptchaPolicy(dto, isAdmin, boardSettings);
@@ -165,6 +100,7 @@ export class CommentService {
     newReply.board = { connect: { id: foundBoard.id } };
     newReply.lastHit = null;
     newReply.parent = { connect: { id: foundParent.id } };
+    newReply.tripcode = this.applyTripcodePolicy(dto.name, boardSettings);
 
     if (attachedFile) {
       newReply.attachedFile = { connect: { id: attachedFile.id } };
@@ -183,6 +119,16 @@ export class CommentService {
     await this.boardService.incrementPostCount(foundBoard.id);
 
     return createdReply;
+  }
+
+  private applyTripcodePolicy(name: string, settings: BoardSettings): string {
+    if (settings.allowTripcodes && name) {
+      if (name.split('#').length > 1) {
+        return generateTripcode(name);
+      }
+    }
+
+    return null;
   }
 
   private applySettingsPolicy(settings: BoardSettings, dto: CommentCreateDto, isReply: boolean): void {
@@ -287,7 +233,7 @@ export class CommentService {
 
     const maxThreads = settings.maxThreadsOnBoard;
     const maxThreadLivingTime = settings.maxThreadLivingTime;
-    const currentThreadCount = await this.count({ lastHit: { not: null }, board: { slug: boardSlug } });
+    const currentThreadCount = await this.commentQueries.count({ lastHit: { not: null }, board: { slug: boardSlug } });
 
     if (currentThreadCount > maxThreads) {
       this.logger.log('Threads will be rotated');

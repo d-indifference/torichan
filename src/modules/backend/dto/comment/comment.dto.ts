@@ -27,6 +27,8 @@ export class CommentDto {
 
   attachedFile?: AttachedFileDto;
 
+  tripcode?: string;
+
   constructor(
     id: string,
     createdAt: string,
@@ -39,7 +41,8 @@ export class CommentDto {
     subject: string,
     comment: string,
     attachedFile?: AttachedFileDto,
-    parentNumber?: number
+    parentNumber?: number,
+    tripcode?: string
   ) {
     this.id = id;
     this.createdAt = createdAt;
@@ -57,6 +60,7 @@ export class CommentDto {
     }
 
     this.parentNumber = parentNumber ?? null;
+    this.tripcode = tripcode ?? null;
   }
 
   public static fromModel(model: Comment, boardSlug: string, attachedFile?: AttachedFile): CommentDto {
@@ -72,7 +76,8 @@ export class CommentDto {
       model.subject,
       model.comment,
       AttachedFileDto.fromModel(attachedFile),
-      model['parent'] ? model['parent'].displayNumber : null
+      model['parent'] ? model['parent'].displayNumber : null,
+      model.tripcode
     );
   }
 }

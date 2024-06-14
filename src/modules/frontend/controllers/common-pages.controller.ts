@@ -15,7 +15,15 @@ export class CommonPagesController {
 
   @Get('/')
   @Render('index')
-  public async index(): Promise<IndexPage> {
+  public index(): void {}
+
+  @Get('/menu')
+  @Render('menu')
+  public menu(): void {}
+
+  @Get('/main')
+  @Render('main')
+  public async main(): Promise<IndexPage> {
     return await this.indexService.index();
   }
 

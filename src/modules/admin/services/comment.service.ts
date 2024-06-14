@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { AttachedFileService, BoardService, CommentService as BackendCommentService } from '@backend/services';
+import { AttachedFileService, BoardService, CommentService as BackendCommentService, CommentsQueries } from '@backend/services';
 import { RemoveCommentDto, RemoveCommentMode, SessionPayloadDto } from '@admin/dto';
 import { Response } from 'express';
 import { Prisma } from '@prisma/client';
@@ -12,6 +12,7 @@ export class CommentService {
   constructor(
     private readonly paginationResolve: PaginationResolveService,
     private readonly commentService: BackendCommentService,
+    private readonly commentQueries: CommentsQueries,
     private readonly boardService: BoardService,
     private readonly attachedFileService: AttachedFileService
   ) {}
@@ -21,14 +22,14 @@ export class CommentService {
 
     const boards = await this.boardService.findAll({}, new PrismaTakeSkipDto(), { slug: 'asc' });
     const commentSearchCondition: Prisma.CommentWhereInput = { board: { slug: normalizedSlug } };
-    const comments = await this.commentService.findAll(commentSearchCondition, this.paginationResolve.resolveTableSelection(page), {
+    const comments = await this.commentQueries.findAll(commentSearchCondition, this.paginationResolve.resolveTableSelection(page), {
       createdAt: 'desc'
     });
 
     return {
       session,
       currentPage: page,
-      maxPage: await this.commentService.getMaxPageNumber(commentSearchCondition),
+      maxPage: await this.commentQueries.getMaxPageNumber(commentSearchCondition),
       comments,
       currentBoard: boards.find(value => value.slug === slug),
       allBoards: boards
@@ -64,7 +65,7 @@ export class CommentService {
   private async removeAllByIp(dto: RemoveCommentDto): Promise<void> {
     const commentsWhereInput: Prisma.CommentWhereInput = { ip: dto.ip };
 
-    const commentsCandidateDeletion = await this.commentService.findAll(commentsWhereInput, new PrismaTakeSkipDto());
+    const commentsCandidateDeletion = await this.commentQueries.findAll(commentsWhereInput, new PrismaTakeSkipDto());
 
     for (const comment of commentsCandidateDeletion) {
       if (comment.attachedFile) {

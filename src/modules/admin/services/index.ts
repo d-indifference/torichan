@@ -8,3 +8,4 @@ export * from './file.service';
 export * from './sql-console.service';
 export * from './ip-list-files.service';
 export * from './ip-filter.service';
+export * from './global-settings.service';

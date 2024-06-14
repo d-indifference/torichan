@@ -1,20 +1,9 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="robots" content="nofollow">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <%- include("fragments/styles-common"); %>
-    <%- include('fragments/tori-script') %>
-    <title><%= statusCode %></title>
-</head>
+<%- include('components/head-error') %>
 <body>
     <h1 class="tori-page-title">Error</h1>
 
     <div style="text-align: center">
         <p><strong><%- message %></strong></p>
-        <p><a href="/">To the main page</a></p>
+        <p><a href="/main">To the main page</a></p>
     </div>
 </body>

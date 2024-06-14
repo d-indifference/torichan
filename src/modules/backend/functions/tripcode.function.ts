@@ -1,8 +1,4 @@
-import * as CryptoJS from 'crypto-js';
-
-const desEncrypt = (key: string, text: string): string => {
-  return CryptoJS.DES.encrypt(text, key).toString();
-};
+import { createTrip } from '2ch-trip';
 
 const makeTripcodeCredentials = (name: string): [string, string] => {
   const splitName = name.split('#');
@@ -27,12 +23,5 @@ export const generateTripcode = (name: string): string => {
     return username;
   }
 
-  let salt = password.slice(0, 2);
-  salt = salt.replace(/[^.-z]/g, '.');
-  salt = salt.replace(/:/g, 'A');
-  salt += 'H.';
-
-  const tripcode = desEncrypt(Buffer.from(salt.slice(0, 8), 'ascii').toString(), password);
-
-  return `!${tripcode.slice(0, 10)}`;
+  return createTrip(`${username}#${password}`);
 };

@@ -92,7 +92,11 @@ function setNameFromCookies(cookieName, formId) {
 
   if (form) {
     if (form.name) {
-      form.name.value = decodeURIComponent(name);
+      if (name !== null) {
+        form.name.value = decodeURIComponent(name);
+      } else {
+        form.name.value = '';
+      }
     }
   }
 }

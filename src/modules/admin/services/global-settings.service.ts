@@ -1,7 +1,15 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { VolumeSettingsService } from '@utils/services';
 import { GlobalSettingsDto } from '@admin/dto';
-import { DEFAULT_FAQ_PAGE, DEFAULT_RULES_PAGE, DEFAULT_SITE_NAME, DEFAULT_SITE_NAVBAR, DEFAULT_SITE_SLOGAN } from '@admin/misc';
+import {
+  DEFAULT_FAQ_PAGE,
+  DEFAULT_MENU_FRAME,
+  DEFAULT_RULES_PAGE,
+  DEFAULT_SITE_NAME,
+  DEFAULT_SITE_NAVBAR,
+  DEFAULT_SITE_SLOGAN,
+  DEFAULT_START_PAGE
+} from '@admin/misc';
 
 @Injectable()
 export class GlobalSettingsService {
@@ -21,6 +29,8 @@ export class GlobalSettingsService {
         DEFAULT_SITE_NAME,
         DEFAULT_SITE_SLOGAN,
         DEFAULT_SITE_NAVBAR,
+        DEFAULT_MENU_FRAME,
+        DEFAULT_START_PAGE,
         DEFAULT_FAQ_PAGE,
         DEFAULT_RULES_PAGE
       );

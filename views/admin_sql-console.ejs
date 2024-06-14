@@ -1,15 +1,4 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="robots" content="nofollow">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <%- include("fragments/styles-admin"); %>
-    <%- include('fragments/tori-script') %>
-    <title>SQL Console - <%- templateConstants.siteName() %></title>
-</head>
+<%- include('components/head-admin', { paramPageTitle: 'SQL Console' }) %>
 <body>
     <%- include('fragments/admin-navbar') %>
 

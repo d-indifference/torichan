@@ -33,6 +33,15 @@ function eraseCookie(name) {
   document.cookie = name + '=; Max-Age=-99999999;';
 }
 
+function getFrameByName(name) {
+  var frames = window.parent.frames;
+  for (var i = 0; i < frames.length; i++) {
+    if (name === frames[i].name) {
+      return(frames[i]);
+    }
+  }
+}
+
 function insert(formId, text) {
   var form = document.getElementById(formId);
 
@@ -48,7 +57,7 @@ function setStyle(cookieName) {
     setCookie(cookieName, 'Burichan', 365);
   }
 
-  const currentStyle = getCookie(cookieName);
+  var currentStyle = getCookie(cookieName);
 
   $('link[rel][title]').each(function () {
     this.disabled = this.title !== currentStyle;
@@ -66,9 +75,13 @@ function setStyle(cookieName) {
 }
 
 function changeStyle(select, cookieName) {
-  const selectedStyle = select.selectedOptions[0].value;
+  var selectedStyle = select.selectedOptions[0].value;
 
   setCookie(cookieName, selectedStyle, 365);
 
   setStyle(cookieName);
+
+  var menuFrame = getFrameByName('menu');
+
+  menuFrame.setStyle(cookieName);
 }

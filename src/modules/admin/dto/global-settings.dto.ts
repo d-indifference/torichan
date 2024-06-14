@@ -15,8 +15,15 @@ export class GlobalSettingsDto {
 
   @IsString()
   @IsOptional()
-  @MaxLength(10000)
   siteNavbar: string;
+
+  @IsString()
+  @IsNotEmpty()
+  menuFrame: string;
+
+  @IsString()
+  @IsNotEmpty()
+  startPage: string;
 
   @IsString()
   @IsNotEmpty()
@@ -26,10 +33,12 @@ export class GlobalSettingsDto {
   @IsNotEmpty()
   rulesPage: string;
 
-  constructor(siteName: string, siteSlogan: string, siteNavbar: string, faqPage: string, rulesPage: string) {
+  constructor(siteName: string, siteSlogan: string, siteNavbar: string, menuFrame: string, startPage: string, faqPage: string, rulesPage: string) {
     this.siteName = siteName;
     this.siteSlogan = siteSlogan;
     this.siteNavbar = siteNavbar;
+    this.menuFrame = menuFrame;
+    this.startPage = startPage;
     this.faqPage = faqPage;
     this.rulesPage = rulesPage;
   }

@@ -146,7 +146,7 @@ export class BoardService {
   }
 
   private validateSlug(slug: string): void {
-    const reservedUrls = ['faq', 'rules', 'admin', 'files'];
+    const reservedUrls = ['faq', 'rules', 'admin', 'files', 'main', 'menu'];
 
     if (reservedUrls.indexOf(slug) !== -1) {
       const message = `This slug is reserved by system: ${slug}. You cannot create a board with it.`;

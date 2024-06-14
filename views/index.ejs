@@ -1,0 +1,17 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
+<html>
+<head>
+    <title><%- templateConstants.siteName() %></title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <link rel="shortcut icon" href="/icons/favicon.ico">
+</head>
+
+<frameset cols="16%,*">
+    <frame src="/menu" name="menu" noresize scrolling="auto" frameborder="1">
+    <frame src="/main" name="main" noresize>
+</frameset>
+<noframes>
+    Your browser doesn't support frames, which <%- templateConstants.siteName() %> requires.<br>
+    Please upgrade to something newer.
+</noframes>
+</html>

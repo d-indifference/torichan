@@ -1,15 +1,4 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="robots" content="nofollow">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <%- include("fragments/styles-admin"); %>
-    <%- include('fragments/tori-script') %>
-    <title>Global site settings - <%- templateConstants.siteName() %></title>
-</head>
+<%- include('components/head-admin', { paramPageTitle: 'Global site settings' }) %>
 <body>
 <%- include('fragments/admin-navbar') %>
 
@@ -34,6 +23,14 @@
             <tr>
                 <td>Site navbar</td>
                 <td><textarea name="siteNavbar" cols="30" rows="10"><%= args.formData.siteNavbar %></textarea></td>
+            </tr>
+            <tr>
+                <td>Menu frame</td>
+                <td><textarea name="menuFrame" cols="30" rows="10"><%= args.formData.menuFrame %></textarea></td>
+            </tr>
+            <tr>
+                <td>Start page</td>
+                <td><textarea name="startPage" cols="30" rows="10"><%= args.formData.startPage %></textarea></td>
             </tr>
             <tr>
                 <td>FAQ page</td>

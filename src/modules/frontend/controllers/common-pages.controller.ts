@@ -14,10 +14,12 @@ export class CommonPagesController {
   ) {}
 
   @Get('/')
-  @Render('main')
-  public async index(): Promise<IndexPage> {
-    return await this.indexService.index();
-  }
+  @Render('index')
+  public index(): void {}
+
+  @Get('/menu')
+  @Render('menu')
+  public menu(): void {}
 
   @Get('/main')
   @Render('main')

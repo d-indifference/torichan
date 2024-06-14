@@ -6,6 +6,8 @@ export const templateConstants = {
   siteName: () => (global['global-settings'] as GlobalSettingsDto).siteName,
   siteSlogan: () => (global['global-settings'] as GlobalSettingsDto).siteSlogan,
   siteNavbar: () => (global['global-settings'] as GlobalSettingsDto).siteNavbar,
+  menuFrame: () => (global['global-settings'] as GlobalSettingsDto).menuFrame,
+  startPage: () => (global['global-settings'] as GlobalSettingsDto).startPage,
   faqPage: () => (global['global-settings'] as GlobalSettingsDto).faqPage,
   rulesPage: () => (global['global-settings'] as GlobalSettingsDto).rulesPage,
 };

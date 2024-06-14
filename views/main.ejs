@@ -1,39 +1,13 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="robots" content="nofollow">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <%- include("fragments/styles-start"); %>
-    <%- include('fragments/tori-script') %>
-    <title><%- templateConstants.siteName() %></title>
-</head>
+<%- include('components/head-start') %>
 <body>
     <%- include('fragments/tori-navbar'); %>
     <br clear="all">
 
-    <h1 class="tori-title"><%- templateConstants.siteName() %></h1>
-    <em class="tori-slogan"><%- templateConstants.siteSlogan() %></em>
-    <p class="tori-main-links">
-        [<a href="/rules">global rules</a>] / [<a href="/admin">management</a>] / [<a href="https://github.com/d-indifference/torichan">torichan 0.2.0</a>]
-    </p>
-
-    <table border="1" class="tori-board-list" cellpadding="5">
-        <% boards.forEach(board => { %>
-            <tr>
-                <td>
-                    <strong><a href="/<%= board.slug %>">/<%= board.slug %>/ - <%= board.name %></a></strong>
-                    <p><%- board.description %></p>
-                </td>
-            </tr>
-        <% }); %>
-    </table>
+    <%- templateConstants.startPage() %>
 
     <%- include('fragments/tori-navbar'); %>
     <br clear="all">
 
     <%- include('fragments/tori-footer') %>
 </body>
-</html>
+

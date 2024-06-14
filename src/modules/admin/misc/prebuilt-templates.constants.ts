@@ -3,11 +3,58 @@ export const DEFAULT_SITE_NAME: string = 'Torichan Imageboard Engine';
 export const DEFAULT_SITE_SLOGAN: string = 'Put your slogan here...';
 
 export const DEFAULT_SITE_NAVBAR: string =
-  '[<a href="/faq">FAQ</a>][<a href="/rules">Rules</a>] || [<a href="/admin">Management</a>][<a href="/">Home</a>]';
+  '[<a href="/faq">FAQ</a>][<a href="/rules">Rules</a>] || [<a href="/admin">Management</a>][<a href="/main">Home</a>]';
+
+export const DEFAULT_MENU_FRAME: string = `
+<div class="menu-header brand">
+  <a href="/" target="_blank">Torichan</a>
+</div>
+<a href="/main" class="menu-link" target="main">Main page</a>
+<a href="/a" class="menu-link" target="main">/a/ - Anime</a>
+<a href="/b" class="menu-link" target="main">/b/ - Random</a>
+<a href="/c" class="menu-link" target="main">/c/ - Comics</a>
+<a href="/d" class="menu-link" target="main">/d/ - Discussions about Torichan</a>
+<a href="#" class="menu-link" target="main">Please edit this page...</a>
+`;
+
+export const DEFAULT_START_PAGE: string = `
+<h1 class="tori-title" style="text-align: center">Torichan Imageboard Engine</h1>
+<em class="tori-slogan" style="text-align: center">Put your slogan here...</em>
+<p class="tori-main-links" style="text-align: center">
+  [<a href="/rules">global rules</a>] / [<a href="/admin">management</a>] / [<a href="https://github.com/d-indifference/torichan">torichan engine</a>]
+</p>
+
+<table border="1" class="tori-board-list" cellpadding="5" style="margin: 0 auto">
+  <tr>
+    <td>
+      <strong><a href="/a">/a/ - Anime</a></strong>
+      <p>Lorem ipsum sit dolor amet</p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <strong><a href="/b">/b/ - Random</a></strong>
+      <p>Lorem ipsum sit dolor amet</p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <strong><a href="/c">/b/ - Comics</a></strong>
+      <p>Lorem ipsum sit dolor amet</p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <strong><a href="/d">/b/ - Discussions about Torichan</a></strong>
+      <p>Lorem ipsum sit dolor amet</p>
+    </td>
+  </tr>
+</table>
+`;
 
 export const DEFAULT_FAQ_PAGE: string = `
 <div class="tori-navbar">
-  [<a href="/faq">FAQ</a>] [<a href="/rules">Rules</a>] [<a href="/admin">Management</a>] [<a href="/">Home</a>]
+  [<a href="/faq">FAQ</a>] [<a href="/rules">Rules</a>] [<a href="/admin">Management</a>] [<a href="/main">Home</a>]
 </div>
 <br clear="all">
 
@@ -45,14 +92,14 @@ export const DEFAULT_FAQ_PAGE: string = `
 </div>
 
 <div class="tori-navbar">
-  [<a href="/faq">FAQ</a>] [<a href="/rules">Rules</a>] [<a href="/admin">Management</a>] [<a href="/">Home</a>]
+  [<a href="/faq">FAQ</a>] [<a href="/rules">Rules</a>] [<a href="/admin">Management</a>] [<a href="/main">Home</a>]
 </div>
 <br clear="all">
 `;
 
 export const DEFAULT_RULES_PAGE: string = `
 <div class="tori-navbar">
-  [<a href="/faq">FAQ</a>] [<a href="/rules">Rules</a>] [<a href="/admin">Management</a>] [<a href="/">Home</a>]
+  [<a href="/faq">FAQ</a>] [<a href="/rules">Rules</a>] [<a href="/admin">Management</a>] [<a href="/main">Home</a>]
 </div>
 <br clear="all">
 
@@ -73,7 +120,7 @@ export const DEFAULT_RULES_PAGE: string = `
 </div>
 
 <div class="tori-navbar">
-    [<a href="/faq">FAQ</a>] [<a href="/rules">Rules</a>] [<a href="/admin">Management</a>] [<a href="/">Home</a>]
+    [<a href="/faq">FAQ</a>] [<a href="/rules">Rules</a>] [<a href="/admin">Management</a>] [<a href="/main">Home</a>]
 </div>
 <br clear="all">
 `;

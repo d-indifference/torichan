@@ -16,7 +16,7 @@ import {
   UnauthorizedExceptionFilter,
   BadRequestExceptionFilter
 } from '@utils/filters/exceptions';
-import { helperCollapseText, templateConstants } from '@config/application-template-helpers';
+import { helperCollapseText, parseTripcode, templateConstants } from '@config/application-template-helpers';
 import { VolumeSettingsService } from '@utils/services';
 import { IpFilterGuard } from '@utils/guards';
 import { IpListFilesService } from '@admin/services/ip-list-files.service';
@@ -55,6 +55,7 @@ const bootstrap = async (): Promise<void> => {
 
   app.setLocal('templateConstants', templateConstants);
   app.setLocal('helperCollapseText', helperCollapseText);
+  app.setLocal('parseTripcode', parseTripcode);
 
   await volumeSettingsService.create('spam-list');
   await ipListFilesService.create();

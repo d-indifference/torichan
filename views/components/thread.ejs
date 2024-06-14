@@ -35,7 +35,7 @@
                 <span class="subject"><%= thread.openingPost.subject %></span>
 
                 <% if (thread.openingPost.tripcode) { %>
-                    <% if (!thread.openingPost.isAdmin) { %><span class="tripcode"><%= thread.openingPost.tripcode %></span><% } else { %><span class="admin-tripcode" title="Highlight posts by Moderators">!!&nbsp;<%= thread.openingPost.tripcode %></span><% } %>
+                    <%- parseTripcode(thread.openingPost.tripcode, thread.openingPost.isAdmin) %>
                 <% } else { %>
                     <% if (!thread.openingPost.isAdmin) { %><span class="name"><%= thread.openingPost.name %></span><% } else { %><span class="admin-name" title="Highlight posts by Moderators">##&nbsp;<%= thread.openingPost.name %></span><% } %>
                 <% } %>
@@ -112,7 +112,7 @@
                     <span class="subject"><%= reply.subject %></span>
 
                     <% if (reply.tripcode) { %>
-                        <% if (!reply.isAdmin) { %><span class="tripcode"><%= reply.tripcode %></span><% } else { %><span class="admin-tripcode" title="Highlight posts by Moderators">!!&nbsp;<%= reply.tripcode %></span><% } %>
+                        <%- parseTripcode(reply.tripcode, reply.isAdmin) %>
                     <% } else { %>
                         <% if (!reply.isAdmin) { %><span class="name"><%= reply.name %></span><% } else { %><span class="admin-name" title="Highlight posts by Moderators">##&nbsp;<%= reply.name %></span><% } %>
                     <% } %>

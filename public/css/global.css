@@ -242,3 +242,12 @@ form.changeStyleForm {
 .menu-link {
   padding: 5px 0 5px 0;
 }
+
+.tripcode {
+  color: #ff3300;
+}
+
+.admin-tripcode {
+  color: #dc00ff;
+  font-weight: 900;
+}

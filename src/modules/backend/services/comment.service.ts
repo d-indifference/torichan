@@ -9,7 +9,7 @@ import { AttachedFileService } from '@backend/services/attached-file.service';
 import { BanService } from '@backend/services/ban.service';
 import { SpamService } from '@backend/services/spam.service';
 import * as he from 'he';
-import { replyMarkdown, replySimpleMarkdown, threadMarkdown, threadSimpleMarkdown } from '@backend/functions';
+import { replyMarkdown, replySimpleMarkdown, threadMarkdown, threadSimpleMarkdown, generateTripcode } from '@backend/functions';
 import { CommentsQueries } from '@backend/services/comment.queries';
 
 @Injectable()
@@ -51,6 +51,7 @@ export class CommentService {
     const newThread = dto.toCreateInput(foundBoard.postCount + 1, ip);
     newThread.board = { connect: { id: foundBoard.id } };
     newThread.lastHit = new Date();
+    newThread.tripcode = this.applyTripcodePolicy(dto.name, boardSettings);
 
     if (attachedFile) {
       newThread.attachedFile = { connect: { id: attachedFile.id } };
@@ -99,6 +100,7 @@ export class CommentService {
     newReply.board = { connect: { id: foundBoard.id } };
     newReply.lastHit = null;
     newReply.parent = { connect: { id: foundParent.id } };
+    newReply.tripcode = this.applyTripcodePolicy(dto.name, boardSettings);
 
     if (attachedFile) {
       newReply.attachedFile = { connect: { id: attachedFile.id } };
@@ -117,6 +119,16 @@ export class CommentService {
     await this.boardService.incrementPostCount(foundBoard.id);
 
     return createdReply;
+  }
+
+  private applyTripcodePolicy(name: string, settings: BoardSettings): string {
+    if (settings.allowTripcodes && name) {
+      if (name.split('#').length > 1) {
+        return generateTripcode(name);
+      }
+    }
+
+    return null;
   }
 
   private applySettingsPolicy(settings: BoardSettings, dto: CommentCreateDto, isReply: boolean): void {

@@ -137,6 +137,17 @@
                     </td>
                 </tr>
                 <tr>
+                    <td>Allow tripcodes</td>
+                    <td>
+                        <input
+                             name="allowTripcodes"
+                             type="checkbox"
+                             tabindex="1"
+                             <% if (args.formMode !== 'CREATE' && args.formData.allowTripcodes) { %>checked<% } %>
+                        >
+                    </td>
+                </tr>
+                <tr>
                     <td>Maximum thread on boards</td>
                     <td>
                         <input type="number" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.maxThreadsOnBoard %><% } else { %>100<% } %>" name="maxThreadsOnBoard" min="0">

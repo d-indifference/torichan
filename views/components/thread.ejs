@@ -33,7 +33,13 @@
             <label class="postInfo">
                 <input type="checkbox" name="delete" value="<%= thread.openingPost.displayNumber %>">
                 <span class="subject"><%= thread.openingPost.subject %></span>
-                <% if (!thread.openingPost.isAdmin) { %><span class="name"><%= thread.openingPost.name %></span><% } else { %><span class="admin-name" title="Highlight posts by Moderators">##&nbsp;<%= thread.openingPost.name %></span><% } %>
+
+                <% if (thread.openingPost.tripcode) { %>
+                    <% if (!thread.openingPost.isAdmin) { %><span class="tripcode"><%= thread.openingPost.tripcode %></span><% } else { %><span class="admin-tripcode" title="Highlight posts by Moderators">!!&nbsp;<%= thread.openingPost.tripcode %></span><% } %>
+                <% } else { %>
+                    <% if (!thread.openingPost.isAdmin) { %><span class="name"><%= thread.openingPost.name %></span><% } else { %><span class="admin-name" title="Highlight posts by Moderators">##&nbsp;<%= thread.openingPost.name %></span><% } %>
+                <% } %>
+
                 <span class="dateTime"><%= thread.openingPost.createdAt %></span>
             </label>
             <a
@@ -104,7 +110,13 @@
                 <label class="postInfo">
                     <input type="checkbox" name="delete" value="<%= reply.displayNumber %>">
                     <span class="subject"><%= reply.subject %></span>
-                    <% if (!reply.isAdmin) { %><span class="name"><%= reply.name %></span><% } else { %><span class="admin-name" title="Highlight posts by Moderators">##&nbsp;<%= reply.name %></span><% } %>
+
+                    <% if (reply.tripcode) { %>
+                        <% if (!reply.isAdmin) { %><span class="tripcode"><%= reply.tripcode %></span><% } else { %><span class="admin-tripcode" title="Highlight posts by Moderators">!!&nbsp;<%= reply.tripcode %></span><% } %>
+                    <% } else { %>
+                        <% if (!reply.isAdmin) { %><span class="name"><%= reply.name %></span><% } else { %><span class="admin-name" title="Highlight posts by Moderators">##&nbsp;<%= reply.name %></span><% } %>
+                    <% } %>
+
                     <span class="dateTime"><%= reply.createdAt %></span>
                 </label>
 

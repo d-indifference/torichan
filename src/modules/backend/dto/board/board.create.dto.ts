@@ -70,6 +70,11 @@ export class BoardCreateDto {
   allowMarkdown: 'on' | undefined;
 
   @IsString()
+  @IsOptional()
+  @MaxLength(2)
+  allowTripcodes: 'on' | undefined;
+
+  @IsString()
   @IsNotEmpty()
   @IsNumberString()
   maxThreadsOnBoard: string;
@@ -133,6 +138,7 @@ export class BoardCreateDto {
           minFileSize: normalizeInteger(this.minFileSize, { min: 0, max: 19922944 }),
           maxFileSize: normalizeInteger(this.maxFileSize, { min: 0, max: 19922944 }),
           allowMarkdown: normalizeBoolean(this.allowMarkdown),
+          allowTripcodes: normalizeBoolean(this.allowTripcodes),
           maxThreadsOnBoard: normalizeInteger(this.maxThreadsOnBoard, { min: 0, max: Number.MAX_SAFE_INTEGER - 1 }),
           bumpLimit: normalizeInteger(this.bumpLimit, { min: 0, max: Number.MAX_SAFE_INTEGER }),
           maxStringFieldSize: normalizeInteger(this.maxStringFieldSize, { min: 0, max: Number.MAX_SAFE_INTEGER - 1 }),
@@ -162,6 +168,7 @@ export class BoardCreateDto {
       minFileSize: ${this.minFileSize},
       maxFileSize: ${this.maxFileSize},
       allowMarkdown: ${this.allowMarkdown},
+      allowTripcodes: ${this.allowTripcodes},
       maxThreadsOnBoard: ${this.maxThreadsOnBoard},
       bumpLimit: ${this.bumpLimit},
       maxStringFieldSize: ${this.maxStringFieldSize},

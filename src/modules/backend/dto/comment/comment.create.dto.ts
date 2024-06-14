@@ -58,7 +58,8 @@ export class CommentCreateDto {
       subject: this.subject,
       comment: this.comment,
       password: this.password,
-      isAdmin: !isUndefined(this.isAdmin)
+      isAdmin: !isUndefined(this.isAdmin),
+      tripcode: null
     };
   }
 

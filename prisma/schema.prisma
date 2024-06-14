@@ -36,6 +36,7 @@ model BoardSettings {
   minFileSize              Int                @default(1) @db.Integer
   maxFileSize              Int                @default(19922944) @db.Integer
   allowMarkdown            Boolean            @default(true) @db.Boolean
+  allowTripcodes           Boolean            @default(true) @db.Boolean
   maxThreadsOnBoard        Int                @default(100) @db.Integer
   bumpLimit                Int                @default(250) @db.Integer
   maxStringFieldSize       Int                @default(100) @db.Integer
@@ -56,6 +57,7 @@ model Comment {
   isAdmin       Boolean   @default(false) @db.Boolean
   ip            String    @db.VarChar(64)
   name          String    @db.VarChar(256)
+  tripcode      String?   @db.VarChar(256)
   options       String?   @db.VarChar(512)
   subject       String?   @db.VarChar(256)
   comment       String    @db.Text

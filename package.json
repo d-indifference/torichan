@@ -1,6 +1,6 @@
 {
   "name": "torichan",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Yet another imageboard implementation",
   "author": "d-indifference <umaruchan825@gmail.com>",
   "private": true,
@@ -44,6 +44,7 @@
     "luxon": "^3.4.4",
     "mime-types": "^2.1.35",
     "nestjs-form-data": "^1.9.7",
+    "nestjs-real-ip": "^3.0.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
     "sharp": "^0.33.3",

@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import * as svgCaptcha from 'svg-captcha';
 import { CaptchaDto } from '@frontend/dto';
 import { CryptoUtils } from '@utils/misc';
+import { LOCALE } from '@utils/locale';
 
 @Injectable()
 export class CaptchaService {
@@ -23,7 +24,7 @@ export class CaptchaService {
     const decryptedAnswer = crypto.decrypt(answer);
 
     if (input !== decryptedAnswer) {
-      throw new ForbiddenException('Captcha is invalid!');
+      throw new ForbiddenException(LOCALE.utils['captchaIsInvalid']);
     }
   }
 

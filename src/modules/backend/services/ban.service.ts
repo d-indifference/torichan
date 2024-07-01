@@ -6,6 +6,7 @@ import { BanCreateDto, BanDto, BanDurationType } from '@backend/dto/ban';
 import { UserService } from '@backend/services/user.service';
 import { DateTime, DurationLike } from 'luxon';
 import { ConfigService } from '@nestjs/config';
+import { LOCALE } from '@utils/locale';
 
 @Injectable()
 export class BanService {
@@ -70,7 +71,7 @@ export class BanService {
 
     if (ban) {
       const banDto = BanDto.fromModel(ban);
-      const displayMessage: string = `You're banned till ${banDto.till}.<br>Reason: ${banDto.reason}`;
+      const displayMessage: string = `${LOCALE.backend['youAreBanned'](banDto.till)}.<br>${LOCALE.backend['reason']} ${banDto.reason}`;
 
       this.logger.warn(`IP banned ({ip: ${ip}, till: ${banDto.till})`);
       throw new ForbiddenException(displayMessage);
@@ -91,7 +92,7 @@ export class BanService {
     const ban = await this.prisma.ban.findFirst({ where: { id } });
 
     if (!ban) {
-      const message: string = `Ban by ID: ${id} was not found`;
+      const message: string = LOCALE.backend['banWasNotFound'](id);
       this.logger.warn(message);
       throw new NotFoundException(`${message}.`);
     }

@@ -1,4 +1,4 @@
 <div class="tori-navbar">
-    [<a href="/main">Go to site</a>][<a href="/admin">Management</a>]
-    <form action="/admin/sign-out" method="post" style="display: inline"><input type="submit" value="Sign out"></form>
+    [<a href="/main"><%= LOCALE.views.fragments.adminNavbar.goToSite %></a>][<a href="/admin"><%= LOCALE.views.fragments.adminNavbar.management %></a>]
+    <form action="/admin/sign-out" method="post" style="display: inline"><input type="submit" value="<%= LOCALE.views.fragments.adminNavbar.signOut %>"></form>
 </div>

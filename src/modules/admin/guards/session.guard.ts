@@ -3,6 +3,7 @@ import { Reflector } from '@nestjs/core';
 import { PrismaService } from '@utils/services';
 import { SessionDto } from '@admin/dto';
 import { Response } from 'express';
+import { LOCALE } from '@utils/locale';
 
 @Injectable()
 export class SessionGuard implements CanActivate {
@@ -30,7 +31,7 @@ export class SessionGuard implements CanActivate {
         const userRole = session.payload.role;
 
         if (!userRole || !requiredRoles.includes(userRole)) {
-          throw new ForbiddenException('You do not have permission to perform this action.');
+          throw new ForbiddenException(LOCALE.admin['noPermissionToPerform']);
         } else {
           return true;
         }

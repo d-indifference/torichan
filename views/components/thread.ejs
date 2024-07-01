@@ -7,7 +7,7 @@
             <% if (thread.openingPost.attachedFile) { %>
                 <div class="file">
                     <div class="fileText">
-                        File:
+                        <%- LOCALE.views.components.thread.file %>:
                         <a
                             target="_blank"
                             href="/files/<%= board.slug %>/src/<%= thread.openingPost.attachedFile.path %>"
@@ -49,7 +49,7 @@
                 <% if (pageMode === 'THREAD') { %>style="cursor: pointer;" <% } %>
                 <% if (pageMode === 'THREAD') { %>title="Reply on this post" <% } %>
             >
-                No. <%= thread.openingPost.displayNumber %>
+                <%- LOCALE.views.components.thread.no %> <%= thread.openingPost.displayNumber %>
             </a>
 
             <div class="reply-link">
@@ -63,7 +63,7 @@
                         name="payload"
                         value="{&quot;mode&quot;:&quot;ONLY_COMMENT&quot;,&quot;commentId&quot;:&quot;<%= thread.openingPost.id %>&quot;,&quot;ip&quot;:&quot;<%= thread.openingPost.ip %>&quot;,&quot;redirectAfterDeletion&quot;:&quot;/<%= board.slug %>&quot;}"
                     >
-                        Delete this comment
+                        <%= LOCALE.views.components.thread.deleteThisComment %>
                     </button>
                     <button
                         type="submit"
@@ -71,7 +71,7 @@
                         name="payload"
                         value="{&quot;mode&quot;:&quot;ONLY_FILE&quot;,&quot;commentId&quot;:&quot;<%= thread.openingPost.id %>&quot;,&quot;ip&quot;:&quot;<%= thread.openingPost.ip %>&quot;,&quot;redirectAfterDeletion&quot;:&quot;/<%= board.slug %><% if (pageMode === 'THREAD') { %>/res/<%= thread.openingPost.displayNumber %><% } %>&quot;}"
                     >
-                        Delete this file
+                        <%= LOCALE.views.components.thread.deleteThisFile %>
                     </button>
                     <button
                         type="submit"
@@ -79,11 +79,11 @@
                         name="payload"
                         value="{&quot;mode&quot;:&quot;ALL_BY_IP&quot;,&quot;commentId&quot;:&quot;<%= thread.openingPost.id %>&quot;,&quot;ip&quot;:&quot;<%= thread.openingPost.ip %>&quot;,&quot;redirectAfterDeletion&quot;:&quot;/<%= board.slug %>&quot;}"
                     >
-                        Delete all comments from this IP
+                        <%= LOCALE.views.components.thread.deleteAllCommentsFromThisIP %>
                     </button>
-                    [<a target="_blank" href="/admin/ban/new?ip=<%= thread.openingPost.ip %>">Ban this IP</a>]
+                    [<a target="_blank" href="/admin/ban/new?ip=<%= thread.openingPost.ip %>"><%- LOCALE.views.components.thread.banThisIP %></a>]
                 <% } %>
-                <% if (pageMode === 'BOARD') { %>[<a href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>">Reply</a>]<% } %>
+                <% if (pageMode === 'BOARD') { %>[<a href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>"><%- LOCALE.views.components.thread.reply %></a>]<% } %>
             </div><br>
 
             <% if (pageMode === 'BOARD') { %>
@@ -94,8 +94,14 @@
 
             <% if (thread.omittedPosts) { %>
                 <% if (thread.omittedPosts.needToDisplay) { %>
-                    <span class="omitted-posts"><%= thread.omittedPosts.comments %> replies and <%= thread.omittedPosts.files %> files omitted. <a
-                                href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>">Click here</a> to view them.</span>
+                    <span class="omitted-posts">
+                        <%- LOCALE.views.components.thread.omittedPosts(
+                                thread.omittedPosts.comments,
+                                thread.omittedPosts.files,
+                                board.slug,
+                                thread.openingPost.displayNumber
+                        ); %>
+                    </span>
                 <% } %>
             <% } %>
         </div>
@@ -114,7 +120,7 @@
                     <% if (reply.tripcode) { %>
                         <%- parseTripcode(reply.tripcode, reply.isAdmin) %>
                     <% } else { %>
-                        <% if (!reply.isAdmin) { %><span class="name"><%= reply.name %></span><% } else { %><span class="admin-name" title="Highlight posts by Moderators">##&nbsp;<%= reply.name %></span><% } %>
+                        <% if (!reply.isAdmin) { %><span class="name"><%= reply.name %></span><% } else { %><span class="admin-name" title="<%= LOCALE.views.components.thread.highlightPostByModerators %>">##&nbsp;<%= reply.name %></span><% } %>
                     <% } %>
 
                     <span class="dateTime"><%= reply.createdAt %></span>
@@ -127,7 +133,7 @@
                     <% if (pageMode === 'THREAD') { %>style="cursor: pointer;" <% } %>
                     <% if (pageMode === 'THREAD') { %>title="Reply on this post" <% } %>
                 >
-                    No. <%= reply.displayNumber %>
+                    <%- LOCALE.views.components.thread.no %> <%= reply.displayNumber %>
                 </a>
 
                 <% if (session) { %>
@@ -140,7 +146,7 @@
                             name="payload"
                             value="{&quot;mode&quot;:&quot;ONLY_COMMENT&quot;,&quot;commentId&quot;:&quot;<%= reply.id %>&quot;,&quot;ip&quot;:&quot;<%= reply.ip %>&quot;,&quot;redirectAfterDeletion&quot;:&quot;/<%= board.slug %><% if (pageMode === 'THREAD') { %>/res/<%= thread.openingPost.displayNumber %><% } %>&quot;}"
                     >
-                        Delete this comment
+                        <%= LOCALE.views.components.thread.deleteThisComment %>
                     </button>
                     <button
                             type="submit"
@@ -148,7 +154,7 @@
                             name="payload"
                             value="{&quot;mode&quot;:&quot;ONLY_FILE&quot;,&quot;commentId&quot;:&quot;<%= reply.id %>&quot;,&quot;ip&quot;:&quot;<%= reply.ip %>&quot;,&quot;redirectAfterDeletion&quot;:&quot;/<%= board.slug %><% if (pageMode === 'THREAD') { %>/res/<%= thread.openingPost.displayNumber %><% } %>&quot;}"
                     >
-                        Delete this file
+                        <%= LOCALE.views.components.thread.deleteThisFile %>
                     </button>
                     <button
                             type="submit"
@@ -156,15 +162,15 @@
                             name="payload"
                             value="{&quot;mode&quot;:&quot;ALL_BY_IP&quot;,&quot;commentId&quot;:&quot;<%= reply.id %>&quot;,&quot;ip&quot;:&quot;<%= reply.ip %>&quot;,&quot;redirectAfterDeletion&quot;:&quot;/<%= board.slug %><% if (pageMode === 'THREAD') { %>/res/<%= thread.openingPost.displayNumber %><% } %>&quot;}"
                     >
-                        Delete all comments from this IP
+                        <%= LOCALE.views.components.thread.deleteAllCommentsFromThisIP %>
                     </button>
-                    [<a target="_blank" href="/admin/ban/new?ip=<%= reply.ip %>">Ban this IP</a>]
+                    [<a target="_blank" href="/admin/ban/new?ip=<%= reply.ip %>"><%= LOCALE.views.components.thread.banThisIP %></a>]
                 <% } %>
 
                 <% if (reply.attachedFile) { %>
                     <div class="file">
                         <div class="fileText">
-                            File:
+                            <%= LOCALE.views.components.thread.file %>:
                             <a
                                 target="_blank"
                                 href="/files/<%= board.slug %>/src/<%= reply.attachedFile.path %>"

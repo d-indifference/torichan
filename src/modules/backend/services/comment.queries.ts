@@ -4,6 +4,7 @@ import { PrismaTakeSkipDto } from '@utils/misc';
 import { CommentDto } from '@backend/dto/comment';
 import { PrismaService } from '@utils/services';
 import { ConfigService } from '@nestjs/config';
+import { LOCALE } from '@utils/locale';
 
 @Injectable()
 export class CommentsQueries {
@@ -53,7 +54,7 @@ export class CommentsQueries {
     const comment = await this.prisma.comment.findFirst({ where, include: { board: true, attachedFile: true, children: true, parent: true } });
 
     if (!comment) {
-      const message = 'Comment was not found';
+      const message = LOCALE.backend['commentWasNotFound'];
       this.logger.warn(`${message}, params: ${JSON.stringify(where)}`);
       throw new NotFoundException(message);
     }

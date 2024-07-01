@@ -6,14 +6,16 @@
 
     <%- include('fragments/tori-navbar'); %>
 
-    <h1 class="tori-page-title">/<%= board.slug %>/ - <% if (thread.openingPost.subject) { %><%= thread.openingPost.subject %><% } else { %>Reply to thread #<%= thread.openingPost.displayNumber %><% } %></h1>
+    <h1 class="tori-page-title">/<%= board.slug %>/ - <% if (thread.openingPost.subject) { %><%= thread.openingPost.subject %><% } else { %>
+            <%= LOCALE.views.thread.replyToThread(thread.openingPost.displayNumber) %>
+        <% } %></h1>
 
     <hr class="tori-above-post-form">
 
     <% if (board.allowPosting) { %>
         <div class="tori-posting-form">
             <fieldset>
-                <legend>Mode: Reply</legend>
+                <legend><%= LOCALE.views.thread.modeReply %></legend>
 
                 <form id="posting_form" action="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>/post" method="post" enctype="multipart/form-data">
                     <% if (board.enableCaptcha) { %>
@@ -23,67 +25,67 @@
                     <table class="tori-post-form" width="1%">
                         <% if (!board.strictAnonymity) { %>
                             <tr>
-                                <td>Name</td>
+                                <td><%= LOCALE.views.board.name %></td>
                                 <td>
-                                    <input name="name" type="text" tabindex="1" placeholder="<% if (session) { %>Moderator<% } else { %>Anonymous<% } %>" size="32">
-                                    <% if (session) { %><label><input type="checkbox" name="isAdmin" checked>Mark me as administrator</label><% } %>
+                                    <input name="name" type="text" tabindex="1" placeholder="<% if (session) { %><%= LOCALE.views.board.moderator %><% } else { %><%= LOCALE.views.board.anonymous %><% } %>" size="32">
+                                    <% if (session) { %><label><input type="checkbox" name="isAdmin" checked><%= LOCALE.views.board.markMeAsAdmin %></label><% } %>
                                 </td>
                             </tr>
                         <% } else { %>
                             <% if (session) { %>
                                 <tr>
-                                    <td>Name</td>
-                                    <td><label><input type="checkbox" name="isAdmin" checked>Mark me as administrator</label></td>
+                                    <td><%= LOCALE.views.board.name %></td>
+                                    <td><label><input type="checkbox" name="isAdmin" checked><%= LOCALE.views.board.markMeAsAdmin %></label></td>
                                 </tr>
                             <% } %>
                         <% } %>
                         <tr>
-                            <td>Options</td>
+                            <td><%= LOCALE.views.board.options %></td>
                             <td><input name="options" type="text" tabindex="1" size="32"></td>
                         </tr>
                         <tr>
-                            <td>Subject</td>
+                            <td><%= LOCALE.views.board.subject %></td>
                             <td><input name="subject" type="text" tabindex="1" size="27"><input type="submit" value="Post"></td>
                         </tr>
                         <tr>
-                            <td>Comment</td>
+                            <td><%= LOCALE.views.board.comment %></td>
                             <td><textarea name="comment" tabindex="1" rows="11" cols="33"></textarea></td>
                         </tr>
                         <% if (board.replyFileAttachmentMode !== 'FORBIDDEN') { %>
                             <tr>
-                                <td>File</td>
+                                <td><%= LOCALE.views.board.file %></td>
                                 <td><input name="file" type="file" tabindex="1" size="8"></td>
                             </tr>
                         <% } %>
                         <% if (board.enableCaptcha) { %>
                             <tr>
-                                <td>Captcha</td>
+                                <td><%= LOCALE.views.board.captcha %></td>
                                 <td>
                                     <%- captcha.data %>
                                     <input type="text" name="captcha" size="16">
-                                    <% if (session) { %><br>Tick `Mark me as administrator` to skip the captcha<% } %>
+                                    <% if (session) { %><br><%= LOCALE.views.board.skipCaptcha %><% } %>
                                 </td>
                             </tr>
                         <% } %>
                         <tr>
-                            <td>Password</td>
+                            <td><%= LOCALE.views.board.password %></td>
                             <td><input
                                         name="password"
                                         type="password"
                                         tabindex="1"
                                         size="8"
                                         value="<%= password %>"
-                                > (For comments & files deletion)</td>
+                                > <%= LOCALE.views.board.passwordExplanation %></td>
                         </tr>
                         <tr>
                             <td colspan="2" class="rules">
                                 <ul class="rules">
                                     <% if (board.replyFileAttachmentMode !== 'FORBIDDEN') { %>
-                                        <li>Image files up to <%= board.maxFileSize %> in size are supported.</li>
-                                        <li>Images larger than 200x200 will be reduced in size.</li>
+                                        <li><%- LOCALE.views.board.ruleImageSize(board.maxFileSize) %></li>
+                                        <li><%- LOCALE.views.board.ruleThumbnail %></li>
                                     <% } %>
-                                    <li>Moderator is always right.</li>
-                                    <li>Please read the <a href="/rules">Rules</a> and <a href="/faq">FAQ</a> before posting.</li>
+                                    <li><%- LOCALE.views.board.moderatorIsAlwaysRight %></li>
+                                    <li><%- LOCALE.views.board.pleaseReadTheRules %></li>
                                 </ul>
                                 <%- board.rules %>
                             </td>
@@ -96,8 +98,8 @@
 
     <hr>
     <div class="reply-navbar">
-        [<a href="/<%= board.slug %>">Return</a>]
-        [<a href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#bottom">Bottom</a>]
+        [<a href="/<%= board.slug %>"><%= LOCALE.views.thread.return %></a>]
+        [<a href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#bottom"><%= LOCALE.views.thread.bottom %></a>]
     </div>
 
     <a name="top"></a>
@@ -108,21 +110,21 @@
         </div>
 
         <div class="delete-form">
-            Delete Post: [<label>File only <input type="checkbox" name="fileOnly"></label>]<br>
-            Password <input
+            <%= LOCALE.views.board.deletePost %> [<label><%= LOCALE.views.board.fileOnly %> <input type="checkbox" name="fileOnly"></label>]<br>
+            <%= LOCALE.views.board.password %> <input
                     type="password"
                     tabindex="1"
                     size="8"
                     value="<%= password %>"
                     name="password"
-            ><input type="submit" value="Delete"><br>
+            ><input type="submit" value="<%= LOCALE.views.board.delete %>"><br>
         </div>
     </form>
     <a name="bottom"></a>
 
     <div class="reply-navbar">
-        [<a href="/<%= board.slug %>">Return</a>]
-        [<a href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#top">Top</a>]
+        [<a href="/<%= board.slug %>"><%= LOCALE.views.thread.return %></a>]
+        [<a href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#top"><%= LOCALE.views.thread.top %></a>]
     </div>
 
     <br clear="all">

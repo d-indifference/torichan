@@ -1,8 +1,8 @@
-<%- include('components/head-admin', { paramPageTitle: 'Bans' }) %>
+<%- include('components/head-admin', { paramPageTitle: LOCALE.views.admin.listBan.bans }) %>
 <body>
 <%- include('fragments/admin-navbar') %>
 
-<h1 class="tori-page-title">Bans - Management panel</h1>
+<h1 class="tori-page-title"><%= LOCALE.views.admin.listBan.bans %> - <%= LOCALE.views.constants.managementPanel %></h1>
 <%- include('fragments/admin-welcome') %>
 
 <%- include('fragments/admin-tabs') %>
@@ -11,11 +11,11 @@
     <thead>
     <tr>
         <td>#</td>
-        <td>Banned by</td>
-        <td>IP</td>
-        <td>Created at</td>
-        <td>Banned till</td>
-        <td>Ban reason</td>
+        <td><%= LOCALE.views.admin.listBan.bannedBy %></td>
+        <td><%= LOCALE.views.admin.listBan.ip %></td>
+        <td><%= LOCALE.views.admin.listBan.createdAt %></td>
+        <td><%= LOCALE.views.admin.listBan.bannedTill %></td>
+        <td><%= LOCALE.views.admin.listBan.banReason %></td>
         <td></td>
     </tr>
     </thead>
@@ -28,7 +28,7 @@
             <td><%= ban.createdAt %></td>
             <td><%= ban.till %></td>
             <td><%= ban.reason %></td>
-            <td><form action="/admin/ban/<%= ban.id %>/delete" method="post"><button type="submit">Delete</button></form></td>
+            <td><form action="/admin/ban/<%= ban.id %>/delete" method="post"><button type="submit"><%= LOCALE.views.admin.listBan.delete %></button></form></td>
         </tr>
     <% }); %>
     </tbody>
@@ -50,7 +50,7 @@
             &raquo;
         <% } %>
     </span><br>
-    [<a href="/admin/ban/new">New ban</a>]<br>
+    [<a href="/admin/ban/new"><%= LOCALE.views.admin.listBan.newBan %></a>]<br>
 </div>
 
 <%- include('fragments/admin-navbar') %>

@@ -7,6 +7,7 @@ import { EditPage, EditPageFormArgsMode } from '@admin/pages';
 import { GlobalSettingsService } from '@admin/services';
 import { FormDataRequest } from 'nestjs-form-data';
 import { Response } from 'express';
+import { LOCALE } from '@utils/locale';
 
 @Controller('admin/global-settings')
 export class GlobalSettingsController {
@@ -20,7 +21,7 @@ export class GlobalSettingsController {
     return {
       session: session.payload,
       args: {
-        formDescription: 'Global site settings',
+        formDescription: LOCALE.admin['globalSiteSettings'],
         formHandler: '/admin/global-settings',
         formData: await this.globalSettingsService.get(),
         formMode: EditPageFormArgsMode.UPDATE

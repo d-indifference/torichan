@@ -1,41 +1,41 @@
-<%- include('components/head-admin', { paramPageTitle: 'New ban' }) %>
+<%- include('components/head-admin', { paramPageTitle: LOCALE.views.admin.editBan.newBan }) %>
 <body>
 <%- include('fragments/admin-navbar') %>
 
-<h1 class="tori-page-title">New ban - Management panel</h1>
+<h1 class="tori-page-title"><%= LOCALE.views.admin.editBan.newBan %> - <%= LOCALE.views.constants.managementPanel %></h1>
 <%- include('fragments/admin-welcome') %>
 
 <%- include('fragments/admin-tabs') %>
 
 <fieldset class="admin-form">
-    <legend>Create new ban</legend>
-    [<a href="/admin/ban">Go back</a>]
+    <legend><%= LOCALE.views.admin.editBan.createNewBan %></legend>
+    [<a href="/admin/ban"><%= LOCALE.views.constants.goBack %></a>]
 
     <form action="/admin/ban/new" method="post">
         <table class="tori-post-form" width="1%">
             <tr>
-                <td>IP</td>
+                <td><%= LOCALE.views.admin.editBan.ip %></td>
                 <td><input name="ip" type="text" tabindex="1" size="32" required <% if (ip) { %>value="<%= ip %>" <% } %>></td>
             </tr>
             <tr>
-                <td>Name</td>
+                <td><%= LOCALE.views.admin.editBan.duration %></td>
                 <td>
                     <input name="till" type="number" tabindex="1" size="40" required value="3" min="1">
                     <select name="durationType">
-                        <option value="MINUTES">Minutes</option>
-                        <option value="HOURS">Hours</option>
-                        <option value="DAYS" selected>Days</option>
-                        <option value="MONTHS">Months</option>
-                        <option value="YEARS">Years</option>
+                        <option value="MINUTES"><%= LOCALE.views.admin.editBan.minutes %></option>
+                        <option value="HOURS"><%= LOCALE.views.admin.editBan.hours %></option>
+                        <option value="DAYS" selected><%= LOCALE.views.admin.editBan.days %></option>
+                        <option value="MONTHS"><%= LOCALE.views.admin.editBan.months %></option>
+                        <option value="YEARS"><%= LOCALE.views.admin.editBan.years %></option>
                     </select>
                 </td>
             </tr>
             <tr>
-                <td>Reason</td>
+                <td><%= LOCALE.views.admin.editBan.reason %></td>
                 <td><textarea name="reason" tabindex="1" rows="5" cols="33"></textarea></td>
             </tr>
         </table>
-        <input type="submit" value="Ban user" tabindex="1" size="32">
+        <input type="submit" value="<%= LOCALE.views.admin.editBan.banUser %>" tabindex="1" size="32">
     </form>
 </fieldset>
 

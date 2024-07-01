@@ -1,8 +1,8 @@
-<%- include('components/head-admin', { paramPageTitle: 'Edit user' }) %>
+<%- include('components/head-admin', { paramPageTitle: LOCALE.views.admin.editUser.editUser }) %>
 <body>
     <%- include('fragments/admin-navbar') %>
 
-    <h1 class="tori-page-title">Edit user - Management panel</h1>
+    <h1 class="tori-page-title"><%= LOCALE.views.admin.editUser.editUser %> - <%= LOCALE.views.constants.managementPanel %></h1>
     <%- include('fragments/admin-welcome') %>
 
     <%- include('fragments/admin-tabs') %>
@@ -13,14 +13,13 @@
 
     <% if (args.formMode !== 'CREATE') { %>
         <div class="admin-danger">
-            <div class="header">Danger zone</div>
+            <div class="header"><%= LOCALE.views.constants.dangerZone %></div>
             <p>
-                Deleting the user "<%= args.formData.username %>" once will mean that you will never be able to restore this record.<br>
-                <u>Are you sure of your intentions?</u>
+                <%= LOCALE.views.admin.editUser.dangerZoneExplanation(args.formData.username) %>
             </p>
 
             <form action="/admin/staff/<%= args.formData.id %>/delete" method="post">
-                <input type="submit" value="Delete user '<%= args.formData.username %>'">
+                <input type="submit" value="<%= LOCALE.views.admin.editUser.deleteUser(args.formData.username) %>">
             </form>
         </div>
     <% } %>

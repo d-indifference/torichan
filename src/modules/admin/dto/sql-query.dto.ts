@@ -1,7 +1,8 @@
 import { IsNotEmpty, IsString } from 'class-validator';
+import { LOCALE } from '@utils/locale';
 
 export class SqlQueryDto {
-  @IsString()
-  @IsNotEmpty()
+  @IsString(LOCALE.validators['isString']('query'))
+  @IsNotEmpty(LOCALE.validators['isNotEmpty']('query'))
   query: string;
 }

@@ -6,6 +6,7 @@ import { BoardListPage, EditPage, EditPageFormArgsMode } from '@admin/pages';
 import { validateNotEmptyPage } from '@utils/misc';
 import { BoardCreateDto, BoardUpdateDto } from '@backend/dto/board';
 import { Response } from 'express';
+import { LOCALE } from '@utils/locale';
 
 @Injectable()
 export class BoardService {
@@ -34,7 +35,7 @@ export class BoardService {
     return {
       session,
       args: {
-        formDescription: `Edit board: ${board.name}`,
+        formDescription: LOCALE.admin['editBoard'](board.name),
         formHandler: `/admin/board/${board.id}`,
         formMode: EditPageFormArgsMode.UPDATE,
         formData: BoardUpdateDto.fromModel(board)

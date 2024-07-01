@@ -1,36 +1,36 @@
-<%- include('components/head-admin', { paramPageTitle: 'IP Filter' }) %>
+<%- include('components/head-admin', { paramPageTitle: LOCALE.views.admin.ipFilter.ipFilter }) %>
 <body>
     <%- include('fragments/admin-navbar') %>
 
-    <h1 class="tori-page-title">IP Filter - Management panel</h1>
+    <h1 class="tori-page-title"><%= LOCALE.views.admin.ipFilter.ipFilter %> - <%= LOCALE.views.constants.managementPanel %></h1>
     <%- include('fragments/admin-welcome') %>
 
     <%- include('fragments/admin-tabs') %>
 
 
     <fieldset class="admin-form">
-        <legend>IP Whitelist</legend>
+        <legend><%= LOCALE.views.admin.ipFilter.ipWhiteList %></legend>
         <form action="/admin/filter/whitelist" method="post">
             <table class="tori-post-form" width="1%">
                 <tr>
-                    <td>Whitelist</td>
+                    <td><%= LOCALE.views.admin.ipFilter.whiteList %></td>
                     <td><textarea name="ipList" tabindex="1" rows="15" cols="33"><%= whiteList %></textarea></td>
                 </tr>
             </table>
-            <input type="submit" value="Save" tabindex="1" size="32">
+            <input type="submit" value="<%= LOCALE.views.constants.save %>" tabindex="1" size="32">
         </form>
     </fieldset>
 
     <fieldset class="admin-form">
-        <legend>IP Blacklist</legend>
+        <legend><%= LOCALE.views.admin.ipFilter.ipBlacklist %></legend>
         <form action="/admin/filter/blacklist" method="post">
             <table class="tori-post-form" width="1%">
                 <tr>
-                    <td>Blacklist</td>
+                    <td><%= LOCALE.views.admin.ipFilter.blackList %></td>
                     <td><textarea name="ipList" tabindex="1" rows="15" cols="33"><%= blackList %></textarea></td>
                 </tr>
             </table>
-            <input type="submit" value="Save" tabindex="1" size="32">
+            <input type="submit" value="<%= LOCALE.views.constants.save %>" tabindex="1" size="32">
         </form>
     </fieldset>
 

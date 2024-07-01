@@ -1,8 +1,8 @@
-<%- include('components/head-admin', { paramPageTitle: 'Boards' }) %>
+<%- include('components/head-admin', { paramPageTitle: LOCALE.views.admin.listBoard.boards }) %>
 <body>
 <%- include('fragments/admin-navbar') %>
 
-<h1 class="tori-page-title">Boards - Management panel</h1>
+<h1 class="tori-page-title"><%= LOCALE.views.admin.listBoard.boards %> - <%= LOCALE.views.constants.managementPanel %></h1>
 <%- include('fragments/admin-welcome') %>
 
 <%- include('fragments/admin-tabs') %>
@@ -11,8 +11,8 @@
     <thead>
     <tr>
         <td>#</td>
-        <td>Slug</td>
-        <td>Name</td>
+        <td><%= LOCALE.views.admin.listBoard.slug %></td>
+        <td><%= LOCALE.views.admin.listBoard.name %></td>
         <td></td>
     </tr>
     </thead>
@@ -22,7 +22,7 @@
             <td><%= idx + 1 %></td>
             <td><a target="_blank" href="/<%= board.slug %>">/<%= board.slug %>/</a></td>
             <td><%= board.name %></td>
-            <td>[<a href="/admin/board/<%= board.id %>">Edit</a>]</td>
+            <td>[<a href="/admin/board/<%= board.id %>"><%= LOCALE.views.constants.edit %></a>]</td>
         </tr>
     <% }); %>
     </tbody>
@@ -44,7 +44,7 @@
             &raquo;
         <% } %>
     </span><br>
-    [<a href="/admin/board/new">New board</a>]<br>
+    [<a href="/admin/board/new"><%= LOCALE.views.admin.listBoard.newBoard %></a>]<br>
 </div>
 
 <%- include('fragments/admin-navbar') %>

@@ -1,14 +1,14 @@
 <div class="admin-options">
-    <a href="/admin">Home</a>
-    <a href="/admin/staff/me">My profile</a>
-    <% if (session.role === 'ADMINISTRATOR') { %><a href="/admin/global-settings">Global settings</a><% } %>
-    <% if (session.role === 'ADMINISTRATOR') { %><a href="/admin/staff">Staff</a><% } %>
-    <% if (session.role === 'ADMINISTRATOR') { %><a href="/admin/sql">SQL Console</a><% } %>
-    <% if (session.role === 'ADMINISTRATOR') { %><a href="/admin/spam">Spam list</a><% } %>
-    <% if (session.role === 'ADMINISTRATOR') { %><a href="/admin/filter">IP filter</a><% } %>
-    <% if (session.role === 'ADMINISTRATOR') { %><a href="/admin/file">Disk space usage</a><% } %>
-    <% if (session.role === 'ADMINISTRATOR') { %><a href="/admin/board">Boards</a><% } %>
-    <a href="/admin/comment">Comments</a>
-    <a href="/admin/ban">Bans</a>
+    <a href="/admin"><%= LOCALE.views.fragments.adminTabs.home %></a>
+    <a href="/admin/staff/me"><%= LOCALE.views.fragments.adminTabs.myProfile %></a>
+    <% if (session.role === 'ADMINISTRATOR') { %><a href="/admin/global-settings"><%= LOCALE.views.fragments.adminTabs.globalSettings %></a><% } %>
+    <% if (session.role === 'ADMINISTRATOR') { %><a href="/admin/staff"><%= LOCALE.views.fragments.adminTabs.staff %></a><% } %>
+    <% if (session.role === 'ADMINISTRATOR') { %><a href="/admin/sql"><%= LOCALE.views.fragments.adminTabs.sqlConsole %></a><% } %>
+    <% if (session.role === 'ADMINISTRATOR') { %><a href="/admin/spam"><%= LOCALE.views.fragments.adminTabs.spamList %></a><% } %>
+    <% if (session.role === 'ADMINISTRATOR') { %><a href="/admin/filter"><%= LOCALE.views.fragments.adminTabs.ipFilter %></a><% } %>
+    <% if (session.role === 'ADMINISTRATOR') { %><a href="/admin/file"><%= LOCALE.views.fragments.adminTabs.diskSpaceUsage %></a><% } %>
+    <% if (session.role === 'ADMINISTRATOR') { %><a href="/admin/board"><%= LOCALE.views.fragments.adminTabs.boards %></a><% } %>
+    <a href="/admin/comment"><%= LOCALE.views.fragments.adminTabs.comments %></a>
+    <a href="/admin/ban"><%= LOCALE.views.fragments.adminTabs.bans %></a>
 </div>
 <hr>

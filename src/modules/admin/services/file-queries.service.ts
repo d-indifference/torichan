@@ -6,6 +6,7 @@ import { FileDto } from '@admin/dto';
 import { imageMimeList } from '@utils/misc';
 import sizeOf from 'image-size';
 import * as mime from 'mime-types';
+import { LOCALE } from '@utils/locale';
 
 type ReadDirectoryResultType = {
   files: string[];
@@ -66,7 +67,7 @@ export class FileQueriesService {
     const files = allFiles.slice(currentPage * 10, 10);
 
     if (currentPage > 0 && files.length === 0) {
-      throw new NotFoundException(`Page ${currentPage} was not found.`);
+      throw new NotFoundException(LOCALE.admin['pageWasNotFound'](currentPage));
     }
 
     return { currentPage, maxPage, files };
@@ -80,7 +81,7 @@ export class FileQueriesService {
     const mimeType = mime.lookup(fullSrcPath);
 
     if (!mimeType) {
-      throw new NotFoundException(`File: ${fullSrcPath} was not found`);
+      throw new NotFoundException(LOCALE.admin['fileWasNotFound'](fullSrcPath));
     }
 
     const dto: FileDto = {
@@ -104,7 +105,7 @@ export class FileQueriesService {
     const exists = await this.fileSystem.isPathExists(pathToDir);
 
     if (!exists) {
-      const message = `Directory not exist on disk: ${pathToDir}.`;
+      const message = LOCALE.admin['directoryNotExists'](pathToDir);
       this.logger.warn(message);
       throw new NotFoundException(message);
     }

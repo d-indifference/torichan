@@ -1,8 +1,8 @@
-<%- include('components/head-admin', { paramPageTitle: 'Management Panel' }) %>
+<%- include('components/head-admin', { paramPageTitle: LOCALE.views.constants.managementPanel }) %>
 <body>
     <%- include('fragments/admin-navbar') %>
 
-    <h1 class="tori-page-title">Management panel</h1>
+    <h1 class="tori-page-title"><%= LOCALE.views.constants.managementPanel %></h1>
     <%- include('fragments/admin-welcome') %>
 
     <%- include('fragments/admin-tabs') %>
@@ -11,56 +11,53 @@
         <table style="margin: 0 auto">
             <tr>
                 <td>
-                    <p>Currently, there are <strong><%= technicalInfo.totalComments %></strong> posts on <strong><%= technicalInfo.totalBoards %></strong> boards</p>
+                    <p><%- LOCALE.views.admin.home.currently(technicalInfo.totalComments, technicalInfo.totalBoards) %></p>
 
                     <% if (session.role === 'ADMINISTRATOR') { %>
 
-                        <p><a href='/admin/file'>Disk space used</a> is <strong><%= technicalInfo.diskSpaceUsed %></strong></p>
+                        <p><%- LOCALE.views.admin.home.diskSpaceUsed(technicalInfo.diskSpaceUsed) %></p>
 
-                        <h3>Technical Info</h3>
+                        <h3><%- LOCALE.views.admin.home.technicalInfo %></h3>
                         <ul>
-                            <li>Uptime (seconds) - <b><%= technicalInfo.uptime %></b></li>
+                            <li><%- LOCALE.views.admin.home.uptime %> - <b><%= technicalInfo.uptime %></b></li>
                         </ul>
 
-                        <h5>CPU details (<%= technicalInfo.cpus.length %>) [<a href="#" id="cpu_toggle">Show</a>]</h5>
+                        <h5><%- LOCALE.views.admin.home.cpuDetails %> (<%= technicalInfo.cpus.length %>) [<a href="#" id="cpu_toggle"><%- LOCALE.views.admin.home.show %></a>]</h5>
                         <div id="cpu_section" style="display: none">
                             <hr>
                             <% technicalInfo.cpus.forEach((cpu, idx) => { %>
                                 <b>CPU #<%= idx + 1 %>:</b>
                                 <ul>
-                                    <li>model - <b><%= cpu.model %></b></li>
-                                    <li>speed - <b><%= cpu.speed %></b></li>
-                                    <li>user usage time (microseconds) - <b><%= cpu.times.user %></b></li>
-                                    <li>system usage time (microseconds) - <b><%= cpu.times.sys %></b></li>
-                                    <li>nice mode time (microseconds) - <b><%= cpu.times.nice %></b></li>
-                                    <li>idle mode time (microseconds) - <b><%= cpu.times.idle %></b></li>
-                                    <li>irq mode time (microseconds) - <b><%= cpu.times.irq %></b></li>
+                                    <li><%- LOCALE.views.admin.home.model %> - <b><%= cpu.model %></b></li>
+                                    <li><%- LOCALE.views.admin.home.speed %> - <b><%= cpu.speed %></b></li>
+                                    <li><%- LOCALE.views.admin.home.userTime %> - <b><%= cpu.times.user %></b></li>
+                                    <li><%- LOCALE.views.admin.home.systemTime %> - <b><%= cpu.times.sys %></b></li>
+                                    <li><%- LOCALE.views.admin.home.niceTime %> - <b><%= cpu.times.nice %></b></li>
+                                    <li><%- LOCALE.views.admin.home.idleTime %> - <b><%= cpu.times.idle %></b></li>
+                                    <li><%- LOCALE.views.admin.home.irqTime %> - <b><%= cpu.times.irq %></b></li>
                                 </ul>
                             <% }); %>
                             <hr>
                         </div>
 
-                        <p>Memory usage:</p>
+                        <p><%- LOCALE.views.admin.home.memoryUsage %></p>
                         <ul>
-                            <li>Total - <b><%= technicalInfo.memory.total %></b></li>
-                            <li>Free - <b><%= technicalInfo.memory.inUsage  %></b></li>
-                            <li>In use - <b><%= technicalInfo.memory.free %></b></li>
+                            <li><%- LOCALE.views.admin.home.total %> - <b><%= technicalInfo.memory.total %></b></li>
+                            <li><%- LOCALE.views.admin.home.free %> - <b><%= technicalInfo.memory.inUsage  %></b></li>
+                            <li><%- LOCALE.views.admin.home.inUse %> - <b><%= technicalInfo.memory.free %></b></li>
                         </ul>
 
-                        <p>Debug port: <b><%= technicalInfo.debugPort %></b> (see <a
-                                    href='https://nodejs.org/en/docs/guides/debugging-getting-started'
-                                    target='_blank'
-                            >Node.js Debugging Guide</a>)</p>
-                        <p>App port: <b><%= technicalInfo.port %></b></p>
+                        <p><%- LOCALE.views.admin.home.debugPort %> <b><%= technicalInfo.debugPort %></b> (<%- LOCALE.views.admin.home.nodeJsDebugGuide %>)</p>
+                        <p><%- LOCALE.views.admin.home.appPort %> <b><%= technicalInfo.port %></b></p>
 
-                        <p><abbr title='Docker container ID'>Host name</abbr>: <b><%= technicalInfo.host %></b></p>
+                        <p><abbr title='<%- LOCALE.views.admin.home.dockerContainerId %>'><%- LOCALE.views.admin.home.hostName %></abbr>: <b><%= technicalInfo.host %></b></p>
 
                         <h3>Node.js</h3>
                         <p>
-                            <a href='https://nodejs.org/' target='_blank'>Node.js</a> version - <b>v<%= technicalInfo.processVersions.node %></b>
+                            <a href='https://nodejs.org/' target='_blank'>Node.js</a> <%- LOCALE.views.admin.home.version %> - <b>v<%= technicalInfo.processVersions.node %></b>
                         </p>
 
-                        <h5>Node details</h5>
+                        <h5><%- LOCALE.views.admin.home.nodeDetails %></h5>
                         <ol>
                             <% Object.keys(technicalInfo.processVersions).forEach(proc => { %>
                                 <li><%= proc %>: <b><%= technicalInfo.processVersions[proc] %></b></li>
@@ -68,9 +65,9 @@
                         </ol>
 
                         <h3>PostgreSQL</h3>
-                        <p><a href='https://www.postgresql.org/' target='_blank'>PostgreSQL</a> version: <b><%= technicalInfo.postgresVersion %></b></p>
+                        <p><a href='https://www.postgresql.org/' target='_blank'>PostgreSQL</a> <%- LOCALE.views.admin.home.version %>: <b><%= technicalInfo.postgresVersion %></b></p>
 
-                        <h3>Dependencies</h3>
+                        <h3><%- LOCALE.views.admin.home.dependencies %></h3>
 
                         <ul>
                             <% Object.keys(technicalInfo.dependencies).forEach(dependency => { %>
@@ -80,7 +77,7 @@
                             <% }); %>
                         </ul>
 
-                        <h3>Dev Dependencies</h3>
+                        <h3><%- LOCALE.views.admin.home.devDependencies %></h3>
 
                         <ul>
                             <% Object.keys(technicalInfo.devDependencies).forEach(dependency => { %>

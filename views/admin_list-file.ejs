@@ -1,8 +1,8 @@
-<%- include('components/head-admin', { paramPageTitle: 'Disk space usage' }) %>
+<%- include('components/head-admin', { paramPageTitle: LOCALE.views.admin.listFile.diskSpaceUsage }) %>
 <body>
     <%- include('fragments/admin-navbar') %>
 
-    <h1 class="tori-page-title">Disk space usage - Management panel</h1>
+    <h1 class="tori-page-title"><%= LOCALE.views.admin.listFile.diskSpaceUsage %> - <%= LOCALE.views.constants.managementPanel %></h1>
     <%- include('fragments/admin-welcome') %>
 
     <%- include('fragments/admin-tabs') %>
@@ -21,19 +21,19 @@
                 <% } %>
             <% }) %>
         </select>
-        <button type="submit">Select</button>
+        <button type="submit"><%= LOCALE.views.admin.listFile.select %></button>
     </form>
 
     <table border="1" class="table-list">
         <thead>
         <tr>
             <td>#</td>
-            <td>File</td>
-            <td>MIME</td>
-            <td>Size</td>
-            <td>Created at</td>
-            <td>Dimensions</td>
-            <td>Go to</td>
+            <td><%= LOCALE.views.admin.listFile.file %></td>
+            <td><%= LOCALE.views.admin.listFile.mime %></td>
+            <td><%= LOCALE.views.admin.listFile.size %></td>
+            <td><%= LOCALE.views.admin.listFile.createdAt %></td>
+            <td><%= LOCALE.views.admin.listFile.dimensions %></td>
+            <td><%= LOCALE.views.admin.listFile.goto %></td>
             <td></td>
         </tr>
         </thead>
@@ -46,7 +46,7 @@
                         <% if (file.thumbnail) { %>
                             <img src="/files/<%= file.thumbnail %>" alt="<%= file.filename %>">
                         <% } else { %>
-                            Go to source
+                            <%= LOCALE.views.admin.listFile.goToSource %>
                         <% } %>
                     </a>
                 </td>
@@ -55,9 +55,9 @@
                 <td><%= file.createdAt %></td>
                 <td><% if (file.width && file.height) { %><%= file.width %>x<%= file.height %><% } else { %>——<% } %></td>
                 <td>
-                    [<a target="_blank" href="/files/<%= file.filename %>">Source</a>]<br>
+                    [<a target="_blank" href="/files/<%= file.filename %>"><%= LOCALE.views.admin.listFile.source %></a>]<br>
                     <% if (file.thumbnail) { %>
-                        [<a target="_blank" href="/files/<%= file.thumbnail %>">Thumbnail</a>]
+                        [<a target="_blank" href="/files/<%= file.thumbnail %>"><%= LOCALE.views.admin.listFile.thumbnail %></a>]
                     <% } %>
                 </td>
                 <td>
@@ -69,7 +69,7 @@
                         <% } %>
 
                         <input type="hidden" name="redirectTo" value="/admin/file?slug=<%= currentBoard.slug %>">
-                        <button type="submit">Remove</button>
+                        <button type="submit"><%= LOCALE.views.admin.listFile.remove %></button>
                     </form>
                 </td>
             </tr>

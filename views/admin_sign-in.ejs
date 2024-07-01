@@ -1,24 +1,24 @@
-<%- include('components/head-admin', { paramPageTitle: 'Management Panel' }) %>
+<%- include('components/head-admin', { paramPageTitle: LOCALE.views.constants.managementPanel }) %>
 <body>
 
-    <h1 class="tori-page-title">Management panel</h1>
+    <h1 class="tori-page-title"><%= LOCALE.views.constants.managementPanel %></h1>
 
     <fieldset class="admin-form">
-        <legend>Sign in to management panel</legend>
-        [<a href="/main" style="text-align: center">Go back</a>]
+        <legend><%= LOCALE.views.admin.signIn.signInToManagementPanel %></legend>
+        [<a href="/main" style="text-align: center"><%= LOCALE.views.constants.goBack %></a>]
         <form action="/admin/sign-in" method="post">
             <table class="tori-post-form" width="1%">
                 <tr>
-                    <td>Username</td>
+                    <td><%= LOCALE.views.admin.signIn.username %></td>
                     <td><input name="username" type="text" tabindex="1" size="32"></td>
                 </tr>
                 <tr>
-                    <td>Password</td>
+                    <td><%= LOCALE.views.admin.signIn.password %></td>
                     <td><input name="password" type="password" tabindex="1" size="32"></td>
                 </tr>
             </table>
 
-            <input type="submit" value="Sign in" tabindex="1" size="32">
+            <input type="submit" value="<%= LOCALE.views.admin.signIn.signIn %>" tabindex="1" size="32">
         </form>
     </fieldset>
 

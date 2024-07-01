@@ -5,6 +5,7 @@ import { Response } from 'express';
 import { CommentRemoveDto } from '@frontend/dto';
 import { Prisma } from '@prisma/client';
 import { SessionDto } from '@admin/dto';
+import { LOCALE } from '@utils/locale';
 
 @Injectable()
 export class CommentService {
@@ -79,7 +80,7 @@ export class CommentService {
 
   private validateSession(dto: CommentCreateDto, session: SessionDto): void {
     if (dto.isAdmin === 'on' && !session.payload) {
-      throw new BadRequestException('You cannot write comments as admin without signing in.');
+      throw new BadRequestException(LOCALE.frontend['youCannotWriteCommentWithoutSignIn']);
     }
   }
 

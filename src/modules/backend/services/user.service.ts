@@ -4,6 +4,7 @@ import { UserCreateDto, UserDto, UserUpdateDto } from '@backend/dto/user';
 import { Prisma, User } from '@prisma/client';
 import { PrismaTakeSkipDto } from '@utils/misc';
 import { ConfigService } from '@nestjs/config';
+import { LOCALE } from '@utils/locale';
 
 @Injectable()
 export class UserService {
@@ -33,7 +34,7 @@ export class UserService {
     const user = await this.prisma.user.findUnique({ where: { id } });
 
     if (!user) {
-      const message = `User with id ${id} not found`;
+      const message = LOCALE.backend['userWasNotFound'](id);
       this.logger.warn(message);
       throw new NotFoundException(message);
     }
@@ -93,11 +94,11 @@ export class UserService {
     const { userByEmail, userByUsername } = await this.findUsersForUniquenessCheck(dto.email, dto.username);
 
     if (userByEmail) {
-      this.processBadRequest(`User with email: ${dto.email} already exists`);
+      this.processBadRequest(LOCALE.backend['userWithEmailExists'](dto.email));
     }
 
     if (userByUsername) {
-      this.processBadRequest(`User with email: ${dto.email} already exists`);
+      this.processBadRequest(LOCALE.backend['userWithUsernameExists'](dto.username));
     }
   }
 
@@ -106,13 +107,13 @@ export class UserService {
 
     if (userByEmail) {
       if (userByEmail.id !== id) {
-        this.processBadRequest(`User with email: ${dto.email} already exists`);
+        this.processBadRequest(LOCALE.backend['userWithEmailExists'](dto.email));
       }
     }
 
     if (userByUsername) {
       if (userByUsername.id !== id) {
-        this.processBadRequest(`User with username: ${dto.username} already exists`);
+        this.processBadRequest(LOCALE.backend['userWithUsernameExists'](dto.username));
       }
     }
   }

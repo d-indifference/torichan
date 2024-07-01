@@ -1,10 +1,10 @@
 <fieldset class="admin-form">
     <legend><%= args.formDescription %></legend>
-    [<a href="<%= args.formBackAddress %>">Go back</a>]
+    [<a href="<%= args.formBackAddress %>"><%- LOCALE.views.constants.goBack %></a>]
     <form action="<%= args.formHandler %>" method="post">
         <table class="tori-post-form" width="1%">
             <tr>
-                <td>Username</td>
+                <td><%= LOCALE.views.components.userForm.username %></td>
                 <td>
                     <input
                         name="username"
@@ -17,7 +17,7 @@
                 </td>
             </tr>
             <tr>
-                <td>Email</td>
+                <td><%= LOCALE.views.components.userForm.email %></td>
                 <td>
                     <input
                         name="email"
@@ -30,17 +30,17 @@
                 </td>
             </tr>
             <tr>
-                <td>Role</td>
+                <td><%= LOCALE.views.components.userForm.role %></td>
                 <td>
                     <% if (args.formMode === 'CREATE') { %>
                         <select name="role" tabindex="1" required>
-                            <option value="MODERATOR" selected>Moderator</option>
-                            <option value="ADMINISTRATOR">Administrator</option>
+                            <option value="MODERATOR" selected><%= LOCALE.views.components.userForm.moderator %></option>
+                            <option value="ADMINISTRATOR"><%= LOCALE.views.components.userForm.administrator %></option>
                         </select>
                     <% } else if (args.formData.id !== session.id) { %>
                         <select name="role" tabindex="1" required>
-                            <option value="MODERATOR" <% if (args.formData.role === 'MODERATOR') { %>selected<% } %>>Moderator</option>
-                            <option value="ADMINISTRATOR" <% if (args.formData.role === 'ADMINISTRATOR') { %>selected<% } %>>Administrator</option>
+                            <option value="MODERATOR" <% if (args.formData.role === 'MODERATOR') { %>selected<% } %>><%= LOCALE.views.components.userForm.moderator %></option>
+                            <option value="ADMINISTRATOR" <% if (args.formData.role === 'ADMINISTRATOR') { %>selected<% } %>><%= LOCALE.views.components.userForm.administrator %></option>
                         </select>
                     <% } else { %>
                         <b><%= args.formData.role %></b>
@@ -50,10 +50,10 @@
 
             <% if (args.formMode !== 'UPDATE') { %>
                 <tr>
-                    <td>Password</td>
+                    <td><%= LOCALE.views.components.userForm.password %></td>
                     <td>
                         <input name="password" type="password" tabindex="1" size="32">
-                        <% if (args.formMode !== 'CREATE') { %><span>Leave it empty if you don't want to change it.</span><% } %>
+                        <% if (args.formMode !== 'CREATE') { %><span><%= LOCALE.views.components.userForm.leaveItEmpty %></span><% } %>
                     </td>
                 </tr>
             <% } %>

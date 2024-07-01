@@ -1,6 +1,7 @@
 import { UserDto } from '@backend/dto/user';
 import { Ban } from '@prisma/client';
 import { DateTime } from 'luxon';
+import { LOCALE } from '@utils/locale';
 
 export class BanDto {
   id: string;
@@ -19,8 +20,8 @@ export class BanDto {
     return {
       id: model.id,
       ip: model.ip,
-      createdAt: DateTime.fromJSDate(model.createdAt).toFormat('EEE dd MMM yyyy HH:mm:ss'),
-      till: DateTime.fromJSDate(model.till).toFormat('EEE dd MMM yyyy HH:mm:ss'),
+      createdAt: DateTime.fromJSDate(model.createdAt).toFormat('EEE dd MMM yyyy HH:mm:ss', { locale: LOCALE.luxon as string }),
+      till: DateTime.fromJSDate(model.till).toFormat('EEE dd MMM yyyy HH:mm:ss', { locale: LOCALE.luxon as string }),
       reason: model.reason,
       user: {
         id: model['user'].id,

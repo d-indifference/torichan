@@ -117,6 +117,11 @@ export class BoardCreateDto {
   @MaxLength(2, LOCALE.validators['maxLength']('enableCaptcha', 2))
   enableCaptcha: 'on' | undefined;
 
+  @IsString(LOCALE.validators['isString']('isCaptchaCaseSensitive'))
+  @IsOptional()
+  @MaxLength(2, LOCALE.validators['maxLength']('isCaptchaCaseSensitive', 2))
+  isCaptchaCaseSensitive: 'on' | undefined;
+
   @IsString(LOCALE.validators['isString']('rules'))
   @IsOptional()
   @MaxLength(2048, LOCALE.validators['maxLength']('defaultModeratorName', 2048))
@@ -148,6 +153,7 @@ export class BoardCreateDto {
           defaultPosterName: this.defaultPosterName,
           defaultModeratorName: this.defaultModeratorName,
           enableCaptcha: normalizeBoolean(this.enableCaptcha),
+          isCaptchaCaseSensitive: normalizeBoolean(this.isCaptchaCaseSensitive),
           rules: this.rules
         }
       }
@@ -178,6 +184,7 @@ export class BoardCreateDto {
       defaultPosterName: ${this.defaultPosterName},
       defaultModeratorName: ${this.defaultModeratorName},
       enableCaptcha: ${this.enableCaptcha},
+      isCaptchaCaseSensitive: ${this.isCaptchaCaseSensitive},
       rules: ${this.rules}
     }`;
   }

@@ -180,6 +180,7 @@ export const LOCALE: Record<string, unknown> = {
         defaultPosterName: localeStrings.views['admin']['editBoard']['defaultPosterName'],
         defaultModeratorName: localeStrings.views['admin']['editBoard']['defaultModeratorName'],
         enableCaptcha: localeStrings.views['admin']['editBoard']['enableCaptcha'],
+        isCaptchaCaseSensitive: localeStrings.views['admin']['editBoard']['isCaptchaCaseSensitive'],
         rules: localeStrings.views['admin']['editBoard']['rules'],
         saveChanges: localeStrings.views['admin']['editBoard']['saveChanges'],
         dangerZoneExplanation: (boardName: string) => format(localeStrings.views['admin']['editBoard']['dangerZoneExplanation'], boardName),
@@ -296,11 +297,11 @@ export const LOCALE: Record<string, unknown> = {
         signIn: localeStrings.views['admin']['signIn']['signIn']
       },
       signUp: {
-        signUpToManagementPanel: localeStrings.views['admin']['signUp']['signInToManagementPanel'],
-        username: localeStrings.views['admin']['signUp']['signInToManagementPanel'],
-        email: localeStrings.views['admin']['signUp']['signInToManagementPanel'],
-        password: localeStrings.views['admin']['signUp']['signInToManagementPanel'],
-        signUp: localeStrings.views['admin']['signUp']['signInToManagementPanel']
+        signUpToManagementPanel: localeStrings.views['admin']['signUp']['signUpToManagementPanel'],
+        username: localeStrings.views['admin']['signUp']['username'],
+        email: localeStrings.views['admin']['signUp']['email'],
+        password: localeStrings.views['admin']['signUp']['password'],
+        signUp: localeStrings.views['admin']['signUp']['signUp']
       },
       spam: {
         spamList: localeStrings.views['admin']['spam']['spamList'],

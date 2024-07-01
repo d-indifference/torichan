@@ -8,7 +8,7 @@ export class SignUpDto {
   @MaxLength(255, LOCALE.validators['maxLength']('username', 255))
   username: string;
 
-  @IsEmail(null, LOCALE.validators['isEmail']('email'))
+  @IsEmail({ allow_display_name: false }, LOCALE.validators['isEmail']('email'))
   @IsNotEmpty(LOCALE.validators['isNotEmpty']('email'))
   email: string;
 

@@ -175,6 +175,7 @@ export const localeStrings: Record<string, unknown> = {
         defaultPosterName: 'Default poster name',
         defaultModeratorName: 'Default moderator name',
         enableCaptcha: 'Enable captcha',
+        isCaptchaCaseSensitive: 'Case sensitive captcha',
         rules: 'Rules',
         saveChanges: 'Save changes',
         dangerZoneExplanation: `Deleting the board "%s" once will mean that you will never be able to restore this record.<br>

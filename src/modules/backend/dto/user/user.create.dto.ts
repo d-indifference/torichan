@@ -11,7 +11,7 @@ export class UserCreateDto {
   username: string;
 
   @IsString(LOCALE.validators['isString']('email'))
-  @IsEmail(null, LOCALE.validators['isEmail']('email'))
+  @IsEmail({ allow_display_name: false }, LOCALE.validators['isEmail']('email'))
   @IsNotEmpty(LOCALE.validators['isNotEmpty']('email'))
   email: string;
 

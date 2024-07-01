@@ -201,9 +201,20 @@
                     </td>
                 </tr>
                 <tr>
+                    <td><%= LOCALE.views.admin.editBoard.isCaptchaCaseSensitive %></td>
+                    <td>
+                        <input
+                                name="isCaptchaCaseSensitive"
+                                type="checkbox"
+                                tabindex="1"
+                                <% if (args.formMode !== 'CREATE' && args.formData.isCaptchaCaseSensitive) { %>checked<% } %>
+                        >
+                    </td>
+                </tr>
+                <tr>
                     <td><%= LOCALE.views.admin.editBoard.rules %></td>
                     <td>
-                        <textarea name="rules" cols="33" rows="11" required><% if (args.formMode !== 'CREATE') { %><%= args.formData.rules %><% } %></textarea>
+                        <textarea name="rules" cols="33" rows="11" required><% if (args.formMode !== 'CREATE') { %><%= args.formData.rules %><% } else {%><ul class="rules"></ul><% } %></textarea>
                     </td>
                 </tr>
             </table>

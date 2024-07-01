@@ -17,13 +17,17 @@ export class CaptchaService {
     return new CaptchaDto(captcha.data, crypto.encrypt(captcha.text));
   }
 
-  public solveCaptcha(input: string, answer: string): void {
+  public solveCaptcha(input: string, answer: string, isCaseSensitive: boolean): void {
     const captchaCryptoKey = this.config.getOrThrow('secure.secret.captcha');
     const crypto = new CryptoUtils(captchaCryptoKey);
 
     const decryptedAnswer = crypto.decrypt(answer);
 
-    if (input !== decryptedAnswer) {
+    if (!isCaseSensitive) {
+      if (input.toLowerCase() !== decryptedAnswer.toLowerCase()) {
+        throw new ForbiddenException(LOCALE.utils['captchaIsInvalid']);
+      }
+    } else if (input !== decryptedAnswer) {
       throw new ForbiddenException(LOCALE.utils['captchaIsInvalid']);
     }
   }

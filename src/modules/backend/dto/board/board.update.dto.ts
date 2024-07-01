@@ -134,6 +134,11 @@ export class BoardUpdateDto {
   enableCaptcha: 'on' | undefined;
 
   @IsOptional()
+  @IsString(LOCALE.validators['isString']('isCaptchaCaseSensitive'))
+  @MaxLength(2, LOCALE.validators['maxLength']('isCaptchaCaseSensitive', 2))
+  isCaptchaCaseSensitive: 'on' | undefined;
+
+  @IsOptional()
   @IsString(LOCALE.validators['isString']('rules'))
   @MaxLength(2048, LOCALE.validators['maxLength']('defaultModeratorName', 2048))
   rules?: string;
@@ -166,6 +171,7 @@ export class BoardUpdateDto {
     this.setFieldToInputTemplate(inputBoardSettings, 'defaultModeratorName');
     this.setFieldToInputTemplate(inputBoardSettings, 'rules');
     this.setBooleanFieldToInputTemplate(inputBoardSettings, 'enableCaptcha');
+    this.setBooleanFieldToInputTemplate(inputBoardSettings, 'isCaptchaCaseSensitive');
 
     const prismaInputBoardSettings: Prisma.BoardSettingsUpdateInput = inputBoardSettings as Prisma.BoardSettingsUpdateInput;
     const prismaInputBoard: Prisma.BoardUpdateInput = inputBoard as Prisma.BoardUpdateInput;
@@ -201,6 +207,7 @@ export class BoardUpdateDto {
     dto.defaultPosterName = boardSettings.defaultPosterName;
     dto.defaultModeratorName = boardSettings.defaultModeratorName;
     dto.enableCaptcha = boardSettings.enableCaptcha ? 'on' : null;
+    dto.isCaptchaCaseSensitive = boardSettings.isCaptchaCaseSensitive ? 'on' : null;
     dto.rules = boardSettings.rules;
 
     return dto;
@@ -229,7 +236,8 @@ export class BoardUpdateDto {
       maxThreadLivingTime: ${this.maxThreadLivingTime},
       defaultPosterName: ${this.defaultPosterName},
       defaultModeratorName: ${this.defaultModeratorName},
-      enableCaptcha: ${this.enableCaptcha}
+      enableCaptcha: ${this.enableCaptcha},
+      isCaptchaCaseSensitive: ${this.isCaptchaCaseSensitive},
       rules: ${this.rules}
     }`;
   }

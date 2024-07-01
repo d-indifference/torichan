@@ -37,6 +37,7 @@ CREATE TABLE "BoardSettings" (
     "defaultPosterName" VARCHAR(256) NOT NULL DEFAULT 'Anonymous',
     "defaultModeratorName" VARCHAR(256) NOT NULL DEFAULT 'Moderator',
     "enableCaptcha" BOOLEAN NOT NULL DEFAULT false,
+    "isCaptchaCaseSensitive" BOOLEAN NOT NULL DEFAULT false,
     "rules" TEXT NOT NULL,
 
     CONSTRAINT "BoardSettings_pkey" PRIMARY KEY ("id")

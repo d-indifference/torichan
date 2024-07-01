@@ -188,7 +188,7 @@ export class CommentService {
 
   private applyCaptchaPolicy(dto: CommentCreateDto, isAdmin: boolean, settings: BoardSettings): void {
     if (!isAdmin && settings.enableCaptcha) {
-      this.captchaService.solveCaptcha(dto.captcha, dto.nya);
+      this.captchaService.solveCaptcha(dto.captcha, dto.nya, settings.isCaptchaCaseSensitive);
     }
   }
 

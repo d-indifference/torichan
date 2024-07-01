@@ -79,6 +79,20 @@ If you want to install the application without using Docker, you will need to pe
 7. Then go to [localhost:3000](http://localhost:3000/). And enjoy using the application!
 8. Now you can go to [localhost:3000/admin/sign-up](http://localhost:3000/admin/sign-up) and create your first admin profile.
 
+## Localization
+
+### How I can translate the site to my language?
+
+You now have an easier way to create your own localization for the Torichan engine.
+
+An example file with all the localizable strings can be found at: `torichan/src/utils/locale/locale-en.ts`
+
+You can create another file with your own strings in your language based on the file `strings-en.ts` and connect it by importing it in the file `torichan/src/utils/locale/locale.ts`
+
+Alternatively, you can simply rewrite the existing strings in the `locale-en.ts` file in the language you want to translate the site into.
+
+If desired, you can submit pull requests with your completed localizations.
+
 ## License
 <a href="https://github.com/d-indifference/torichan/blob/master/LICENSE">GPLV2 License</a>
 

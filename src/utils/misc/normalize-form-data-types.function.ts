@@ -1,4 +1,5 @@
 import { BadRequestException } from '@nestjs/common';
+import { LOCALE } from '@utils/locale';
 
 export const normalizeBoolean = (source: 'on' | undefined): boolean => source === 'on';
 
@@ -6,7 +7,7 @@ export const normalizeInteger = (source: string, options?: { min: number; max: n
   const int = parseInt(source);
 
   if (isNaN(int)) {
-    throw new BadRequestException(`Number: ${source} must be an integer`);
+    throw new BadRequestException(LOCALE.utils['numberMustBeAnInteger']);
   }
 
   const wholeInt = Math.floor(int);

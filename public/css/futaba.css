@@ -126,3 +126,8 @@ a.menu-link:hover {
   background-color: #f0e0d6;
   text-decoration: none !important;
 }
+
+div.post.highlight {
+  background-color: #f0e0d6;
+  border: 2px dashed #eeaa88 !important;
+}

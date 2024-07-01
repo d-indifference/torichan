@@ -6,6 +6,7 @@ import { Prisma } from '@prisma/client';
 import { PrismaTakeSkipDto } from '@utils/misc';
 import { CommentListPage } from '@admin/pages';
 import { PaginationResolveService } from '@utils/services';
+import { LOCALE } from '@utils/locale';
 
 @Injectable()
 export class CommentService {
@@ -44,7 +45,7 @@ export class CommentService {
     } else if (dto.mode === RemoveCommentMode.ALL_BY_IP) {
       await this.removeAllByIp(dto);
     } else {
-      throw new BadRequestException(`Unknown deletion option: ${dto.mode}`);
+      throw new BadRequestException(LOCALE.admin['unknownDeletionOption'](dto.mode));
     }
 
     res.redirect(dto.redirectAfterDeletion);

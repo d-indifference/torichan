@@ -1,15 +1,5 @@
-import {
-  IsEnum,
-  IsInt,
-  IsIP,
-  IsNotEmpty,
-  IsNumber,
-  IsNumberString,
-  IsOptional,
-  IsString,
-  MaxLength,
-  MinLength
-} from 'class-validator';
+import { IsEnum, IsIP, IsNotEmpty, IsNumberString, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import { LOCALE } from '@utils/locale';
 
 export enum BanDurationType {
   MINUTES = 'MINUTES',
@@ -20,21 +10,21 @@ export enum BanDurationType {
 }
 
 export class BanCreateDto {
-  @IsIP()
-  @IsNotEmpty()
+  @IsIP('4', LOCALE.validators['isIp']('ip'))
+  @IsNotEmpty(LOCALE.validators['isNotEmpty']('ip'))
   ip: string;
 
-  @IsNumberString()
-  @IsNotEmpty()
+  @IsNumberString(null, LOCALE.validators['isNumberString']('till'))
+  @IsNotEmpty(LOCALE.validators['isNotEmpty']('till'))
   till: string;
 
-  @IsEnum(BanDurationType)
-  @IsNotEmpty()
+  @IsEnum(BanDurationType, LOCALE.validators['isEnum']('durationType'))
+  @IsNotEmpty(LOCALE.validators['isNotEmpty']('till'))
   durationType: BanDurationType;
 
   @IsOptional()
-  @IsString()
-  @MinLength(0)
-  @MaxLength(512)
+  @IsString(LOCALE.validators['isString']('reason'))
+  @MinLength(0, LOCALE.validators['minLength']('reason', 0))
+  @MaxLength(512, LOCALE.validators['maxLength']('reason', 512))
   reason: string;
 }

@@ -7,6 +7,7 @@ import { UserEditPage, UserEditPageFormMode, UserListPage } from '@admin/pages';
 import { UserCreateDto, UserUpdateDto } from '@backend/dto/user';
 import { validateNotEmptyPage } from '@utils/misc';
 import { UserRole } from '@prisma/client';
+import { LOCALE } from '@utils/locale';
 
 @Injectable()
 export class UserService {
@@ -38,12 +39,12 @@ export class UserService {
     return {
       session,
       args: {
-        formDescription: 'Edit my profile',
+        formDescription: LOCALE.admin['editMyProfile'],
         formBackAddress: '/admin',
         formHandler: `/admin/staff/${session.id}`,
         formMode: UserEditPageFormMode.ME,
         formData: { ...user },
-        formSubmit: 'Edit profile'
+        formSubmit: LOCALE.admin['editProfile']
       }
     };
   }
@@ -52,12 +53,12 @@ export class UserService {
     return {
       session,
       args: {
-        formDescription: 'Create new staff member',
+        formDescription: LOCALE.admin['createNewStaffMember'],
         formBackAddress: '/admin/staff',
         formHandler: '/admin/staff/new',
         formMode: UserEditPageFormMode.CREATE,
         formData: null,
-        formSubmit: 'Save changes'
+        formSubmit: LOCALE.admin['saveChanges']
       }
     };
   }
@@ -68,12 +69,12 @@ export class UserService {
     return {
       session,
       args: {
-        formDescription: `Edit profile of user: ${user.username}`,
+        formDescription: LOCALE.admin['editProfileOfUser'](user.username),
         formBackAddress: '/admin/staff',
         formHandler: `/admin/staff/${id}`,
         formMode: UserEditPageFormMode.UPDATE,
         formData: { ...user },
-        formSubmit: 'Save changes'
+        formSubmit: LOCALE.admin['saveChanges']
       }
     };
   }
@@ -149,7 +150,7 @@ export class UserService {
   private async authorize(dto: SignInDto): Promise<SessionPayloadDto> {
     this.logger.log(`authorize ({dto: ${JSON.stringify(dto)})`);
 
-    const failedMessage: string = 'The username or password you entered is incorrect.';
+    const failedMessage: string = LOCALE.admin['incorrectCredentials'];
 
     const foundUser = await this.prisma.user.findFirst({ where: { username: dto.username } });
 
@@ -177,7 +178,7 @@ export class UserService {
       const adminsCount = await this.prisma.user.count({ where: { role: UserRole.ADMINISTRATOR } });
 
       if (adminsCount === 1) {
-        throw new BadRequestException('You cannot delete this user.');
+        throw new BadRequestException(LOCALE.admin['cannotDeleteUser']);
       }
     }
   }

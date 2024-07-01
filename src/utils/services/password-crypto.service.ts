@@ -6,7 +6,7 @@ import { CryptoUtils } from '@utils/misc';
 export class PasswordCryptoService {
   constructor(private readonly config: ConfigService) {}
 
-  public enrcypt(password: string): string {
+  public encrypt(password: string): string {
     const key = this.config.getOrThrow('secure.secret.password');
     const crypto = new CryptoUtils(key);
 

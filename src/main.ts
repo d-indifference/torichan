@@ -21,6 +21,7 @@ import { VolumeSettingsService } from '@utils/services';
 import { IpFilterGuard } from '@utils/guards';
 import { IpListFilesService } from '@admin/services/ip-list-files.service';
 import { GlobalSettingsService, IpFilterService } from '@admin/services';
+import { LOCALE } from '@utils/locale';
 
 const bootstrap = async (): Promise<void> => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -56,6 +57,7 @@ const bootstrap = async (): Promise<void> => {
   app.setLocal('templateConstants', templateConstants);
   app.setLocal('helperCollapseText', helperCollapseText);
   app.setLocal('parseTripcode', parseTripcode);
+  app.setLocal('LOCALE', LOCALE);
 
   await volumeSettingsService.create('spam-list');
   await ipListFilesService.create();

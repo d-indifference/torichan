@@ -2,15 +2,15 @@
 <body>
     <%- include('fragments/admin-navbar') %>
 
-    <h1 class="tori-page-title">SQL Console - Management panel</h1>
+    <h1 class="tori-page-title"><%= LOCALE.views.admin.sqlConsole.sqlConsole %> - <%= LOCALE.views.constants.managementPanel %></h1>
     <%- include('fragments/admin-welcome') %>
 
     <%- include('fragments/admin-tabs') %>
 
 
     <fieldset class="admin-form">
-        <legend>Run SQL (PostgreSQL) query</legend>
-        [<a href="/admin/sql">Clear</a>]
+        <legend><%= LOCALE.views.admin.sqlConsole.runSql %></legend>
+        [<a href="/admin/sql"><%= LOCALE.views.admin.sqlConsole.clear %></a>]
 
         <form action="/admin/sql" method="post">
             <table class="tori-post-form" width="1%">
@@ -18,8 +18,12 @@
                     <td>SQL</td>
                     <td><textarea name="query" tabindex="1" rows="15" cols="33"><% if (query) { %><%= query %><% } %></textarea></td>
                 </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="checkbox" name="runAsMutation"> <%= LOCALE.views.admin.sqlConsole.runMutation %></td>
+                </tr>
             </table>
-            <input type="submit" value="Run query (I know, what I am doing)" tabindex="1" size="32">
+            <input type="submit" value="<%= LOCALE.views.admin.sqlConsole.runQuery %>" tabindex="1" size="32">
         </form>
     </fieldset>
 
@@ -46,7 +50,7 @@
 
             <form action="/admin/sql/save" method="post" class="download-result">
                 <input type="hidden" name="query" value="<%= query %>">
-                <button type="submit">Save query result (JSON)</button>
+                <button type="submit"><%= LOCALE.views.admin.sqlConsole.saveQueryResult %></button>
             </form>
         <% } %>
     <% } %>

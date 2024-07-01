@@ -1,5 +1,6 @@
 import { ForbiddenException, Injectable, Logger } from '@nestjs/common';
 import { VolumeSettingsService } from '@utils/services';
+import { LOCALE } from '@utils/locale';
 
 @Injectable()
 export class SpamService {
@@ -13,7 +14,7 @@ export class SpamService {
     spamList.forEach(position => {
       if (str.search(`${position}`) !== -1) {
         this.logger.log(`Spam detected: ${str}`);
-        throw new ForbiddenException('Spam has been detected in your inputs.');
+        throw new ForbiddenException(LOCALE.backend['spamHasBeenDetected']);
       }
     });
   }

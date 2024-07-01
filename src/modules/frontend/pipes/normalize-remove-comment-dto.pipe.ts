@@ -1,5 +1,6 @@
 import { BadRequestException, PipeTransform } from '@nestjs/common';
 import { CommentRemoveDto, CommentRemoveNotNormalizedDto } from '@frontend/dto';
+import { LOCALE } from '@utils/locale';
 
 export class NormalizeRemoveCommentDtoPipe implements PipeTransform {
   transform(value: CommentRemoveNotNormalizedDto): CommentRemoveDto {
@@ -26,7 +27,7 @@ export class NormalizeRemoveCommentDtoPipe implements PipeTransform {
     const result = Number(val);
 
     if (isNaN(result)) {
-      throw new BadRequestException(`Value ${val} must be number`);
+      throw new BadRequestException(LOCALE.frontend['valueMustBeNumber'](val));
     } else {
       return result;
     }

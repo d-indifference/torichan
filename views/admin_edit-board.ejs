@@ -2,19 +2,19 @@
 <body>
     <%- include('fragments/admin-navbar') %>
 
-    <h1 class="tori-page-title"><%= args.formDescription %> - Management panel</h1>
+    <h1 class="tori-page-title"><%= args.formDescription %> - <%= LOCALE.views.constants.managementPanel %></h1>
     <%- include('fragments/admin-welcome') %>
 
     <%- include('fragments/admin-tabs') %>
 
     <fieldset class="admin-form">
         <legend><%= args.formDescription %></legend>
-        [<a href="/admin/board">Go back</a>]
+        [<a href="/admin/board"><%= LOCALE.views.constants.goBack %></a>]
 
         <form action="<%= args.formHandler %>" method="post">
             <table class="tori-post-form" width="1%">
                 <tr>
-                    <td>Slug</td>
+                    <td><%= LOCALE.views.admin.editBoard.slug %></td>
                     <td>
                         <input
                             name="slug"
@@ -27,7 +27,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Name</td>
+                    <td><%= LOCALE.views.admin.editBoard.name %></td>
                     <td>
                         <input
                             name="name"
@@ -40,7 +40,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Visible</td>
+                    <td><%= LOCALE.views.admin.editBoard.visible %></td>
                     <td>
                         <input
                             name="visible"
@@ -52,13 +52,13 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Description</td>
+                    <td><%= LOCALE.views.admin.editBoard.description %></td>
                     <td>
                         <textarea name="description" cols="33" rows="11" required><% if (args.formMode !== 'CREATE') { %><%= args.formData.description %><% } %></textarea>
                     </td>
                 </tr>
                 <tr>
-                    <td>Allow posting</td>
+                    <td><%= LOCALE.views.admin.editBoard.allowPosting %></td>
                     <td>
                         <input
                             name="allowPosting"
@@ -70,7 +70,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Strict anonymity</td>
+                    <td><%= LOCALE.views.admin.editBoard.strictAnonymity %></td>
                     <td>
                         <input
                             name="strictAnonymity"
@@ -81,51 +81,51 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Thread file attachment</td>
+                    <td><%= LOCALE.views.admin.editBoard.threadFileAttachmentMode %></td>
                     <td>
                         <select name="threadFileAttachmentMode" required>
-                            <option value="STRICT" <% if (args.formMode !== 'CREATE' && args.formData.threadFileAttachmentMode === 'STRICT') { %>selected<% } %>>Strict</option>
-                            <option value="OPTIONAL" <% if (args.formMode !== 'CREATE' && args.formData.threadFileAttachmentMode === 'OPTIONAL') { %>selected<% } %><% if (args.formMode === 'CREATE') { %>selected<% } %>>Optional</option>
-                            <option value="FORBIDDEN" <% if (args.formMode !== 'CREATE' && args.formData.threadFileAttachmentMode === 'FORBIDDEN') { %>selected<% } %>>Forbidden</option>
+                            <option value="STRICT" <% if (args.formMode !== 'CREATE' && args.formData.threadFileAttachmentMode === 'STRICT') { %>selected<% } %>><%= LOCALE.views.admin.editBoard.strict %></option>
+                            <option value="OPTIONAL" <% if (args.formMode !== 'CREATE' && args.formData.threadFileAttachmentMode === 'OPTIONAL') { %>selected<% } %><% if (args.formMode === 'CREATE') { %>selected<% } %>><%= LOCALE.views.admin.editBoard.optional %></option>
+                            <option value="FORBIDDEN" <% if (args.formMode !== 'CREATE' && args.formData.threadFileAttachmentMode === 'FORBIDDEN') { %>selected<% } %>><%= LOCALE.views.admin.editBoard.forbidden %></option>
                         </select>
                     </td>
                 </tr>
                 <tr>
-                    <td>Reply file attachment</td>
+                    <td><%= LOCALE.views.admin.editBoard.replyFileAttachmentMode %></td>
                     <td>
                         <select name="replyFileAttachmentMode" required>
-                            <option value="STRICT" <% if (args.formMode !== 'CREATE' && args.formData.replyFileAttachmentMode === 'STRICT') { %>selected<% } %>>Strict</option>
-                            <option value="OPTIONAL" <% if (args.formMode !== 'CREATE' && args.formData.replyFileAttachmentMode === 'OPTIONAL') { %>selected<% } %><% if (args.formMode === 'CREATE') { %>selected<% } %>>Optional</option>
-                            <option value="FORBIDDEN" <% if (args.formMode !== 'CREATE' && args.formData.replyFileAttachmentMode === 'FORBIDDEN') { %>selected<% } %>>Forbidden</option>
+                            <option value="STRICT" <% if (args.formMode !== 'CREATE' && args.formData.replyFileAttachmentMode === 'STRICT') { %>selected<% } %>><%= LOCALE.views.admin.editBoard.strict %></option>
+                            <option value="OPTIONAL" <% if (args.formMode !== 'CREATE' && args.formData.replyFileAttachmentMode === 'OPTIONAL') { %>selected<% } %><% if (args.formMode === 'CREATE') { %>selected<% } %>><%= LOCALE.views.admin.editBoard.optional %></option>
+                            <option value="FORBIDDEN" <% if (args.formMode !== 'CREATE' && args.formData.replyFileAttachmentMode === 'FORBIDDEN') { %>selected<% } %>><%= LOCALE.views.admin.editBoard.forbidden %></option>
                         </select>
                     </td>
                 </tr>
                 <tr>
-                    <td>Delay after thread</td>
+                    <td><%= LOCALE.views.admin.editBoard.delayAfterThread %></td>
                     <td>
-                        <input type="number" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.delayAfterThread %><% } else { %>30<% } %>" name="delayAfterThread" min="0" required>, seconds.
+                        <input type="number" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.delayAfterThread %><% } else { %>30<% } %>" name="delayAfterThread" min="0" required>, <%= LOCALE.views.admin.editBoard.seconds %>.
                     </td>
                 </tr>
                 <tr>
-                    <td>Delay after reply</td>
+                    <td><%= LOCALE.views.admin.editBoard.delayAfterReply %></td>
                     <td>
-                        <input type="number" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.delayAfterReply %><% } else { %>15<% } %>" name="delayAfterReply" min="0">, seconds.
+                        <input type="number" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.delayAfterReply %><% } else { %>15<% } %>" name="delayAfterReply" min="0">, <%= LOCALE.views.admin.editBoard.seconds %>.
                     </td>
                 </tr>
                 <tr>
-                    <td>Minimum file size</td>
+                    <td><%= LOCALE.views.admin.editBoard.minFileSize %></td>
                     <td>
-                        <input type="number" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.minFileSize %><% } else { %>1<% } %>" name="minFileSize" min="0">, bytes.
+                        <input type="number" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.minFileSize %><% } else { %>1<% } %>" name="minFileSize" min="0">, <%= LOCALE.views.admin.editBoard.bytes %>.
                     </td>
                 </tr>
                 <tr>
-                    <td>Maximum file size</td>
+                    <td><%= LOCALE.views.admin.editBoard.maxFileSize %>/td>
                     <td>
-                        <input type="number" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.maxFileSize %><% } else { %>3145728<% } %>" name="maxFileSize" min="0">, bytes.
+                        <input type="number" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.maxFileSize %><% } else { %>3145728<% } %>" name="maxFileSize" min="0">, <%= LOCALE.views.admin.editBoard.bytes %>.
                     </td>
                 </tr>
                 <tr>
-                    <td>Allow markdown [<abbr title="If you uncheck the box, then the only markdown that will be available to you is replies, citations and links">?</abbr>]</td>
+                    <td><%= LOCALE.views.admin.editBoard.allowMarkdown %> [<abbr title="<%= LOCALE.views.admin.editBoard.allowMarkdownExplanation %>">?</abbr>]</td>
                     <td>
                         <input
                             name="allowMarkdown"
@@ -137,7 +137,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Allow tripcodes</td>
+                    <td><%= LOCALE.views.admin.editBoard.allowTripcodes %></td>
                     <td>
                         <input
                              name="allowTripcodes"
@@ -148,49 +148,49 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Maximum thread on boards</td>
+                    <td><%= LOCALE.views.admin.editBoard.maxThreadsOnBoard %></td>
                     <td>
                         <input type="number" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.maxThreadsOnBoard %><% } else { %>100<% } %>" name="maxThreadsOnBoard" min="0">
                     </td>
                 </tr>
                 <tr>
-                    <td>Bump limit</td>
+                    <td><%= LOCALE.views.admin.editBoard.bumpThread %></td>
                     <td>
                         <input type="number" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.bumpLimit %><% } else { %>250<% } %>" name="bumpLimit" min="0">
                     </td>
                 </tr>
                 <tr>
-                    <td>Max string field size [<abbr title="Name, options, subject">?</abbr>]</td>
+                    <td><%= LOCALE.views.admin.editBoard.maxStringFieldSize %> [<abbr title="<%= LOCALE.views.admin.editBoard.maxStringFieldSizeExplanation %>">?</abbr>]</td>
                     <td>
                         <input type="number" name="maxStringFieldSize" min="0" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.maxStringFieldSize %><% } else { %>100<% } %>">
                     </td>
                 </tr>
                 <tr>
-                    <td>Max comment size</td>
+                    <td><%= LOCALE.views.admin.editBoard.maxCommentSize %></td>
                     <td>
                         <input type="number" name="maxCommentSize" min="0" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.maxCommentSize %><% } else { %>2048<% } %>">
                     </td>
                 </tr>
                 <tr>
-                    <td>Max thread living time</td>
+                    <td><%= LOCALE.views.admin.editBoard.maxThreadLivingTime %></td>
                     <td>
-                        <input type="number" name="maxThreadLivingTime" min="0" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.maxThreadLivingTime %><% } else { %>86400000<% } %>">, milliseconds
+                        <input type="number" name="maxThreadLivingTime" min="0" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.maxThreadLivingTime %><% } else { %>86400000<% } %>">, <%= LOCALE.views.admin.editBoard.milliseconds %>
                     </td>
                 </tr>
                 <tr>
-                    <td>Default poster name</td>
+                    <td><%= LOCALE.views.admin.editBoard.defaultPosterName %></td>
                     <td>
                         <input type="text" name="defaultPosterName" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.defaultPosterName %><% } else { %>Anonymous<% } %>" placeholder="Anonymous" required>
                     </td>
                 </tr>
                 <tr>
-                    <td>Default moderator name</td>
+                    <td><%= LOCALE.views.admin.editBoard.defaultModeratorName %></td>
                     <td>
                         <input type="text" name="defaultModeratorName" value="<% if (args.formMode !== 'CREATE') { %><%= args.formData.defaultModeratorName %><% } else { %>Moderator<% } %>"  placeholder="Moderator" required>
                     </td>
                 </tr>
                 <tr>
-                    <td>Enable captcha</td>
+                    <td><%= LOCALE.views.admin.editBoard.enableCaptcha %></td>
                     <td>
                         <input
                             name="enableCaptcha"
@@ -201,13 +201,24 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Rules</td>
+                    <td><%= LOCALE.views.admin.editBoard.isCaptchaCaseSensitive %></td>
                     <td>
-                        <textarea name="rules" cols="33" rows="11" required><% if (args.formMode !== 'CREATE') { %><%= args.formData.rules %><% } %></textarea>
+                        <input
+                                name="isCaptchaCaseSensitive"
+                                type="checkbox"
+                                tabindex="1"
+                                <% if (args.formMode !== 'CREATE' && args.formData.isCaptchaCaseSensitive) { %>checked<% } %>
+                        >
+                    </td>
+                </tr>
+                <tr>
+                    <td><%= LOCALE.views.admin.editBoard.rules %></td>
+                    <td>
+                        <textarea name="rules" cols="33" rows="11" required><% if (args.formMode !== 'CREATE') { %><%= args.formData.rules %><% } else {%><ul class="rules"></ul><% } %></textarea>
                     </td>
                 </tr>
             </table>
-            <input type="submit" value="Save changes" tabindex="1" size="32">
+            <input type="submit" value="<%= LOCALE.views.admin.editBoard.saveChanges %>" tabindex="1" size="32">
         </form>
     </fieldset>
 
@@ -215,14 +226,13 @@
 
     <% if (args.formMode !== 'CREATE') { %>
         <div class="admin-danger">
-            <div class="header">Danger zone</div>
+            <div class="header"><%= LOCALE.views.constants.dangerZone %></div>
             <p>
-                Deleting the board "<%= args.formData.name %>" once will mean that you will never be able to restore this record.<br>
-                <u>Are you sure of your intentions?</u>
+                <%- LOCALE.views.admin.editBoard.dangerZoneExplanation(args.formData.name) %>
             </p>
 
             <form action="/admin/board/<%= args.formData.id %>/delete" method="post">
-                <input type="submit" value="Delete board '<%= args.formData.name %>'">
+                <input type="submit" value="<%= LOCALE.views.admin.editBoard.deleteBoard(args.formData.name) %>">
             </form>
         </div>
     <% } %>

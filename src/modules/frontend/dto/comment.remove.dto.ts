@@ -1,19 +1,20 @@
 import { IsBoolean, IsInt, IsNotEmpty, IsNumber, IsPositive, IsString, MaxLength, MinLength } from 'class-validator';
+import { LOCALE } from '@utils/locale';
 
 export class CommentRemoveDto {
-  @IsNumber({}, { each: true })
-  @IsNotEmpty({ each: true })
-  @IsInt({ each: true })
-  @IsPositive({ each: true })
+  @IsNumber(null, { each: true, ...LOCALE.validators['isNumber']('delete') })
+  @IsNotEmpty({ each: true, ...LOCALE.validators['isNotEmpty']('delete') })
+  @IsInt({ each: true, ...LOCALE.validators['isInt']('delete') })
+  @IsPositive({ each: true, ...LOCALE.validators['isPositive']('delete') })
   delete: number[];
 
-  @IsBoolean({ each: true })
+  @IsBoolean(LOCALE.validators['isBoolean']('delete'))
   fileOnly: boolean;
 
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(8)
-  @MaxLength(8)
+  @IsString(LOCALE.validators['isString']('password'))
+  @IsNotEmpty(LOCALE.validators['isNotEmpty']('password'))
+  @MinLength(8, LOCALE.validators['minLength']('password', 8))
+  @MaxLength(8, LOCALE.validators['maxLength']('password', 8))
   password: string;
 }
 

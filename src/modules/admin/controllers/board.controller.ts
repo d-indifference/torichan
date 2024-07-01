@@ -9,6 +9,7 @@ import { BoardCreateDto, BoardDto, BoardUpdateDto } from '@backend/dto/board';
 import { FormDataRequest } from 'nestjs-form-data';
 import { ParseOptionalPositiveNumberPipe } from '@utils/pipes';
 import { Response } from 'express';
+import { LOCALE } from '@utils/locale';
 
 @Controller('admin/board')
 export class BoardController {
@@ -30,7 +31,7 @@ export class BoardController {
     return {
       session: session.payload,
       args: {
-        formDescription: 'Create new board',
+        formDescription: LOCALE.admin['createNewBoard'],
         formHandler: '/admin/board/new',
         formMode: EditPageFormArgsMode.CREATE,
         formData: null

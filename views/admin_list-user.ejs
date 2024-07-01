@@ -1,8 +1,8 @@
-<%- include('components/head-admin', { paramPageTitle: 'Staff list' }) %>
+<%- include('components/head-admin', { paramPageTitle: LOCALE.views.admin.listUser.staffList }) %>
 <body>
     <%- include('fragments/admin-navbar') %>
 
-    <h1 class="tori-page-title">Staff list - Management panel</h1>
+    <h1 class="tori-page-title"><%= LOCALE.views.admin.listUser.staffList %> - <%= LOCALE.views.constants.managementPanel %></h1>
     <%- include('fragments/admin-welcome') %>
 
     <%- include('fragments/admin-tabs') %>
@@ -11,9 +11,9 @@
         <thead>
         <tr>
             <td>#</td>
-            <td>Username</td>
-            <td>Email</td>
-            <td>Role</td>
+            <td><%= LOCALE.views.admin.listUser.username %></td>
+            <td><%= LOCALE.views.admin.listUser.email %></td>
+            <td><%= LOCALE.views.admin.listUser.role %></td>
             <td></td>
         </tr>
         </thead>
@@ -24,7 +24,7 @@
                 <td><%= user.username %></td>
                 <td><a href="mailto:<%= user.email %>"><%= user.email %></a></td>
                 <td><b><%= user.role %></b></td>
-                <td>[<a href="/admin/staff/<%= user.id %>">Edit</a>]</td>
+                <td>[<a href="/admin/staff/<%= user.id %>"><%= LOCALE.views.constants.edit %></a>]</td>
             </tr>
         <% }); %>
         </tbody>
@@ -46,7 +46,7 @@
                 &raquo;
             <% } %>
         </span><br>
-        [<a href="/admin/staff/new">New staff member</a>]<br>
+        [<a href="/admin/staff/new"><%= LOCALE.views.admin.listUser.newStaffMember %></a>]<br>
     </div>
 
     <%- include('fragments/admin-navbar') %>

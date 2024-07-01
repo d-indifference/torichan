@@ -1,124 +1,146 @@
 import { Board, BoardSettings, FileAttachmentMode, Prisma } from '@prisma/client';
 import { IsEnum, IsNotEmpty, IsNumberString, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 import { normalizeBoolean, normalizeInteger } from '@utils/misc';
+import { LOCALE } from '@utils/locale';
 
 export class BoardUpdateDto {
   @IsOptional()
-  @IsString()
-  @MaxLength(256)
+  @IsString(LOCALE.validators['isString']('slug'))
+  @IsNotEmpty(LOCALE.validators['isNotEmpty']('slug'))
+  @MaxLength(256, LOCALE.validators['maxLength']('slug', 256))
   slug?: string;
 
   @IsOptional()
-  @IsString()
-  @MaxLength(256)
+  @IsString(LOCALE.validators['isString']('name'))
+  @IsNotEmpty(LOCALE.validators['isNotEmpty']('name'))
+  @MaxLength(256, LOCALE.validators['maxLength']('name', 256))
   name?: string;
 
-  @IsString()
   @IsOptional()
-  @MaxLength(2)
+  @IsString(LOCALE.validators['isString']('visible'))
+  @MaxLength(2, LOCALE.validators['maxLength']('visible', 2))
   visible?: 'on' | undefined;
 
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(3)
-  @MaxLength(1024)
+  @IsOptional()
+  @IsString(LOCALE.validators['isString']('description'))
+  @IsNotEmpty(LOCALE.validators['isNotEmpty']('description'))
+  @MinLength(3, LOCALE.validators['minLength']('description', 3))
+  @MaxLength(1024, LOCALE.validators['maxLength']('description', 1024))
   description?: string;
 
-  @IsString()
   @IsOptional()
-  @MaxLength(2)
+  @IsString(LOCALE.validators['isString']('allowPosting'))
+  @MaxLength(2, LOCALE.validators['maxLength']('allowPosting', 2))
   allowPosting?: 'on' | undefined;
 
-  @IsString()
   @IsOptional()
-  @MaxLength(2)
+  @IsString(LOCALE.validators['isString']('strictAnonymity'))
+  @MaxLength(2, LOCALE.validators['maxLength']('strictAnonymity', 2))
   strictAnonymity?: 'on' | undefined;
 
-  @IsString()
-  @IsNotEmpty()
-  @IsEnum(FileAttachmentMode)
+  @IsOptional()
+  @IsString(LOCALE.validators['isString']('threadFileAttachmentMode'))
+  @IsNotEmpty(LOCALE.validators['isNotEmpty']('threadFileAttachmentMode'))
+  @IsEnum(FileAttachmentMode, LOCALE.validators['isEnum']('threadFileAttachmentMode'))
   threadFileAttachmentMode?: FileAttachmentMode;
 
-  @IsString()
-  @IsNotEmpty()
-  @IsEnum(FileAttachmentMode)
+  @IsOptional()
+  @IsString(LOCALE.validators['isString']('replyFileAttachmentMode'))
+  @IsNotEmpty(LOCALE.validators['isNotEmpty']('replyFileAttachmentMode'))
+  @IsEnum(FileAttachmentMode, LOCALE.validators['isEnum']('replyFileAttachmentMode'))
   replyFileAttachmentMode?: FileAttachmentMode;
 
-  @IsString()
-  @IsNotEmpty()
-  @IsNumberString()
+  @IsOptional()
+  @IsString(LOCALE.validators['isString']('delayAfterThread'))
+  @IsNotEmpty(LOCALE.validators['isNotEmpty']('delayAfterThread'))
+  @IsNumberString(null, LOCALE.validators['isNumberString']('delayAfterThread'))
   delayAfterThread?: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @IsNumberString()
+  @IsOptional()
+  @IsString(LOCALE.validators['isString']('delayAfterReply'))
+  @IsNotEmpty(LOCALE.validators['isNotEmpty']('delayAfterReply'))
+  @IsNumberString(null, LOCALE.validators['isNumberString']('delayAfterReply'))
   delayAfterReply?: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @IsNumberString()
+  @IsOptional()
+  @IsString(LOCALE.validators['isString']('minFileSize'))
+  @IsNotEmpty(LOCALE.validators['isNotEmpty']('minFileSize'))
+  @IsNumberString(null, LOCALE.validators['isNumberString']('minFileSize'))
   minFileSize?: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @IsNumberString()
+  @IsOptional()
+  @IsString(LOCALE.validators['isString']('maxFileSize'))
+  @IsNotEmpty(LOCALE.validators['isNotEmpty']('maxFileSize'))
+  @IsNumberString(null, LOCALE.validators['isNumberString']('maxFileSize'))
   maxFileSize?: string;
 
-  @IsString()
   @IsOptional()
-  @MaxLength(2)
+  @IsString(LOCALE.validators['isString']('allowMarkdown'))
+  @MaxLength(2, LOCALE.validators['maxLength']('allowMarkdown', 2))
   allowMarkdown?: 'on' | undefined;
 
-  @IsString()
   @IsOptional()
-  @MaxLength(2)
+  @IsString(LOCALE.validators['isString']('allowTripcodes'))
+  @MaxLength(2, LOCALE.validators['maxLength']('allowTripcodes', 2))
   allowTripcodes?: 'on' | undefined;
 
-  @IsString()
-  @IsNotEmpty()
-  @IsNumberString()
+  @IsOptional()
+  @IsString(LOCALE.validators['isString']('maxThreadsOnBoard'))
+  @IsNotEmpty(LOCALE.validators['isNotEmpty']('maxThreadsOnBoard'))
+  @IsNumberString(null, LOCALE.validators['isNumberString']('maxThreadsOnBoard'))
   maxThreadsOnBoard?: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @IsNumberString()
+  @IsOptional()
+  @IsString(LOCALE.validators['isString']('bumpLimit'))
+  @IsNotEmpty(LOCALE.validators['isNotEmpty']('bumpLimit'))
+  @IsNumberString(null, LOCALE.validators['isNumberString']('bumpLimit'))
   bumpLimit?: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @IsNumberString()
+  @IsOptional()
+  @IsString(LOCALE.validators['isString']('maxStringFieldSize'))
+  @IsNotEmpty(LOCALE.validators['isNotEmpty']('maxStringFieldSize'))
+  @IsNumberString(null, LOCALE.validators['isNumberString']('maxStringFieldSize'))
   maxStringFieldSize?: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @IsNumberString()
+  @IsOptional()
+  @IsString(LOCALE.validators['isString']('maxCommentSize'))
+  @IsNotEmpty(LOCALE.validators['isNotEmpty']('maxCommentSize'))
+  @IsNumberString(null, LOCALE.validators['isNumberString']('maxCommentSize'))
   maxCommentSize?: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @IsNumberString()
+  @IsOptional()
+  @IsString(LOCALE.validators['isString']('maxThreadLivingTime'))
+  @IsNotEmpty(LOCALE.validators['isNotEmpty']('maxThreadLivingTime'))
+  @IsNumberString(null, LOCALE.validators['isNumberString']('maxThreadLivingTime'))
   maxThreadLivingTime?: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(3)
-  @MaxLength(128)
+  @IsOptional()
+  @IsString(LOCALE.validators['isString']('defaultPosterName'))
+  @IsNotEmpty(LOCALE.validators['isNotEmpty']('defaultPosterName'))
+  @MinLength(3, LOCALE.validators['minLength']('defaultPosterName', 3))
+  @MaxLength(128, LOCALE.validators['maxLength']('defaultPosterName', 128))
   defaultPosterName?: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(3)
-  @MaxLength(128)
+  @IsOptional()
+  @IsString(LOCALE.validators['isString']('defaultModeratorName'))
+  @IsNotEmpty(LOCALE.validators['isNotEmpty']('defaultModeratorName'))
+  @MinLength(3, LOCALE.validators['minLength']('defaultModeratorName', 3))
+  @MaxLength(128, LOCALE.validators['maxLength']('defaultModeratorName', 128))
   defaultModeratorName?: string;
 
-  @IsString()
   @IsOptional()
-  @MaxLength(2)
+  @IsString(LOCALE.validators['isString']('enableCaptcha'))
+  @MaxLength(2, LOCALE.validators['maxLength']('enableCaptcha', 2))
   enableCaptcha: 'on' | undefined;
 
-  @IsString()
   @IsOptional()
-  @MaxLength(2048)
+  @IsString(LOCALE.validators['isString']('isCaptchaCaseSensitive'))
+  @MaxLength(2, LOCALE.validators['maxLength']('isCaptchaCaseSensitive', 2))
+  isCaptchaCaseSensitive: 'on' | undefined;
+
+  @IsOptional()
+  @IsString(LOCALE.validators['isString']('rules'))
+  @MaxLength(2048, LOCALE.validators['maxLength']('defaultModeratorName', 2048))
   rules?: string;
 
   public toUpdateInput(id: string): Prisma.BoardUpdateInput {
@@ -149,6 +171,7 @@ export class BoardUpdateDto {
     this.setFieldToInputTemplate(inputBoardSettings, 'defaultModeratorName');
     this.setFieldToInputTemplate(inputBoardSettings, 'rules');
     this.setBooleanFieldToInputTemplate(inputBoardSettings, 'enableCaptcha');
+    this.setBooleanFieldToInputTemplate(inputBoardSettings, 'isCaptchaCaseSensitive');
 
     const prismaInputBoardSettings: Prisma.BoardSettingsUpdateInput = inputBoardSettings as Prisma.BoardSettingsUpdateInput;
     const prismaInputBoard: Prisma.BoardUpdateInput = inputBoard as Prisma.BoardUpdateInput;
@@ -184,6 +207,7 @@ export class BoardUpdateDto {
     dto.defaultPosterName = boardSettings.defaultPosterName;
     dto.defaultModeratorName = boardSettings.defaultModeratorName;
     dto.enableCaptcha = boardSettings.enableCaptcha ? 'on' : null;
+    dto.isCaptchaCaseSensitive = boardSettings.isCaptchaCaseSensitive ? 'on' : null;
     dto.rules = boardSettings.rules;
 
     return dto;
@@ -212,7 +236,8 @@ export class BoardUpdateDto {
       maxThreadLivingTime: ${this.maxThreadLivingTime},
       defaultPosterName: ${this.defaultPosterName},
       defaultModeratorName: ${this.defaultModeratorName},
-      enableCaptcha: ${this.enableCaptcha}
+      enableCaptcha: ${this.enableCaptcha},
+      isCaptchaCaseSensitive: ${this.isCaptchaCaseSensitive},
       rules: ${this.rules}
     }`;
   }

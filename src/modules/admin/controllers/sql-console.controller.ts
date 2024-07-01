@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, Render, Res, Session, StreamableFile, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, ParseBoolPipe, Post, Query, Render, Res, Session, StreamableFile, UseGuards, ValidationPipe } from '@nestjs/common';
 import { Roles } from '@admin/decorators';
 import { UserRole } from '@prisma/client';
 import { SessionGuard } from '@admin/guards';
@@ -15,8 +15,12 @@ export class SqlConsoleController {
   @Roles(UserRole.ADMINISTRATOR)
   @UseGuards(SessionGuard)
   @Render('admin_sql-console')
-  public async getSqlConsolePage(@Session() session: SessionDto, @Query('query') query?: string): Promise<SqlQueryOutputDto> {
-    const queryResult = query ? await this.sqlConsoleService.runQuery(query) : null;
+  public async getSqlConsolePage(
+    @Session() session: SessionDto,
+    @Query('query') query?: string,
+    @Query('runAsMutation', new ParseBoolPipe({ optional: true })) runAsMutation?: boolean
+  ): Promise<SqlQueryOutputDto> {
+    const queryResult = query ? await this.sqlConsoleService.runQuery(query, runAsMutation) : null;
 
     return { session: session.payload, query: query ?? null, queryResult };
   }
@@ -26,7 +30,13 @@ export class SqlConsoleController {
   @UseGuards(SessionGuard)
   @FormDataRequest()
   public runSql(@Body(new ValidationPipe()) dto: SqlQueryDto, @Res() res: Response): void {
-    res.redirect(`/admin/sql?query=${dto.query}`);
+    let redirectString = `/admin/sql?query=${dto.query}`;
+
+    if (dto.runAsMutation) {
+      redirectString += '&runAsMutation=true';
+    }
+
+    res.redirect(redirectString);
   }
 
   @Post('save')

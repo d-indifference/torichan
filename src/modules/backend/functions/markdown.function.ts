@@ -1,5 +1,5 @@
 const processReplyLink = (text: string[], slug: string, parent: number) =>
-  text.map(str => str.replace(/^&#x3E;&#x3E;(\d.*)$/, `<a href="/${slug}/res/${parent}#$1">>>$1</a>`));
+  text.map(str => str.replace(/^&#x3E;&#x3E;(\d.*)$/, `<a href="/${slug}/res/${parent}#$1" onclick="highlightPost('$1')">>>$1</a>`));
 
 const processNewLine = (text: string): string[] => text.split(/\r\n/);
 

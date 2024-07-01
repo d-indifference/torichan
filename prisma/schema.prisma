@@ -45,6 +45,7 @@ model BoardSettings {
   defaultPosterName        String             @default("Anonymous") @db.VarChar(256)
   defaultModeratorName     String             @default("Moderator") @db.VarChar(256)
   enableCaptcha            Boolean            @default(false) @db.Boolean
+  isCaptchaCaseSensitive   Boolean            @default(false) @db.Boolean
   rules                    String             @db.Text
 
   board Board @relation(fields: [id], references: [id], onDelete: Cascade)

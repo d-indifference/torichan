@@ -1,8 +1,8 @@
-<%- include('components/head-admin', { paramPageTitle: 'Comments' }) %>
+<%- include('components/head-admin', { paramPageTitle: LOCALE.views.admin.listComment.comments }) %>
 <body>
     <%- include('fragments/admin-navbar') %>
 
-    <h1 class="tori-page-title">Comments - Management panel</h1>
+    <h1 class="tori-page-title"><%= LOCALE.views.admin.listComment.comments %> - <%= LOCALE.views.constants.managementPanel %></h1>
     <%- include('fragments/admin-welcome') %>
 
     <%- include('fragments/admin-tabs') %>
@@ -21,23 +21,23 @@
                 <% } %>
             <% }) %>
         </select>
-        <button type="submit">Select</button>
+        <button type="submit"><%= LOCALE.views.admin.listComment.select %></button>
     </form>
 
     <table border="1" class="table-list">
         <thead>
         <tr>
             <td>#</td>
-            <td>Created at</td>
-            <td>IP</td>
-            <td>Admin`s post</td>
-            <td>Name</td>
-            <td>Options</td>
-            <td>Subject</td>
-            <td>Comment</td>
-            <td>File</td>
-            <td>Link</td>
-            <td>Delete</td>
+            <td><%= LOCALE.views.admin.listComment.createdAt %></td>
+            <td><%= LOCALE.views.admin.listComment.ip %></td>
+            <td><%= LOCALE.views.admin.listComment.adminPost %></td>
+            <td><%= LOCALE.views.admin.listComment.name %></td>
+            <td><%= LOCALE.views.admin.listComment.options %></td>
+            <td><%= LOCALE.views.admin.listComment.subject %></td>
+            <td><%= LOCALE.views.admin.listComment.comment %></td>
+            <td><%= LOCALE.views.admin.listComment.file %></td>
+            <td><%= LOCALE.views.admin.listComment.link %></td>
+            <td><%= LOCALE.views.admin.listComment.delete %></td>
             <td></td>
         </tr>
         </thead>
@@ -59,7 +59,7 @@
                                 <img src="/files/<%= comment.boardSlug %>/thumb/<%= comment.attachedFile.thumbnailPath %>" alt="<%= comment.attachedFile.path %>">
                             </a>
                         <% } else { %>
-                            File: <a href="/files/<%= comment.boardSlug %>/src/<%= comment.attachedFile.path %>"><%= comment.attachedFile.path %></a>
+                            <%= LOCALE.views.admin.listComment.file %>: <a href="/files/<%= comment.boardSlug %>/src/<%= comment.attachedFile.path %>"><%= comment.attachedFile.path %></a>
                         <% }%>
                     <% } else { %>——<% } %>
                 </td>
@@ -82,7 +82,7 @@
                             name="payload"
                             value="{&quot;mode&quot;:&quot;ONLY_COMMENT&quot;,&quot;commentId&quot;:&quot;<%= comment.id %>&quot;,&quot;ip&quot;:&quot;<%= comment.ip %>&quot;,&quot;redirectAfterDeletion&quot;:&quot;/admin/comment?slug=<%= comment.boardSlug %>&quot;}"
                         >
-                            Comment
+                            <%= LOCALE.views.admin.listComment.comment %>
                         </button>
                         <button
                             type="submit"
@@ -90,7 +90,7 @@
                             name="payload"
                             value="{&quot;mode&quot;:&quot;ONLY_FILE&quot;,&quot;commentId&quot;:&quot;<%= comment.id %>&quot;,&quot;ip&quot;:&quot;<%= comment.ip %>&quot;,&quot;redirectAfterDeletion&quot;:&quot;/admin/comment?slug=<%= comment.boardSlug %>&quot;}"
                         >
-                            File
+                            <%= LOCALE.views.admin.listComment.file %>
                         </button>
                         <button
                             type="submit"
@@ -98,11 +98,11 @@
                             name="payload"
                             value="{&quot;mode&quot;:&quot;ALL_BY_IP&quot;,&quot;commentId&quot;:&quot;<%= comment.id %>&quot;,&quot;ip&quot;:&quot;<%= comment.ip %>&quot;,&quot;redirectAfterDeletion&quot;:&quot;/admin/comment?slug=<%= comment.boardSlug %>&quot;}"
                         >
-                            All of IP
+                            <%= LOCALE.views.admin.listComment.allOfIp %>
                         </button>
                     </form>
                 </td>
-                <td>[<a target="_blank" href="/admin/ban/new?ip=<%= comment.ip %>">Ban this IP</a>]</td>
+                <td>[<a target="_blank" href="/admin/ban/new?ip=<%= comment.ip %>"><%= LOCALE.views.admin.listComment.banThisIP %></a>]</td>
             </tr>
         <% }); %>
         </tbody>

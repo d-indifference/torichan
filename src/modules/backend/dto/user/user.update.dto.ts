@@ -1,26 +1,27 @@
 import { Prisma, UserRole } from '@prisma/client';
 import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 import { PasswordCryptoService } from '@utils/services';
+import { LOCALE } from '@utils/locale';
 
 export class UserUpdateDto {
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(3)
-  @MaxLength(256)
+  @IsString(LOCALE.validators['isString']('username'))
+  @IsNotEmpty(LOCALE.validators['isNotEmpty']('username'))
+  @MinLength(3, LOCALE.validators['minLength']('username', 3))
+  @MaxLength(256, LOCALE.validators['maxLength']('username', 256))
   username: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @IsEmail()
+  @IsString(LOCALE.validators['isString']('email'))
+  @IsEmail({ allow_display_name: false }, LOCALE.validators['isEmail']('email'))
+  @IsNotEmpty(LOCALE.validators['isNotEmpty']('email'))
   email: string;
 
-  @IsEnum(UserRole)
+  @IsEnum(UserRole, LOCALE.validators['isEnum']('role'))
   @IsOptional()
   role?: UserRole;
 
-  @IsString()
   @IsOptional()
-  @MaxLength(256)
+  @IsString(LOCALE.validators['isString']('password'))
+  @MaxLength(256, LOCALE.validators['maxLength']('password', 256))
   password?: string;
 
   public toUpdateInput(passwordCrypto: PasswordCryptoService): Prisma.UserUpdateInput {
@@ -34,7 +35,7 @@ export class UserUpdateDto {
     }
 
     if (this.password !== undefined && this.password !== null && this.password !== '') {
-      updateInput.encryptedPassword = passwordCrypto.enrcypt(this.password);
+      updateInput.encryptedPassword = passwordCrypto.encrypt(this.password);
     }
 
     return updateInput;

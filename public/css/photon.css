@@ -138,3 +138,9 @@ span.spoiler:hover {
 a.menu-link:hover {
   text-decoration: underline !important;
 }
+
+div.post.highlight {
+  background: #eedacb !important;
+  color: #333333 !important;
+  border: 2px dashed #ee6600 !important;
+}

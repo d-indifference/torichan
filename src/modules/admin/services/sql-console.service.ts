@@ -8,9 +8,13 @@ export class SqlConsoleService {
 
   constructor(private readonly prisma: PrismaService) {}
 
-  public async runQuery(query: string): Promise<unknown> {
+  public async runQuery(query: string, runAsMutation?: boolean): Promise<unknown> {
     try {
       this.logger.log(`runQuery (query: {${query}})`);
+
+      if (runAsMutation) {
+        return (await this.prisma.$executeRawUnsafe(query)) as unknown;
+      }
 
       return (await this.prisma.$queryRawUnsafe(query)) as unknown;
     } catch (e) {

@@ -1,6 +1,7 @@
 import { AttachedFile, Comment } from '@prisma/client';
 import { DateTime } from 'luxon';
 import { AttachedFileDto } from '@backend/dto/comment/attached-file.dto';
+import { LOCALE } from '@utils/locale';
 
 export class CommentDto {
   id: string;
@@ -66,7 +67,7 @@ export class CommentDto {
   public static fromModel(model: Comment, boardSlug: string, attachedFile?: AttachedFile): CommentDto {
     return new CommentDto(
       model.id,
-      DateTime.fromJSDate(model.createdAt).toFormat('EEE dd MMM yyyy HH:mm:ss'),
+      DateTime.fromJSDate(model.createdAt).toFormat('EEE dd MMM yyyy HH:mm:ss', { locale: LOCALE.luxon as string }),
       boardSlug,
       model.displayNumber,
       model.isAdmin,

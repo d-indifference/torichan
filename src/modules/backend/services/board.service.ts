@@ -4,6 +4,7 @@ import { BoardCreateDto, BoardDto, BoardUpdateDto } from '@backend/dto/board';
 import { Board, Prisma } from '@prisma/client';
 import { PrismaTakeSkipDto } from '@utils/misc';
 import { ConfigService } from '@nestjs/config';
+import { LOCALE } from '@utils/locale';
 
 @Injectable()
 export class BoardService {
@@ -33,7 +34,7 @@ export class BoardService {
 
     const board = await this.prisma.board.findFirst({ where: { id }, include: { boardSettings: true } });
 
-    this.processNotFound(board, `Board with id: ${id} was not found`);
+    this.processNotFound(board, LOCALE.backend['boardWasNotFound'](id));
 
     return board;
   }
@@ -43,7 +44,7 @@ export class BoardService {
 
     const board = await this.prisma.board.findFirst({ where: { slug }, include: { boardSettings: true } });
 
-    this.processNotFound(board, `Board with slug: ${slug} was not found`);
+    this.processNotFound(board, LOCALE.backend['boardWasNotFoundBySlug'](slug));
 
     return board;
   }
@@ -61,7 +62,7 @@ export class BoardService {
 
     const board = await this.prisma.board.findFirst({ where: { slug }, include: { boardSettings: true } });
 
-    this.processNotFound(board, `Page with address: /${slug} was not found`);
+    this.processNotFound(board, LOCALE.backend['pageWasNotFound'](slug));
 
     return BoardDto.fromModel(board);
   }
@@ -126,7 +127,7 @@ export class BoardService {
 
     if (board) {
       if (board.id !== id) {
-        const message: string = `Board with slug: ${dto.slug} already exists`;
+        const message: string = LOCALE.backend['boardAlreadyExists'](dto.slug);
 
         this.logger.log(message);
         throw new BadRequestException(message);
@@ -138,7 +139,7 @@ export class BoardService {
     const board = await this.prisma.board.findFirst({ where: { slug: dto.slug } });
 
     if (board) {
-      const message: string = `Board with slug: ${dto.slug} already exists`;
+      const message: string = LOCALE.backend['boardAlreadyExists'](dto.slug);
 
       this.logger.log(message);
       throw new BadRequestException(message);
@@ -149,7 +150,7 @@ export class BoardService {
     const reservedUrls = ['faq', 'rules', 'admin', 'files', 'main', 'menu'];
 
     if (reservedUrls.indexOf(slug) !== -1) {
-      const message = `This slug is reserved by system: ${slug}. You cannot create a board with it.`;
+      const message = LOCALE.backend['reservedSlug'](slug);
       this.logger.warn(message);
       throw new BadRequestException(message);
     }

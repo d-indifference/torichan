@@ -1,23 +1,23 @@
-<%- include('components/head-admin', { paramPageTitle: 'Spam list' }) %>
+<%- include('components/head-admin', { paramPageTitle: LOCALE.views.admin.spam.spamList }) %>
 <body>
 <%- include('fragments/admin-navbar') %>
 
-<h1 class="tori-page-title">Spam list - Management panel</h1>
+<h1 class="tori-page-title"><%= LOCALE.views.admin.spam.spamList %> - <%= LOCALE.views.constants.managementPanel %></h1>
 <%- include('fragments/admin-welcome') %>
 
 <%- include('fragments/admin-tabs') %>
 
 
 <fieldset class="admin-form">
-    <legend>Edit spam list</legend>
+    <legend><%= LOCALE.views.admin.spam.editSpamList %></legend>
     <form action="/admin/spam" method="post">
         <table class="tori-post-form" width="1%">
             <tr>
-                <td>Spam</td>
+                <td><%= LOCALE.views.admin.spam.spam %></td>
                 <td><textarea name="spam" tabindex="1" rows="15" cols="33"><%= spam %></textarea></td>
             </tr>
         </table>
-        <input type="submit" value="Save" tabindex="1" size="32">
+        <input type="submit" value="<%= LOCALE.views.constants.save %>" tabindex="1" size="32">
     </form>
 </fieldset>
 

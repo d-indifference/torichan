@@ -11,6 +11,7 @@ import { SpamService } from '@backend/services/spam.service';
 import * as he from 'he';
 import { replyMarkdown, replySimpleMarkdown, threadMarkdown, threadSimpleMarkdown, generateTripcode } from '@backend/functions';
 import { CommentsQueries } from '@backend/services/comment.queries';
+import { LOCALE } from '@utils/locale';
 
 @Injectable()
 export class CommentService {
@@ -133,61 +134,61 @@ export class CommentService {
 
   private applySettingsPolicy(settings: BoardSettings, dto: CommentCreateDto, isReply: boolean): void {
     if (!settings.allowPosting) {
-      throw new BadRequestException('You cannot post any comments to this board!');
+      throw new BadRequestException(LOCALE.backend['youCannotPost']);
     }
 
     if (settings.strictAnonymity && dto.name) {
-      throw new BadRequestException('You must be anonymous on this board!');
+      throw new BadRequestException(LOCALE.backend['youMustBeAnonymous']);
     }
 
     if (isReply) {
       if (dto.file && settings.replyFileAttachmentMode === FileAttachmentMode.FORBIDDEN) {
-        throw new BadRequestException('Posting of files is not allowed here!');
+        throw new BadRequestException(LOCALE.backend['postingOfFilesNotAllowed']);
       }
 
       if (!dto.file && settings.replyFileAttachmentMode === FileAttachmentMode.STRICT) {
-        throw new BadRequestException('Please attach any file.');
+        throw new BadRequestException(LOCALE.backend['pleaseAttachAnyFile']);
       }
     } else {
       if (dto.file && settings.threadFileAttachmentMode === FileAttachmentMode.FORBIDDEN) {
-        throw new BadRequestException('Posting of files is not allowed here!');
+        throw new BadRequestException(LOCALE.backend['postingOfFilesNotAllowed']);
       }
 
       if (!dto.file && settings.threadFileAttachmentMode === FileAttachmentMode.STRICT) {
-        throw new BadRequestException('Please attach any file.');
+        throw new BadRequestException(LOCALE.backend['pleaseAttachAnyFile']);
       }
     }
 
     if (dto.file) {
       if (dto.file.size < settings.minFileSize) {
-        throw new BadRequestException('Your file is too small.');
+        throw new BadRequestException(LOCALE.backend['fileTooSmall']);
       }
 
       if (dto.file.size > settings.maxFileSize) {
-        throw new BadRequestException('Your file is too big.');
+        throw new BadRequestException(LOCALE.backend['fileTooBig']);
       }
     }
 
     if (!settings.strictAnonymity && dto.name.length > settings.maxStringFieldSize) {
-      throw new BadRequestException('Your name is too long');
+      throw new BadRequestException(LOCALE.backend['nameTooLong']);
     }
 
     if (dto.options.length > settings.maxStringFieldSize) {
-      throw new BadRequestException('Your options is too long');
+      throw new BadRequestException(LOCALE.backend['optionsTooLong']);
     }
 
     if (dto.subject.length > settings.maxStringFieldSize) {
-      throw new BadRequestException('Your subject is too long');
+      throw new BadRequestException(LOCALE.backend['subjectTooLong']);
     }
 
     if (dto.comment.length > settings.maxCommentSize) {
-      throw new BadRequestException('Your comment is too long');
+      throw new BadRequestException(LOCALE.backend['commentTooLong']);
     }
   }
 
   private applyCaptchaPolicy(dto: CommentCreateDto, isAdmin: boolean, settings: BoardSettings): void {
     if (!isAdmin && settings.enableCaptcha) {
-      this.captchaService.solveCaptcha(dto.captcha, dto.nya);
+      this.captchaService.solveCaptcha(dto.captcha, dto.nya, settings.isCaptchaCaseSensitive);
     }
   }
 
@@ -340,7 +341,7 @@ export class CommentService {
   private checkFile(dto: CommentCreateDto) {
     if (dto.file) {
       if (!this.attachedFileService.checkIfAttachedImage(dto.file)) {
-        const message: string = 'Attachment file is not an image';
+        const message: string = LOCALE.backend['fileIsNotAnImage'];
 
         this.logger.warn(message);
         throw new BadRequestException(message);
@@ -360,7 +361,7 @@ export class CommentService {
 
       if (currentTime - lastPostTime <= maxDelayMilliseconds) {
         this.logger.warn(`Trying to send comments too frequent, ip: ${ip}`);
-        throw new BadRequestException('You are trying to send comments too frequent!');
+        throw new BadRequestException(LOCALE.backend['tooFrequentPosting']);
       }
     }
   }

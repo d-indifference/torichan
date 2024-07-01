@@ -1,27 +1,27 @@
-<%- include('components/head-admin', { paramPageTitle: 'Sign-up to Management panel' }) %>
+<%- include('components/head-admin', { paramPageTitle: LOCALE.views.admin.signUp.signUpToManagementPanel }) %>
 <body>
 
-<h1 class="tori-page-title">Sign-up to Management panel</h1>
+<h1 class="tori-page-title"><%= LOCALE.views.admin.signUp.signUpToManagementPanel %></h1>
 
 <fieldset class="admin-form">
-    <legend>Sign up to management panel</legend>
+    <legend><%= LOCALE.views.admin.signUp.signUpToManagementPanel %></legend>
     <form action="/admin/sign-up" method="post">
         <table class="tori-post-form" width="1%">
             <tr>
-                <td>Username</td>
+                <td><%= LOCALE.views.admin.signUp.username %></td>
                 <td><input name="username" type="text" tabindex="1" size="32" required></td>
             </tr>
             <tr>
-                <td>Email</td>
+                <td><%= LOCALE.views.admin.signUp.email %></td>
                 <td><input name="email" type="email" tabindex="1" size="32" required></td>
             </tr>
             <tr>
-                <td>Password</td>
+                <td><%= LOCALE.views.admin.signUp.password %></td>
                 <td><input name="password" type="password" tabindex="1" size="32" required></td>
             </tr>
         </table>
 
-        <input type="submit" value="Sign up" tabindex="1" size="32">
+        <input type="submit" value="<%= LOCALE.views.admin.signUp.signUp     %>" tabindex="1" size="32">
     </form>
 </fieldset>
 

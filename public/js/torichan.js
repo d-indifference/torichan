@@ -100,3 +100,13 @@ function setNameFromCookies(cookieName, formId) {
     }
   }
 }
+
+function highlightPost(postNum) {
+  $('.highlight').removeClass('highlight').addClass('reply');
+
+  var post = document.getElementById('reply-' + postNum);
+
+  if (post) {
+    $('#reply-' + postNum).addClass('highlight').removeClass('reply');
+  }
+}

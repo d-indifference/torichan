@@ -110,7 +110,7 @@
     <% thread.replies.forEach(reply => { %>
         <div class="reply-container">
             <div class="side-arrows">&gt;&gt;</div>
-            <div class="post reply">
+            <div class="post reply" id="reply-<%= reply.displayNumber %>">
                 <a name="<%= reply.displayNumber %>"></a>
 
                 <label class="postInfo">

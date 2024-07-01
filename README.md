@@ -15,6 +15,7 @@ In this case, you have 2 installation methods, which we will explain further.
 After saving the source code, do the following:
 1. Make `volumes` directory in your `torichan` project root:
     ```sh
+   $ cd torichan
    $ mkdir -p ./volumes
    ```
 2. Make `.env` file in your `torichan` project root:

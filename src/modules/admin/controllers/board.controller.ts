@@ -67,10 +67,10 @@ export class BoardController {
     await this.boardService.update(dto, id, res);
   }
 
-  @Post(':id/delete')
+  @Post(':slug/delete')
   @Roles(UserRole.ADMINISTRATOR)
   @UseGuards(SessionGuard)
-  public async deleteBoard(@Param('id', ParseUUIDPipe) id: string, @Res() res: Response): Promise<void> {
-    await this.boardService.remove(id, res);
+  public async deleteBoard(@Param('slug') slug: string, @Res() res: Response): Promise<void> {
+    await this.boardService.remove(slug, res);
   }
 }

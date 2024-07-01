@@ -231,7 +231,7 @@
                 <%- LOCALE.views.admin.editBoard.dangerZoneExplanation(args.formData.name) %>
             </p>
 
-            <form action="/admin/board/<%= args.formData.id %>/delete" method="post">
+            <form action="/admin/board/<%= args.formData.slug %>/delete" method="post">
                 <input type="submit" value="<%= LOCALE.views.admin.editBoard.deleteBoard(args.formData.name) %>">
             </form>
         </div>

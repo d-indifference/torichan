@@ -60,10 +60,10 @@ export class BoardService {
     res.redirect(`/admin/board/${updatedBoard.id}`);
   }
 
-  public async remove(id: string, res: Response): Promise<void> {
-    const board = await this.boardService.findById(id);
+  public async remove(slug: string, res: Response): Promise<void> {
+    const board = await this.boardService.findBySlug(slug);
 
-    await this.boardService.remove(id);
+    await this.boardService.remove(board.id);
 
     await this.fileSystem.removePath(board.slug);
 

@@ -312,7 +312,8 @@ export const LOCALE: Record<string, unknown> = {
         runSql: localeStrings.views['admin']['sqlConsole']['runSql'],
         clear: localeStrings.views['admin']['sqlConsole']['clear'],
         runQuery: localeStrings.views['admin']['sqlConsole']['runQuery'],
-        saveQueryResult: localeStrings.views['admin']['sqlConsole']['saveQueryResult']
+        saveQueryResult: localeStrings.views['admin']['sqlConsole']['saveQueryResult'],
+        runMutation: localeStrings.views['admin']['sqlConsole']['runMutation']
       }
     },
     board: {

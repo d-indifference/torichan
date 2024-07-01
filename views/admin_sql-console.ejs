@@ -18,6 +18,10 @@
                     <td>SQL</td>
                     <td><textarea name="query" tabindex="1" rows="15" cols="33"><% if (query) { %><%= query %><% } %></textarea></td>
                 </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="checkbox" name="runAsMutation"> <%= LOCALE.views.admin.sqlConsole.runMutation %></td>
+                </tr>
             </table>
             <input type="submit" value="<%= LOCALE.views.admin.sqlConsole.runQuery %>" tabindex="1" size="32">
         </form>

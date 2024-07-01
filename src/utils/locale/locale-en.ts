@@ -308,7 +308,8 @@ export const localeStrings: Record<string, unknown> = {
         runSql: 'Run SQL (PostgreSQL) query',
         clear: 'Clear',
         runQuery: 'Run query (I know, what I am doing)',
-        saveQueryResult: 'Save query result (JSON)'
+        saveQueryResult: 'Save query result (JSON)',
+        runMutation: 'Mutation query (INSERT, UPDATE, DELETE, etc.)'
       }
     },
     board: {

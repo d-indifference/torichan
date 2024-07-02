@@ -15,7 +15,7 @@
         <div class="admin-danger">
             <div class="header"><%= LOCALE.views.constants.dangerZone %></div>
             <p>
-                <%= LOCALE.views.admin.editUser.dangerZoneExplanation(args.formData.username) %>
+                <%- LOCALE.views.admin.editUser.dangerZoneExplanation(args.formData.username) %>
             </p>
 
             <form action="/admin/staff/<%= args.formData.id %>/delete" method="post">

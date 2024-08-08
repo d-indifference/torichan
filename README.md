@@ -67,6 +67,9 @@ If you want to install the application without using Docker, you will need to pe
 5. If you need, you can edit `application.yml` file and set here your own settings.
 6. After all installations, please run the following commands:
     ```sh
+    # install gifsicle package globally for GIF downscaling
+    $ npm i -g gifsicle 
+   
     # Install dependencies
     $ npm i
    

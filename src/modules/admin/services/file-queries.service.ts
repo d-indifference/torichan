@@ -57,7 +57,10 @@ export class FileQueriesService {
   public async remove(srcPath: string, thumbnailPath: string): Promise<void> {
     this.logger.log(`remove ({srcPath: ${srcPath}, thumbnailPath: ${thumbnailPath}})`);
 
-    await this.fileSystem.removePath(thumbnailPath);
+    if (thumbnailPath) {
+      await this.fileSystem.removePath(thumbnailPath);
+    }
+
     await this.fileSystem.removePath(srcPath);
   }
 

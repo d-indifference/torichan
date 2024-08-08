@@ -7,34 +7,35 @@
     <label><input type="checkbox" name="allowedFileTypes" value="image/svg+xml" checked> SVG</label><br>
     <label><input type="checkbox" name="allowedFileTypes" value="image/webp" checked> WEBP</label><br>
 <% } else { %>
-    <label><input type="checkbox" name="allowedFileTypes" value="image/apng" <% if (args.formData.allowedFileTypes.indexOf('image/apng') !== -1) { %>checked<% } %>> APNG</label><br>
-    <label><input type="checkbox" name="allowedFileTypes" value="image/avif" <% if (args.formData.allowedFileTypes.indexOf('image/avif') !== -1) { %>checked<% } %>> AVIF</label><br>
-    <label><input type="checkbox" name="allowedFileTypes" value="image/gif" <% if (args.formData.allowedFileTypes.indexOf('image/gif') !== -1) { %>checked<% } %>> GIF</label><br>
-    <label><input type="checkbox" name="allowedFileTypes" value="image/jpeg" <% if (args.formData.allowedFileTypes.indexOf('image/jpeg') !== -1) { %>checked<% } %>> JPEG</label><br>
-    <label><input type="checkbox" name="allowedFileTypes" value="image/png" <% if (args.formData.allowedFileTypes.indexOf('image/png') !== -1) { %>checked<% } %>> PNG</label><br>
-    <label><input type="checkbox" name="allowedFileTypes" value="image/svg+xml" <% if (args.formData.allowedFileTypes.indexOf('image/svg+xml') !== -1) { %>checked<% } %>> SVG</label><br>
-    <label><input type="checkbox" name="allowedFileTypes" value="image/webp" <% if (args.formData.allowedFileTypes.indexOf('image/webp') !== -1) { %>checked<% } %>> WEBP</label><br>
-    <hr>
-    <label><input type="checkbox" name="allowedFileTypes" value="audio/mpeg" <% if (args.formData.allowedFileTypes.indexOf('audio/mpeg') !== -1) { %>checked<% } %>> MPEG</label><br>
-    <label><input type="checkbox" name="allowedFileTypes" value="audio/ogg" <% if (args.formData.allowedFileTypes.indexOf('audio/ogg') !== -1) { %>checked<% } %>> OGG</label><br>
-    <label><input type="checkbox" name="allowedFileTypes" value="audio/aac" <% if (args.formData.allowedFileTypes.indexOf('audio/aac') !== -1) { %>checked<% } %>> AAC</label><br>
-    <label><input type="checkbox" name="allowedFileTypes" value="audio/flac" <% if (args.formData.allowedFileTypes.indexOf('audio/flac') !== -1) { %>checked<% } %>> FLAC</label><br>
-    <hr>
-    <label><input type="checkbox" name="allowedFileTypes" value="application/x-zip-compressed" <% if (args.formData.allowedFileTypes.indexOf('application/x-zip-compressed') !== -1) { %>checked<% } %>> X-ZIP-COMPRESSED</label><br>
-    <label><input type="checkbox" name="allowedFileTypes" value="application/zip" <% if (args.formData.allowedFileTypes.indexOf('application/zip') !== -1) { %>checked<% } %>> ZIP</label><br>
-    <label><input type="checkbox" name="allowedFileTypes" value="application/zip-compressed" <% if (args.formData.allowedFileTypes.indexOf('application/zip-compressed') !== -1) { %>checked<% } %>> ZIP-COMPRESSED</label><br>
-    <label><input type="checkbox" name="allowedFileTypes" value="application/vnd.rar" <% if (args.formData.allowedFileTypes.indexOf('application/vnd.rar') !== -1) { %>checked<% } %>> RAR</label><br>
-    <label><input type="checkbox" name="allowedFileTypes" value="application/x-rar-compressed" <% if (args.formData.allowedFileTypes.indexOf('application/x-rar-compressed') !== -1) { %>checked<% } %>> RAR-COMPRESSED</label><br>
-    <label><input type="checkbox" name="allowedFileTypes" value="application/lzh" <% if (args.formData.allowedFileTypes.indexOf('application/lzh') !== -1) { %>checked<% } %>> LZH</label><br>
-    <label><input type="checkbox" name="allowedFileTypes" value="application/x-lzh-compressed" <% if (args.formData.allowedFileTypes.indexOf('application/x-lzh-compressed') !== -1) { %>checked<% } %>> LZH-COMPRESSED</label><br>
-    <label><input type="checkbox" name="allowedFileTypes" value="application/lha" <% if (args.formData.allowedFileTypes.indexOf('application/lha') !== -1) { %>checked<% } %>> LHA</label><br>
-    <label><input type="checkbox" name="allowedFileTypes" value="application/x-lha" <% if (args.formData.allowedFileTypes.indexOf('application/x-lha') !== -1) { %>checked<% } %>> X-LHA</label><br>
-    <label><input type="checkbox" name="allowedFileTypes" value="application/gzip" <% if (args.formData.allowedFileTypes.indexOf('application/gzip') !== -1) { %>checked<% } %>> GZIP</label><br>
-    <label><input type="checkbox" name="allowedFileTypes" value="application/x-gzip" <% if (args.formData.allowedFileTypes.indexOf('application/x-gzip') !== -1) { %>checked<% } %>> X-GZIP</label><br>
-    <label><input type="checkbox" name="allowedFileTypes" value="application/x-bzip2" <% if (args.formData.allowedFileTypes.indexOf('application/x-bzip2') !== -1) { %>checked<% } %>> BZ2</label><br>
-    <label><input type="checkbox" name="allowedFileTypes" value="application/x-7z-compressed" <% if (args.formData.allowedFileTypes.indexOf('application/x-7z-compressed') !== -1) { %>checked<% } %>> 7ZIP</label><br>
-    <hr>
-    <label><input type="checkbox" name="allowedFileTypes" value="application/x-shockwave-flash" <% if (args.formData.allowedFileTypes.indexOf('application/x-shockwave-flash') !== -1) { %>checked<% } %>> SWF</label><br>
-    <label><input type="checkbox" name="allowedFileTypes" value="application/x-bittorrent" <% if (args.formData.allowedFileTypes.indexOf('application/x-bittorrent') !== -1) { %>checked<% } %>> TORRENT</label><br>
-    <label><input type="checkbox" name="allowedFileTypes" value="video/webm" <% if (args.formData.allowedFileTypes.indexOf('video/webm') !== -1) { %>checked<% } %>> WEBM</label><br>
+    <label><input type="checkbox" name="allowedFileTypes" value="image/apng" <% if (isMimeTypeExists(args, 'image/apng')) { %>checked<% } %>> APNG</label><br>
+    <label><input type="checkbox" name="allowedFileTypes" value="image/avif" <% if (isMimeTypeExists(args, 'image/avif')) { %>checked<% } %>> AVIF</label><br>
+    <label><input type="checkbox" name="allowedFileTypes" value="image/gif" <% if (isMimeTypeExists(args, 'image/gif')) { %>checked<% } %>> GIF</label><br>
+    <label><input type="checkbox" name="allowedFileTypes" value="image/jpeg" <% if (isMimeTypeExists(args, 'image/jpeg')) { %>checked<% } %>> JPEG</label><br>
+    <label><input type="checkbox" name="allowedFileTypes" value="image/png" <% if (isMimeTypeExists(args, 'image/png')) { %>checked<% } %>> PNG</label><br>
+    <label><input type="checkbox" name="allowedFileTypes" value="image/svg+xml" <% if (isMimeTypeExists(args, 'image/svg+xml')) { %>checked<% } %>> SVG</label><br>
+    <label><input type="checkbox" name="allowedFileTypes" value="image/webp" <% if (isMimeTypeExists(args, 'image/webp')) { %>checked<% } %>> WEBP</label><br>
 <% }%>
+
+<hr>
+<label><input type="checkbox" name="allowedFileTypes" value="audio/mpeg" <% if (isMimeTypeExists(args, 'audio/mpeg')) { %>checked<% } %>> MPEG</label><br>
+<label><input type="checkbox" name="allowedFileTypes" value="audio/ogg" <% if (isMimeTypeExists(args, 'audio/ogg')) { %>checked<% } %>> OGG</label><br>
+<label><input type="checkbox" name="allowedFileTypes" value="audio/aac" <% if (isMimeTypeExists(args, 'audio/aac')) { %>checked<% } %>> AAC</label><br>
+<label><input type="checkbox" name="allowedFileTypes" value="audio/flac" <% if (isMimeTypeExists(args, 'audio/flac')) { %>checked<% } %>> FLAC</label><br>
+<hr>
+<label><input type="checkbox" name="allowedFileTypes" value="application/x-zip-compressed" <% if (isMimeTypeExists(args, 'application/x-zip-compressed')) { %>checked<% } %>> X-ZIP-COMPRESSED</label><br>
+<label><input type="checkbox" name="allowedFileTypes" value="application/zip" <% if (isMimeTypeExists(args, 'application/zip')) { %>checked<% } %>> ZIP</label><br>
+<label><input type="checkbox" name="allowedFileTypes" value="application/zip-compressed" <% if (isMimeTypeExists(args, 'application/zip-compressed')) { %>checked<% } %>> ZIP-COMPRESSED</label><br>
+<label><input type="checkbox" name="allowedFileTypes" value="application/vnd.rar" <% if (isMimeTypeExists(args, 'application/vnd.rar')) { %>checked<% } %>> RAR</label><br>
+<label><input type="checkbox" name="allowedFileTypes" value="application/x-rar-compressed" <% if (isMimeTypeExists(args, 'application/x-rar-compressed')) { %>checked<% } %>> RAR-COMPRESSED</label><br>
+<label><input type="checkbox" name="allowedFileTypes" value="application/lzh" <% if (isMimeTypeExists(args, 'application/lzh')) { %>checked<% } %>> LZH</label><br>
+<label><input type="checkbox" name="allowedFileTypes" value="application/x-lzh-compressed" <% if (isMimeTypeExists(args, 'application/x-lzh-compressed')) { %>checked<% } %>> LZH-COMPRESSED</label><br>
+<label><input type="checkbox" name="allowedFileTypes" value="application/lha" <% if (isMimeTypeExists(args, 'application/lha')) { %>checked<% } %>> LHA</label><br>
+<label><input type="checkbox" name="allowedFileTypes" value="application/x-lha" <% if (isMimeTypeExists(args, 'application/x-lha')) { %>checked<% } %>> X-LHA</label><br>
+<label><input type="checkbox" name="allowedFileTypes" value="application/gzip" <% if (isMimeTypeExists(args, 'application/gzip')) { %>checked<% } %>> GZIP</label><br>
+<label><input type="checkbox" name="allowedFileTypes" value="application/x-gzip" <% if (isMimeTypeExists(args, 'application/x-gzip')) { %>checked<% } %>> X-GZIP</label><br>
+<label><input type="checkbox" name="allowedFileTypes" value="application/x-bzip2" <% if (isMimeTypeExists(args, 'application/x-bzip2')) { %>checked<% } %>> BZ2</label><br>
+<label><input type="checkbox" name="allowedFileTypes" value="application/x-7z-compressed" <% if (isMimeTypeExists(args, 'application/x-7z-compressed')) { %>checked<% } %>> 7ZIP</label><br>
+<hr>
+<label><input type="checkbox" name="allowedFileTypes" value="application/x-shockwave-flash" <% if (isMimeTypeExists(args, 'application/x-shockwave-flash')) { %>checked<% } %>> SWF</label><br>
+<label><input type="checkbox" name="allowedFileTypes" value="application/x-bittorrent" <% if (isMimeTypeExists(args, 'application/x-bittorrent')) { %>checked<% } %>> TORRENT</label><br>
+<label><input type="checkbox" name="allowedFileTypes" value="video/webm" <% if (isMimeTypeExists(args, 'video/webm')) { %>checked<% } %>> WEBM</label><br>

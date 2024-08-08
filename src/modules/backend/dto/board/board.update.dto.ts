@@ -143,6 +143,9 @@ export class BoardUpdateDto {
   @MaxLength(2048, LOCALE.validators['maxLength']('defaultModeratorName', 2048))
   rules?: string;
 
+  @IsOptional()
+  allowedFileTypes?: string | string[];
+
   public toUpdateInput(id: string): Prisma.BoardUpdateInput {
     const inputBoard: Record<string, unknown> = {};
     const inputBoardSettings: Record<string, unknown> = {};
@@ -172,6 +175,7 @@ export class BoardUpdateDto {
     this.setFieldToInputTemplate(inputBoardSettings, 'rules');
     this.setBooleanFieldToInputTemplate(inputBoardSettings, 'enableCaptcha');
     this.setBooleanFieldToInputTemplate(inputBoardSettings, 'isCaptchaCaseSensitive');
+    this.normalizeCheckboxArray(inputBoardSettings, 'allowedFileTypes');
 
     const prismaInputBoardSettings: Prisma.BoardSettingsUpdateInput = inputBoardSettings as Prisma.BoardSettingsUpdateInput;
     const prismaInputBoard: Prisma.BoardUpdateInput = inputBoard as Prisma.BoardUpdateInput;
@@ -209,6 +213,7 @@ export class BoardUpdateDto {
     dto.enableCaptcha = boardSettings.enableCaptcha ? 'on' : null;
     dto.isCaptchaCaseSensitive = boardSettings.isCaptchaCaseSensitive ? 'on' : null;
     dto.rules = boardSettings.rules;
+    dto.allowedFileTypes = boardSettings.allowedFileTypes as string[];
 
     return dto;
   }
@@ -238,7 +243,8 @@ export class BoardUpdateDto {
       defaultModeratorName: ${this.defaultModeratorName},
       enableCaptcha: ${this.enableCaptcha},
       isCaptchaCaseSensitive: ${this.isCaptchaCaseSensitive},
-      rules: ${this.rules}
+      rules: ${this.rules},
+      allowedFileTypes: ${this.allowedFileTypes}
     }`;
   }
 
@@ -259,6 +265,18 @@ export class BoardUpdateDto {
   private setFieldToInputTemplate(input: Record<string, unknown>, fieldName: string): void {
     if (this[fieldName]) {
       input[fieldName] = this[fieldName];
+    }
+  }
+
+  private normalizeCheckboxArray(input: Record<string, unknown>, fieldName: string): void {
+    const inputValue = this[fieldName];
+
+    if (input) {
+      if (Array.isArray(input)) {
+        input[fieldName] = JSON.stringify(inputValue);
+      } else {
+        input[fieldName] = JSON.stringify([inputValue]);
+      }
     }
   }
 }

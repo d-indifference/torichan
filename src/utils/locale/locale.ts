@@ -74,7 +74,8 @@ export const LOCALE: Record<string, unknown> = {
     spamHasBeenDetected: localeStrings.backend['spamHasBeenDetected'],
     userWasNotFound: (id: string) => format(localeStrings.backend['spamHasBeenDetected'], id),
     userWithEmailExists: (email: string) => format(localeStrings.backend['userWithEmailExists'], email),
-    userWithUsernameExists: (username: string) => format(localeStrings.backend['userWithUsernameExists'], username)
+    userWithUsernameExists: (username: string) => format(localeStrings.backend['userWithUsernameExists'], username),
+    fileTypeIsNotAllowed: localeStrings.backend['fileTypeIsNotAllowed']
   },
   frontend: {
     valueMustBeNumber: (value: string) => format(localeStrings.backend['valueMustBeNumber'], value),
@@ -184,7 +185,8 @@ export const LOCALE: Record<string, unknown> = {
         rules: localeStrings.views['admin']['editBoard']['rules'],
         saveChanges: localeStrings.views['admin']['editBoard']['saveChanges'],
         dangerZoneExplanation: (boardName: string) => format(localeStrings.views['admin']['editBoard']['dangerZoneExplanation'], boardName),
-        deleteBoard: (boardName: string) => format(localeStrings.views['admin']['editBoard']['deleteBoard'], boardName)
+        deleteBoard: (boardName: string) => format(localeStrings.views['admin']['editBoard']['deleteBoard'], boardName),
+        allowedFileTypes: localeStrings.views['admin']['editBoard']['allowedFileTypes']
       },
       editUser: {
         editUser: localeStrings.views['admin']['editUser']['editUser'],

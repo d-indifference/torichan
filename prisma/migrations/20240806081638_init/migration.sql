@@ -39,6 +39,7 @@ CREATE TABLE "BoardSettings" (
     "enableCaptcha" BOOLEAN NOT NULL DEFAULT false,
     "isCaptchaCaseSensitive" BOOLEAN NOT NULL DEFAULT false,
     "rules" TEXT NOT NULL,
+    "allowedFileTypes" JSONB NOT NULL DEFAULT '["image/apng", "image/avif", "image/gif", "image/jpeg", "image/png", "image/svg+xml", "image/webp"]',
 
     CONSTRAINT "BoardSettings_pkey" PRIMARY KEY ("id")
 );

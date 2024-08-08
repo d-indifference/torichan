@@ -217,6 +217,12 @@
                         <textarea name="rules" cols="33" rows="11" required><% if (args.formMode !== 'CREATE') { %><%= args.formData.rules %><% } else {%><ul class="rules"></ul><% } %></textarea>
                     </td>
                 </tr>
+                <tr>
+                    <td><%= LOCALE.views.admin.editBoard.allowedFileTypes %></td>
+                    <td>
+                        <%- include('components/admin-file-type-picker') %>
+                    </td>
+                </tr>
             </table>
             <input type="submit" value="<%= LOCALE.views.admin.editBoard.saveChanges %>" tabindex="1" size="32">
         </form>

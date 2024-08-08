@@ -127,6 +127,9 @@ export class BoardCreateDto {
   @MaxLength(2048, LOCALE.validators['maxLength']('defaultModeratorName', 2048))
   rules: string;
 
+  @IsOptional()
+  allowedFileTypes?: string | string[];
+
   public toCreateInput(): Prisma.BoardCreateInput {
     return {
       slug: this.slug,
@@ -154,7 +157,8 @@ export class BoardCreateDto {
           defaultModeratorName: this.defaultModeratorName,
           enableCaptcha: normalizeBoolean(this.enableCaptcha),
           isCaptchaCaseSensitive: normalizeBoolean(this.isCaptchaCaseSensitive),
-          rules: this.rules
+          rules: this.rules,
+          allowedFileTypes: this.mapAllowedFileTypes(this.allowedFileTypes)
         }
       }
     };
@@ -185,7 +189,20 @@ export class BoardCreateDto {
       defaultModeratorName: ${this.defaultModeratorName},
       enableCaptcha: ${this.enableCaptcha},
       isCaptchaCaseSensitive: ${this.isCaptchaCaseSensitive},
-      rules: ${this.rules}
+      rules: ${this.rules},
+      allowedFileTypes: ${this.allowedFileTypes}
     }`;
+  }
+
+  private mapAllowedFileTypes(allowedFileTypes: string[] | string): string {
+    if (allowedFileTypes) {
+      if (Array.isArray(allowedFileTypes)) {
+        return JSON.stringify([allowedFileTypes]);
+      }
+
+      return JSON.stringify([[allowedFileTypes]]);
+    }
+
+    return '[[]]';
   }
 }

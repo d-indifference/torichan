@@ -1,6 +1,6 @@
 {
   "name": "torichan",
-  "version": "0.3.0-alpha",
+  "version": "0.4.0-alpha",
   "description": "Yet another imageboard implementation",
   "author": "d-indifference <umaruchan825@gmail.com>",
   "private": true,

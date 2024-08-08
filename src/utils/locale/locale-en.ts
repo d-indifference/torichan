@@ -70,7 +70,8 @@ export const localeStrings: Record<string, unknown> = {
     spamHasBeenDetected: 'Spam has been detected in your inputs.',
     userWasNotFound: 'User with id: %s was not found',
     userWithEmailExists: 'User with email: %s already exists',
-    userWithUsernameExists: 'User with username: %s already exists'
+    userWithUsernameExists: 'User with username: %s already exists',
+    fileTypeIsNotAllowed: 'File type is not allowed on this board'
   },
   frontend: {
     valueMustBeNumber: 'Value %s must be number',
@@ -180,7 +181,8 @@ export const localeStrings: Record<string, unknown> = {
         saveChanges: 'Save changes',
         dangerZoneExplanation: `Deleting the board "%s" once will mean that you will never be able to restore this record.<br>
           <u>Are you sure of your intentions?</u>`,
-        deleteBoard: 'Delete board "%s"'
+        deleteBoard: 'Delete board "%s"',
+        allowedFileTypes: 'Allowed file types'
       },
       editUser: {
         editUser: 'Edit user',

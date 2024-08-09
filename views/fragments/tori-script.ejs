@@ -11,7 +11,13 @@
 
     var match;
 
-    if (match = /#([0-9]+)/.exec(document.location.toString())) {
+    if (match=/#i([0-9]+)/.exec(document.location.toString())) {
+      if (!document.forms.posting_form.comment.value) {
+        insert('posting_form', '>>' + match[1]);
+      }
+    }
+
+    if(match=/#([0-9]+)/.exec(document.location.toString())) {
       highlightPost(match[1]);
     }
   }

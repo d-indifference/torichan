@@ -57,7 +57,11 @@
             </label>
             <a
                 class="postNum"
-                <% if (pageMode === 'BOARD') { %>href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#<%= thread.openingPost.displayNumber %>"<% } %>
+                <% if (pageMode === 'BOARD') { %>
+                    href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#i<%= thread.openingPost.displayNumber %>"
+                <% } else if (pageMode === 'THREAD') { %>
+                    href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#<%= thread.openingPost.displayNumber %>"
+                <% } %>
                 <% if (pageMode === 'THREAD') { %>onclick="insert('posting_form', '>><%= thread.openingPost.displayNumber %>');" <% } %>
                 <% if (pageMode === 'THREAD') { %>style="cursor: pointer;" <% } %>
                 <% if (pageMode === 'THREAD') { %>title="Reply on this post" <% } %>
@@ -141,7 +145,11 @@
 
                 <a
                     class="postNum"
-                    <% if (pageMode === 'BOARD') { %>href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#<%= reply.displayNumber %>"<% } %>
+                    <% if (pageMode === 'BOARD') { %>
+                        href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#i<%= reply.displayNumber %>"
+                    <% } else if (pageMode === 'THREAD') { %>
+                        href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#<%= reply.displayNumber %>"
+                    <% } %>
                     <% if (pageMode === 'THREAD') { %>onclick="insert('posting_form', '>><%= reply.displayNumber %>');" <% } %>
                     <% if (pageMode === 'THREAD') { %>style="cursor: pointer;" <% } %>
                     <% if (pageMode === 'THREAD') { %>title="Reply on this post" <% } %>

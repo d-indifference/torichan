@@ -16,7 +16,8 @@ export const localeStrings: Record<string, unknown> = {
     isInt: '%s: must be an integer',
     isPositive: '%s: must be positive number',
     isNumber: '%s: must be a number',
-    isBoolean: '%s: must be a boolean'
+    isBoolean: '%s: must be a boolean',
+    slugMatch: '%s: must be a word of latin lowercase letters and numbers'
   },
   config: {
     commentTooLong: 'Comment too long. <a href="/%s/res/%d#%d">Click here</a> to view the full text.',

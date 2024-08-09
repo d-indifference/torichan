@@ -47,7 +47,7 @@ model BoardSettings {
   enableCaptcha            Boolean            @default(false) @db.Boolean
   isCaptchaCaseSensitive   Boolean            @default(false) @db.Boolean
   rules                    String             @db.Text
-  allowedFileTypes         Json               @default("[\"image/apng\", \"image/avif\", \"image/gif\", \"image/jpeg\", \"image/png\", \"image/svg+xml\", \"image/webp\"]")
+  allowedFileTypes         Json               @default("[[\"image/apng\", \"image/avif\", \"image/gif\", \"image/jpeg\", \"image/png\", \"image/svg+xml\", \"image/webp\"]]")
 
   board Board @relation(fields: [id], references: [id], onDelete: Cascade)
 }

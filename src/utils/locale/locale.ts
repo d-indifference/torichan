@@ -19,7 +19,8 @@ export const LOCALE: Record<string, unknown> = {
     isInt: (field: string) => ({ message: format(localeStrings.validators['isInt'], field) }),
     isPositive: (field: string) => ({ message: format(localeStrings.validators['isPositive'], field) }),
     isNumber: (field: string) => ({ message: format(localeStrings.validators['isNumber'], field) }),
-    isBoolean: (field: string) => ({ message: format(localeStrings.validators['isBoolean'], field) })
+    isBoolean: (field: string) => ({ message: format(localeStrings.validators['isBoolean'], field) }),
+    slugMatch: (field: string) => ({ message: format(localeStrings.validators['slugMatch'], field) })
   },
   config: {
     commentTooLong: (slug: string, parent: number, displayNumber: number) =>

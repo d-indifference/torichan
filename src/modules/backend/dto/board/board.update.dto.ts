@@ -1,5 +1,5 @@
 import { Board, BoardSettings, FileAttachmentMode, Prisma } from '@prisma/client';
-import { IsEnum, IsNotEmpty, IsNumberString, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumberString, IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator';
 import { normalizeBoolean, normalizeInteger } from '@utils/misc';
 import { LOCALE } from '@utils/locale';
 
@@ -8,6 +8,7 @@ export class BoardUpdateDto {
   @IsString(LOCALE.validators['isString']('slug'))
   @IsNotEmpty(LOCALE.validators['isNotEmpty']('slug'))
   @MaxLength(256, LOCALE.validators['maxLength']('slug', 256))
+  @Matches(/^[a-z0-9]+$/, LOCALE.validators['slugMatch']('slug'))
   slug?: string;
 
   @IsOptional()
@@ -271,11 +272,11 @@ export class BoardUpdateDto {
   private normalizeCheckboxArray(input: Record<string, unknown>, fieldName: string): void {
     const inputValue = this[fieldName];
 
-    if (input) {
-      if (Array.isArray(input)) {
-        input[fieldName] = JSON.stringify(inputValue);
-      } else {
+    if (inputValue) {
+      if (Array.isArray(inputValue)) {
         input[fieldName] = JSON.stringify([inputValue]);
+      } else {
+        input[fieldName] = JSON.stringify([[inputValue]]);
       }
     }
   }

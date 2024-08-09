@@ -1,5 +1,5 @@
 import { FileAttachmentMode, Prisma } from '@prisma/client';
-import { IsEnum, IsNotEmpty, IsNumberString, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumberString, IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator';
 import { normalizeBoolean, normalizeInteger } from '@utils/misc';
 import { LOCALE } from '@utils/locale';
 
@@ -7,6 +7,7 @@ export class BoardCreateDto {
   @IsString(LOCALE.validators['isString']('slug'))
   @IsNotEmpty(LOCALE.validators['isNotEmpty']('slug'))
   @MaxLength(256, LOCALE.validators['maxLength']('slug', 256))
+  @Matches(/^[a-z0-9]+$/, LOCALE.validators['slugMatch']('slug'))
   slug: string;
 
   @IsString(LOCALE.validators['isString']('name'))

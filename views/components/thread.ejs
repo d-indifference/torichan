@@ -27,7 +27,20 @@
                                 loading="lazy"
                             >
                         </a>
-                    <% } %>
+                    <% } else { %>
+                        <a
+                            class="fileThumb"
+                            href="/files/<%= board.slug %>/src/<%= thread.openingPost.attachedFile.path %>"
+                            target="_blank"
+                        >
+                            <img
+                                src="/img/file-icons/<%= thread.openingPost.attachedFile.mimeType.split('/')[1] %>.png"
+                                alt="<%= thread.openingPost.attachedFile.mimeType %>"
+                                style="height: 96px; width: 96px"
+                                loading="lazy"
+                            >
+                        </a>
+                    <% }%>
                 </div>
             <% } %>
             <label class="postInfo">
@@ -44,7 +57,11 @@
             </label>
             <a
                 class="postNum"
-                <% if (pageMode === 'BOARD') { %>href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#<%= thread.openingPost.displayNumber %>"<% } %>
+                <% if (pageMode === 'BOARD') { %>
+                    href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#i<%= thread.openingPost.displayNumber %>"
+                <% } else if (pageMode === 'THREAD') { %>
+                    href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#<%= thread.openingPost.displayNumber %>"
+                <% } %>
                 <% if (pageMode === 'THREAD') { %>onclick="insert('posting_form', '>><%= thread.openingPost.displayNumber %>');" <% } %>
                 <% if (pageMode === 'THREAD') { %>style="cursor: pointer;" <% } %>
                 <% if (pageMode === 'THREAD') { %>title="Reply on this post" <% } %>
@@ -128,7 +145,11 @@
 
                 <a
                     class="postNum"
-                    <% if (pageMode === 'BOARD') { %>href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#<%= reply.displayNumber %>"<% } %>
+                    <% if (pageMode === 'BOARD') { %>
+                        href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#i<%= reply.displayNumber %>"
+                    <% } else if (pageMode === 'THREAD') { %>
+                        href="/<%= board.slug %>/res/<%= thread.openingPost.displayNumber %>#<%= reply.displayNumber %>"
+                    <% } %>
                     <% if (pageMode === 'THREAD') { %>onclick="insert('posting_form', '>><%= reply.displayNumber %>');" <% } %>
                     <% if (pageMode === 'THREAD') { %>style="cursor: pointer;" <% } %>
                     <% if (pageMode === 'THREAD') { %>title="Reply on this post" <% } %>
@@ -190,7 +211,20 @@
                                     loading="lazy"
                                 >
                             </a>
-                        <% } %>
+                        <% } else { %>
+                            <a
+                                class="fileThumb"
+                                href="/files/<%= board.slug %>/src/<%= reply.attachedFile.path %>"
+                                target="_blank"
+                            >
+                                <img
+                                    src="/img/file-icons/<%= reply.attachedFile.mimeType.split('/')[1] %>.png"
+                                    alt="<%= reply.attachedFile.mimeType %>"
+                                    style="height: 96px; width: 96px"
+                                    loading="lazy"
+                                >
+                            </a>
+                        <% }%>
                     </div>
                 <% } %>
 

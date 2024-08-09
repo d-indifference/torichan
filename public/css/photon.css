@@ -144,3 +144,45 @@ div.post.highlight {
   color: #333333 !important;
   border: 2px dashed #ee6600 !important;
 }
+
+.menu-section {
+  border-color: #bbbbbb;
+  background-color: #dddddd;
+}
+
+.menu-section .menu-section-header {
+  background-color: #bbbbbb;
+  color: #333333;
+}
+
+.menu-section ul a {
+  font-weight: 700;
+}
+
+.menu-section ul a:hover {
+  background-color: #cccccc;
+}
+
+.tori-sticky-nav {
+  border-bottom-color: #bbbbbb;
+  background-color: #eeeeee;
+}
+
+table.tori-sections {
+  border-color: #bbbbbb;
+  background-color: #dddddd;
+}
+
+table.tori-sections thead {
+  background-color: #bbbbbb;
+  color: #333333;
+}
+
+table.tori-sections a {
+  text-decoration: none;
+  font-weight: 500;
+}
+
+table.tori-sections a:hover {
+  background-color: #cccccc;
+}

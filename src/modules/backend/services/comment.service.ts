@@ -44,7 +44,7 @@ export class CommentService {
     dto.name = this.processPosterName(dto.name, isAdmin, boardSettings);
 
     await this.checkIpBan(ip);
-    this.checkFile(dto);
+    this.checkFile(dto, boardSettings);
     await this.checkDelay(ip, delayAfterThread);
 
     const attachedFile = await this.attachedFileService.saveFile(board, dto);
@@ -92,7 +92,7 @@ export class CommentService {
     dto.name = this.processPosterName(dto.name, isAdmin, boardSettings);
 
     await this.checkIpBan(ip);
-    this.checkFile(dto);
+    this.checkFile(dto, boardSettings);
     await this.checkDelay(ip, delayAfterReply);
 
     const attachedFile = await this.attachedFileService.saveFile(board, dto);
@@ -338,10 +338,16 @@ export class CommentService {
     }
   }
 
-  private checkFile(dto: CommentCreateDto) {
+  private getAllowedFileTypes(boardSettings: BoardSettings): string[] {
+    return JSON.parse((boardSettings.allowedFileTypes as string))[0];
+  }
+
+  private checkFile(dto: CommentCreateDto, boardSettings: BoardSettings) {
+    const allowedFileTypes: string[] = this.getAllowedFileTypes(boardSettings);
+
     if (dto.file) {
-      if (!this.attachedFileService.checkIfAttachedImage(dto.file)) {
-        const message: string = LOCALE.backend['fileIsNotAnImage'];
+      if (allowedFileTypes.indexOf(dto.file.mimeType) === -1) {
+        const message: string = LOCALE.backend['fileTypeIsNotAllowed'];
 
         this.logger.warn(message);
         throw new BadRequestException(message);

@@ -2,6 +2,8 @@
 
 import { GlobalSettingsDto } from '@admin/dto';
 import { LOCALE } from '@utils/locale';
+import { EditPageFormArgs } from '@admin/pages';
+import { BoardDto } from '@backend/dto/board';
 
 export const templateConstants = {
   siteName: () => (global['global-settings'] as GlobalSettingsDto).siteName,
@@ -34,4 +36,20 @@ export const parseTripcode = (dbValue: string, isAdmin: boolean): string => {
   }
 
   return `<span class="name">${name}</span><span class="tripcode">!${tripcode}</span>`;
+};
+
+export const isMimeTypeExists = (args: EditPageFormArgs<BoardDto>, mimeType: string): boolean => {
+  if (args) {
+    if (args.formData) {
+      if (args.formData.allowedFileTypes) {
+        return args.formData.allowedFileTypes.indexOf(mimeType) !== -1;
+      }
+
+      return false;
+    }
+
+    return false;
+  }
+
+  return false;
 };

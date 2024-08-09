@@ -122,3 +122,40 @@ div.post.highlight {
   background-color: #fcb478;
   border: 2px dashed #932a30 !important;
 }
+
+.menu-section {
+  border-color: transparent;
+  background-color: #fcb478;
+}
+
+.menu-section .menu-section-header {
+  background-color: #f68d45;
+  color: #932a30;
+}
+
+.menu-section ul a:hover {
+  background-color: #f8a188;
+  text-decoration: none !important;
+  color: #ff0000 !important;
+}
+
+.tori-sticky-nav {
+  border-bottom-color: #f8a188;
+  background-color: #ffddb5;
+}
+
+table.tori-sections {
+  border-color: transparent;
+  background-color: #fcb478;
+}
+
+table.tori-sections thead {
+  background-color: #f68d45;
+  color: #932a30;
+}
+
+table.tori-sections a:hover {
+  background-color: #f8a188;
+  text-decoration: none !important;
+  color: #ff0000 !important;
+}

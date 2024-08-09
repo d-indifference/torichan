@@ -1,5 +1,5 @@
 import { FileAttachmentMode, Prisma } from '@prisma/client';
-import { IsEnum, IsNotEmpty, IsNumberString, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumberString, IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator';
 import { normalizeBoolean, normalizeInteger } from '@utils/misc';
 import { LOCALE } from '@utils/locale';
 
@@ -7,6 +7,7 @@ export class BoardCreateDto {
   @IsString(LOCALE.validators['isString']('slug'))
   @IsNotEmpty(LOCALE.validators['isNotEmpty']('slug'))
   @MaxLength(256, LOCALE.validators['maxLength']('slug', 256))
+  @Matches(/^[a-z0-9]+$/, LOCALE.validators['slugMatch']('slug'))
   slug: string;
 
   @IsString(LOCALE.validators['isString']('name'))
@@ -127,6 +128,9 @@ export class BoardCreateDto {
   @MaxLength(2048, LOCALE.validators['maxLength']('defaultModeratorName', 2048))
   rules: string;
 
+  @IsOptional()
+  allowedFileTypes?: string | string[];
+
   public toCreateInput(): Prisma.BoardCreateInput {
     return {
       slug: this.slug,
@@ -154,7 +158,8 @@ export class BoardCreateDto {
           defaultModeratorName: this.defaultModeratorName,
           enableCaptcha: normalizeBoolean(this.enableCaptcha),
           isCaptchaCaseSensitive: normalizeBoolean(this.isCaptchaCaseSensitive),
-          rules: this.rules
+          rules: this.rules,
+          allowedFileTypes: this.mapAllowedFileTypes(this.allowedFileTypes)
         }
       }
     };
@@ -185,7 +190,20 @@ export class BoardCreateDto {
       defaultModeratorName: ${this.defaultModeratorName},
       enableCaptcha: ${this.enableCaptcha},
       isCaptchaCaseSensitive: ${this.isCaptchaCaseSensitive},
-      rules: ${this.rules}
+      rules: ${this.rules},
+      allowedFileTypes: ${this.allowedFileTypes}
     }`;
+  }
+
+  private mapAllowedFileTypes(allowedFileTypes: string[] | string): string {
+    if (allowedFileTypes) {
+      if (Array.isArray(allowedFileTypes)) {
+        return JSON.stringify([allowedFileTypes]);
+      }
+
+      return JSON.stringify([[allowedFileTypes]]);
+    }
+
+    return '[[]]';
   }
 }

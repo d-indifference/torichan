@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier  */
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { FileSystemService, PrismaService } from '@utils/services';
 import { AttachedFile, Prisma } from '@prisma/client';
 import { CommentCreateDto } from '@backend/dto/comment';
@@ -13,6 +13,7 @@ import * as path from 'path';
 import * as fsExtra from 'fs-extra';
 import { ConfigService } from '@nestjs/config';
 import { imageMimeList } from '@utils/misc';
+import { execFile, ExecFileException } from 'child_process';
 
 @Injectable()
 export class AttachedFileService {
@@ -170,7 +171,7 @@ export class AttachedFileService {
     const thumbnailSide = this.config.getOrThrow<number>('constants.thumbnail.side');
 
     if (sourceWidth <= thumbnailSide && sourceHeight <= thumbnailSide) {
-      await this.saveThumbnail(sourcePath, path.join(fullThumbPath, thumbnailNameWithExt), sourceWidth, sourceHeight);
+      await this.saveThumbnail(sourcePath, path.join(fullThumbPath, thumbnailNameWithExt), sourceWidth, sourceHeight, file.mimeType);
 
       const result = { thumbnailPath: thumbnailNameWithExt, thumbnailHeight: sourceHeight, thumbnailWidth: sourceWidth };
       this.logger.log(`Thumbnail saved { result: ${JSON.stringify(result)} }`);
@@ -181,7 +182,7 @@ export class AttachedFileService {
     if (sourceWidth < sourceHeight) {
       const thumbnailWidth = Math.floor((sourceWidth * thumbnailSide) / sourceHeight);
 
-      await this.saveThumbnail(sourcePath, path.join(fullThumbPath, thumbnailNameWithExt), thumbnailWidth, thumbnailSide);
+      await this.saveThumbnail(sourcePath, path.join(fullThumbPath, thumbnailNameWithExt), thumbnailWidth, thumbnailSide, file.mimeType);
 
       const result = { thumbnailPath: thumbnailNameWithExt, thumbnailHeight: thumbnailSide, thumbnailWidth };
       this.logger.log(`Thumbnail saved { result: ${JSON.stringify(result)} }`);
@@ -190,7 +191,7 @@ export class AttachedFileService {
     } else if (sourceWidth > sourceHeight) {
       const thumbnailHeight = Math.floor((sourceHeight * thumbnailSide) / sourceWidth);
 
-      await this.saveThumbnail(sourcePath, path.join(fullThumbPath, thumbnailNameWithExt), thumbnailSide, thumbnailHeight);
+      await this.saveThumbnail(sourcePath, path.join(fullThumbPath, thumbnailNameWithExt), thumbnailSide, thumbnailHeight, file.mimeType);
 
       const result = { thumbnailPath: thumbnailNameWithExt, thumbnailHeight, thumbnailWidth: thumbnailSide };
       this.logger.log(`Thumbnail saved { result: ${JSON.stringify(result)} }`);
@@ -198,7 +199,7 @@ export class AttachedFileService {
       return result;
     }
 
-    await this.saveThumbnail(sourcePath, path.join(fullThumbPath, thumbnailNameWithExt), thumbnailSide, thumbnailSide);
+    await this.saveThumbnail(sourcePath, path.join(fullThumbPath, thumbnailNameWithExt), thumbnailSide, thumbnailSide, file.mimeType);
 
     const result = { thumbnailPath: thumbnailNameWithExt, thumbnailHeight: thumbnailSide, thumbnailWidth: thumbnailSide };
     this.logger.log(`Thumbnail saved { result: ${JSON.stringify(result)} }`);
@@ -206,12 +207,46 @@ export class AttachedFileService {
     return result;
   }
 
-  private async saveThumbnail(sourcePath: string, targetPath: string, width: number, height: number): Promise<void> {
-    this.logger.log(`saveThumbnail ({sourcePath: ${sourcePath}, targetPath: ${targetPath}, width: ${width}, height: ${height})`);
+  private async saveThumbnail(sourcePath: string, targetPath: string, width: number, height: number, mimeType: string): Promise<void> {
+    this.logger.log(`saveThumbnail ({sourcePath: ${sourcePath}, targetPath: ${targetPath}, width: ${width}, height: ${height}, mimeType: ${mimeType}})`);
 
-    await sharp(sourcePath, { failOn: 'truncated' })
-      .resize({ fit: 'contain', width, height })
-      .jpeg({ quality: 80 })
-      .toFile(targetPath);
+    if (mimeType === 'image/gif') {
+      await this.saveGifThumbnail(sourcePath, targetPath, width, height);
+    } else {
+      await sharp(sourcePath, { failOn: 'truncated' })
+        .resize({ fit: 'contain', width, height })
+        .jpeg({ quality: 80 })
+        .toFile(targetPath);
+    }
+  }
+
+  private async saveGifThumbnail(sourcePath: string, targetPath: string, width: number, height: number): Promise<void> {
+    this.logger.log(`saveGifThumbnail ({sourcePath: ${sourcePath}, targetPath: ${targetPath}, width: ${width}, height: ${height}})`);
+
+    try {
+      const { pages } = await sharp(sourcePath).metadata();
+
+      if (pages > 1) {
+        execFile('gifsicle',
+          ['--colors', '256', '--resize-width', width.toString(), '-o', targetPath, sourcePath],
+          (err: ExecFileException) => {
+            if (err) {
+              this.logger.error(err);
+              throw new InternalServerErrorException(err);
+            }
+        });
+
+        this.logger.log(`Gif successfully downscaled: ${targetPath}`);
+      } else {
+        await sharp(sourcePath, { failOn: 'truncated' })
+          .resize({ fit: 'contain', width, height })
+          .jpeg({ quality: 80 })
+          .toFile(targetPath);
+      }
+    } catch (err) {
+      this.logger.error(err);
+
+      throw new InternalServerErrorException(err);
+    }
   }
 }

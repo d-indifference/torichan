@@ -26,6 +26,8 @@ export class BoardDto {
 
   rules: string;
 
+  allowedFileTypes: string[];
+
   constructor(
     id: string,
     slug: string,
@@ -38,7 +40,8 @@ export class BoardDto {
     minFileSize: string,
     maxFileSize: string,
     enableCaptcha: boolean,
-    rules: string
+    rules: string,
+    allowedFileTypes: string[]
   ) {
     this.id = id;
     this.slug = slug;
@@ -52,10 +55,12 @@ export class BoardDto {
     this.maxFileSize = maxFileSize;
     this.enableCaptcha = enableCaptcha;
     this.rules = rules;
+    this.allowedFileTypes = allowedFileTypes;
   }
 
   public static fromModel(model: Board): BoardDto {
     const boardSettings: BoardSettings = model['boardSettings'];
+
     return new BoardDto(
       model.id,
       model.slug,
@@ -68,7 +73,8 @@ export class BoardDto {
       filesize(boardSettings.minFileSize, { standard: 'jedec' }),
       filesize(boardSettings.maxFileSize, { standard: 'jedec' }),
       boardSettings.enableCaptcha,
-      boardSettings.rules
+      boardSettings.rules,
+      boardSettings.allowedFileTypes as string[]
     );
   }
 }

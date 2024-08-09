@@ -19,7 +19,6 @@ html, body {
 }
 
 .tori-navbar {
-  float: right;
   font-size: 9pt;
   text-align: right;
 }
@@ -250,4 +249,37 @@ form.changeStyleForm {
 .admin-tripcode {
   color: #dc00ff;
   font-weight: 900;
+}
+
+.menu-section {
+  margin: 5px 0 5px 0;
+  border: 1px solid;
+}
+
+.menu-section .menu-section-header {
+  font-size: 18px;
+  font-weight: 700;
+  padding-left: 7px;
+}
+
+.menu-section ul {
+  list-style: none;
+  padding-inline-start: 0;
+  margin-block-start: 7px;
+  margin-block-end: 7px;
+}
+
+.menu-section ul a {
+  display: block;
+  padding: 4px 0 4px 10px;
+  font-size: 15px;
+}
+
+.tori-sticky-nav {
+  display: block;
+  position: sticky;
+  top: 0;
+  left: 0;
+  border-bottom: 1px solid;
+  padding: 0 3px 5px 0;
 }

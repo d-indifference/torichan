@@ -9,12 +9,16 @@ export const DEFAULT_MENU_FRAME: string = `
 <div class="menu-header brand">
   <a href="/" target="_blank">Torichan</a>
 </div>
-<a href="/main" class="menu-link" target="main">Main page</a>
-<a href="/a" class="menu-link" target="main">/a/ - Anime</a>
-<a href="/b" class="menu-link" target="main">/b/ - Random</a>
-<a href="/c" class="menu-link" target="main">/c/ - Comics</a>
-<a href="/d" class="menu-link" target="main">/d/ - Discussions about Torichan</a>
-<a href="#" class="menu-link" target="main">Please edit this page...</a>
+<hr>
+<div class="menu-section">
+    <div class="menu-section-header">Discussions</div>
+    <ul>
+        <li><a href="/a" target="main">/a/ — Anime</a></li>
+        <li><a href="/b" target="main">/b/ — Random</a></li>
+        <li><a href="/c" target="main">/c/ — Comics</a></li>
+        <li><a href="/d" target="main">/d/ — Discussions about site</a></li>
+    </ul>
+</div>
 `;
 
 export const DEFAULT_START_PAGE: string = `
@@ -24,32 +28,60 @@ export const DEFAULT_START_PAGE: string = `
   [<a href="/rules">global rules</a>] / [<a href="/admin">management</a>] / [<a href="https://github.com/d-indifference/torichan">torichan engine</a>]
 </p>
 
-<table border="1" class="tori-board-list" cellpadding="5" style="margin: 0 auto">
-  <tr>
-    <td>
-      <strong><a href="/a">/a/ - Anime</a></strong>
-      <p>Lorem ipsum sit dolor amet</p>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <strong><a href="/b">/b/ - Random</a></strong>
-      <p>Lorem ipsum sit dolor amet</p>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <strong><a href="/c">/b/ - Comics</a></strong>
-      <p>Lorem ipsum sit dolor amet</p>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <strong><a href="/d">/b/ - Discussions about Torichan</a></strong>
-      <p>Lorem ipsum sit dolor amet</p>
-    </td>
-  </tr>
+<hr>
+<div class="tori-description">
+  <p>
+    Welcome to the Torichan Imageboard Engine! 
+    Here, everyone can share their thoughts, ideas, and creativity while remaining completely anonymous. 
+    Our community has no limits to self-expression: discuss any topics, share interesting images, memes, and stories. 
+    Respect for others and freedom of speech are the foundations of our community. 
+    Join the discussions, get inspired, and create unique content with us. 
+    Your anonymous space for communication and creativity awaits you!
+  </p>
+  <p>
+    Each section of the site has a specific theme, but in the <a href="/b">/b/</a> section, you are free to communicate on any topic.
+    You can submit all your suggestions, requests, and comments related to the site’s functionality in the <a href="/d">/d/</a> section.
+  </p>
+</div>
+
+<table class="tori-sections">
+  <thead>
+    <tr>
+        <td>Discussions #1</td>
+        <td>Discussions #2</td>
+        <td>Discussions #3</td>
+    </tr>
+   </thead>
+   <tbody>
+    <tr>
+      <td><a href="/a">Anime</a></td>
+      <td><a href="/a">Anime</a></td>
+      <td><a href="/a">Anime</a></td>
+    </tr>
+    <tr>
+      <td><a href="/b">Random</a></td>
+      <td><a href="/b">Random</a></td>
+      <td><a href="/b">Random</a></td>
+    </tr>
+    <tr>
+      <td><a href="/c">Comics</a></td>
+      <td><a href="/c">Comics</a></td>
+      <td><a href="/c">Comics</a></td>
+    </tr>
+    <tr>
+      <td><a href="/d">Discussions about site</a></td>
+      <td><a href="/d">Discussions about site</a></td>
+      <td><a href="/d">Discussions about site</a></td>
+    </tr>
+   </tbody>
 </table>
+
+<figure>
+    <p></p>
+    <figcaption></figcaption>
+</figure>
+
+<hr>
 `;
 
 export const DEFAULT_FAQ_PAGE: string = `
@@ -58,7 +90,7 @@ export const DEFAULT_FAQ_PAGE: string = `
 </div>
 <br clear="all">
 
-<h1 class="tori-title">FAQ</h1>
+<h1 class="tori-title" style="text-align: center">FAQ</h1>
 
 <div class="info-page">
   <h2>Posts markup</h2>
@@ -103,7 +135,7 @@ export const DEFAULT_RULES_PAGE: string = `
 </div>
 <br clear="all">
 
-<h1 class="tori-title">Rules</h1>
+<h1 class="tori-title" style="text-align: center">Rules</h1>
 
 <div class="info-page">
   <table style="text-align: left">

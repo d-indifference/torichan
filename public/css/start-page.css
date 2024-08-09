@@ -16,3 +16,37 @@ em.tori-slogan {
   display: block;
   font-size: 14pt
 }
+
+.tori-description {
+  font-size: 16px;
+  text-align: center;
+}
+
+figure img {
+  display: block;
+  margin: 0 auto;
+}
+
+figure figcaption {
+  text-align: center;
+}
+
+table.tori-sections {
+  margin: 0 auto;
+  border: 1px solid;
+  font-size: 16px;
+  border-collapse: collapse;
+}
+
+table.tori-sections thead {
+  font-weight: 700;
+}
+
+table.tori-sections thead td {
+  padding-left: 8px;
+}
+
+table.tori-sections a {
+  display: block;
+  padding: 4px 8px 4px 8px;
+}
